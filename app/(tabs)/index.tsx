@@ -12,7 +12,7 @@ export default function HomeScreen() {
           <View style={tw`w-8 h-8 bg-[#EF4444] rounded-lg items-center justify-center mr-3`}>
             <Text style={tw`text-white font-bold`}>⚡</Text>
           </View>
-          <Text style={tw`text-white font-semibold tracking-wider`}>
+          <Text style={tw`text-white text-sm font-semibold tracking-wider`}>
             PERFORMANCE LAB
           </Text>
         </View>

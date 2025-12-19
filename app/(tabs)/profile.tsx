@@ -1,7 +1,19 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuthStore } from "@/stores";
+import tw from "@/lib/tw";
 
 export default function ProfileScreen() {
+  const { user, signOut, isLoading } = useAuthStore();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch {
+      // Error handled by store
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20 }} showsVerticalScrollIndicator={false}>
@@ -14,14 +26,27 @@ export default function ProfileScreen() {
           <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: "#262626", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
             <Text style={{ fontSize: 32 }}>👤</Text>
           </View>
-          <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>Guest</Text>
-          <Text style={{ color: "rgba(255,255,255,0.6)", marginTop: 4 }}>Sign in to sync your progress</Text>
+          <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+            {user?.email || "Guest"}
+          </Text>
+          <Text style={{ color: "rgba(255,255,255,0.6)", marginTop: 4 }}>
+            {user ? "Signed in" : "Sign in to sync your progress"}
+          </Text>
         </View>
 
-        {/* Sign In Button */}
-        <Pressable style={{ backgroundColor: "#141414", borderWidth: 1, borderColor: "#262626", borderRadius: 12, paddingVertical: 16, alignItems: "center", marginBottom: 32 }}>
-          <Text style={{ color: "white", fontWeight: "500" }}>Sign In</Text>
-        </Pressable>
+        {/* Sign Out Button */}
+        {user && (
+          <Pressable
+            style={tw.style(
+              "bg-surface border border-border rounded-xl py-4 items-center mb-8",
+              isLoading && "opacity-50"
+            )}
+            onPress={handleSignOut}
+            disabled={isLoading}
+          >
+            <Text style={tw`text-accent font-medium`}>Sign Out</Text>
+          </Pressable>
+        )}
 
         {/* Settings */}
         <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, letterSpacing: 1, marginBottom: 16 }}>
