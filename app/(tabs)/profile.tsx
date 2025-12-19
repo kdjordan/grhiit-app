@@ -1,46 +1,66 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-1 px-6 pt-8">
-        <Text className="text-3xl font-bold text-primary mb-6">Profile</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20 }} showsVerticalScrollIndicator={false}>
+        <Text style={{ color: "white", fontSize: 24, fontWeight: "bold", letterSpacing: 1, marginBottom: 24 }}>
+          PROFILE
+        </Text>
 
-        {/* User Info Placeholder */}
-        <View className="bg-surface rounded-2xl p-6 mb-6 border border-border">
-          <View className="w-16 h-16 rounded-full bg-border items-center justify-center mb-4">
-            <Text className="text-3xl">👤</Text>
+        {/* User Info */}
+        <View style={{ backgroundColor: "#141414", borderRadius: 16, padding: 24, marginBottom: 24, borderWidth: 1, borderColor: "#262626" }}>
+          <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: "#262626", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+            <Text style={{ fontSize: 32 }}>👤</Text>
           </View>
-          <Text className="text-primary text-xl font-bold">Guest</Text>
-          <Text className="text-secondary">Sign in to sync your progress</Text>
+          <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>Guest</Text>
+          <Text style={{ color: "rgba(255,255,255,0.6)", marginTop: 4 }}>Sign in to sync your progress</Text>
         </View>
 
         {/* Sign In Button */}
-        <Pressable className="bg-surface rounded-xl py-4 items-center border border-border active:opacity-80">
-          <Text className="text-primary font-medium">Sign In</Text>
+        <Pressable style={{ backgroundColor: "#141414", borderWidth: 1, borderColor: "#262626", borderRadius: 12, paddingVertical: 16, alignItems: "center", marginBottom: 32 }}>
+          <Text style={{ color: "white", fontWeight: "500" }}>Sign In</Text>
         </Pressable>
 
         {/* Settings */}
-        <View className="mt-8">
-          <Text className="text-secondary text-sm mb-4">SETTINGS</Text>
+        <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, letterSpacing: 1, marginBottom: 16 }}>
+          SETTINGS
+        </Text>
 
-          <Pressable className="bg-surface rounded-xl p-4 mb-3 border border-border flex-row justify-between items-center">
-            <Text className="text-primary">Notifications</Text>
-            <Text className="text-secondary">→</Text>
+        {[
+          { label: "Notifications", icon: "🔔" },
+          { label: "Health Integration", icon: "❤️" },
+          { label: "Sound & Haptics", icon: "🔊" },
+          { label: "About GRHIIT", icon: "ℹ️" },
+        ].map((item, index) => (
+          <Pressable
+            key={item.label}
+            style={{
+              backgroundColor: "#141414",
+              borderRadius: 12,
+              padding: 16,
+              marginBottom: 12,
+              borderWidth: 1,
+              borderColor: "#262626",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ marginRight: 12 }}>{item.icon}</Text>
+              <Text style={{ color: "white" }}>{item.label}</Text>
+            </View>
+            <Text style={{ color: "rgba(255,255,255,0.4)" }}>→</Text>
           </Pressable>
+        ))}
 
-          <Pressable className="bg-surface rounded-xl p-4 mb-3 border border-border flex-row justify-between items-center">
-            <Text className="text-primary">Health Integration</Text>
-            <Text className="text-secondary">→</Text>
-          </Pressable>
-
-          <Pressable className="bg-surface rounded-xl p-4 border border-border flex-row justify-between items-center">
-            <Text className="text-primary">About GRHIIT</Text>
-            <Text className="text-secondary">→</Text>
-          </Pressable>
-        </View>
-      </View>
+        {/* App Version */}
+        <Text style={{ color: "rgba(255,255,255,0.3)", textAlign: "center", fontSize: 12, marginTop: 24 }}>
+          GRHIIT v1.0.0
+        </Text>
+      </ScrollView>
     </SafeAreaView>
   );
 }

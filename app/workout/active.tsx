@@ -3,29 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { useWorkoutStore } from "@/stores/workoutStore";
-import Svg, { Path } from "react-native-svg";
-
-function CloseIcon() {
-  return (
-    <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
-      <Path
-        d="M18 6L6 18M6 6l12 12"
-        stroke="#6B7280"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </Svg>
-  );
-}
-
-function HeartIcon() {
-  return (
-    <Svg width={18} height={18} viewBox="0 0 24 24" fill="#EF4444">
-      <Path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-    </Svg>
-  );
-}
 
 export default function ActiveWorkoutScreen() {
   const {
@@ -67,58 +44,59 @@ export default function ActiveWorkoutScreen() {
     router.replace("/workout/complete");
   };
 
-  const handleSkip = () => {
-    // Skip to next interval
-    tick();
-  };
-
-  // Check if workout is complete
   useEffect(() => {
     if (currentPhase === "complete") {
       handleComplete();
     }
   }, [currentPhase]);
 
+  const isWork = currentPhase === "work";
+  const phaseColor = isWork ? "#EF4444" : "#22C55E";
+
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      {/* Red glow effect at top */}
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
+      {/* Glow effect */}
       <View
-        className="absolute top-0 left-0 right-0 h-96 opacity-20"
         style={{
-          backgroundColor: currentPhase === "work" ? "#EF4444" : "#22C55E",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 400,
+          backgroundColor: phaseColor,
+          opacity: 0.15,
         }}
       />
 
-      <View className="flex-1">
+      <View style={{ flex: 1 }}>
         {/* Header */}
-        <View className="flex-row items-center justify-between px-5 pt-4">
-          <Text className="text-white/60 text-sm">
-            ROUND{" "}
-            <Text className="text-white font-bold">{currentRound}</Text>
-            <Text className="text-white/40">/{totalRounds}</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20, paddingTop: 16 }}>
+          <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>
+            ROUND <Text style={{ color: "white", fontWeight: "bold" }}>{currentRound}</Text>
+            <Text style={{ color: "rgba(255,255,255,0.4)" }}>/{totalRounds}</Text>
           </Text>
           <Pressable
-            className="w-10 h-10 bg-surface rounded-lg items-center justify-center border border-border"
+            style={{ width: 40, height: 40, backgroundColor: "#141414", borderRadius: 8, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "#262626" }}
             onPress={handleComplete}
           >
-            <CloseIcon />
+            <Text style={{ color: "#6B7280", fontSize: 18 }}>✕</Text>
           </Pressable>
         </View>
 
         {/* Main Timer Area */}
-        <View className="flex-1 items-center justify-center px-5">
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", paddingHorizontal: 20 }}>
           {/* Movement Name */}
-          <Text className="text-white text-2xl font-bold tracking-wider mb-8">
+          <Text style={{ color: "white", fontSize: 24, fontWeight: "bold", letterSpacing: 1, marginBottom: 32 }}>
             {currentMovement || "FLYING SQUATS"}
           </Text>
 
           {/* Large Timer */}
           <Text
-            className={`text-9xl font-bold ${
-              currentPhase === "work" ? "text-accent" : "text-success"
-            }`}
             style={{
-              textShadowColor: currentPhase === "work" ? "#EF4444" : "#22C55E",
+              color: phaseColor,
+              fontSize: 120,
+              fontWeight: "bold",
+              textShadowColor: phaseColor,
               textShadowOffset: { width: 0, height: 0 },
               textShadowRadius: 40,
             }}
@@ -128,72 +106,67 @@ export default function ActiveWorkoutScreen() {
 
           {/* Phase Indicator */}
           <View
-            className={`px-8 py-2 rounded mt-4 border ${
-              currentPhase === "work"
-                ? "border-accent bg-accent/10"
-                : "border-success bg-success/10"
-            }`}
+            style={{
+              paddingHorizontal: 32,
+              paddingVertical: 8,
+              borderRadius: 4,
+              marginTop: 16,
+              borderWidth: 1,
+              borderColor: phaseColor,
+              backgroundColor: `${phaseColor}20`,
+            }}
           >
-            <Text
-              className={`text-lg font-bold tracking-widest ${
-                currentPhase === "work" ? "text-accent" : "text-success"
-              }`}
-            >
-              {currentPhase === "work" ? "WORK" : "REST"}
+            <Text style={{ color: phaseColor, fontSize: 18, fontWeight: "bold", letterSpacing: 2 }}>
+              {isWork ? "WORK" : "REST"}
             </Text>
           </View>
         </View>
 
         {/* Bottom Section */}
-        <View className="px-5 pb-8">
+        <View style={{ paddingHorizontal: 20, paddingBottom: 32 }}>
           {/* Up Next */}
-          <View className="bg-surface rounded-xl p-4 mb-4 border border-border flex-row items-center justify-between">
+          <View style={{ backgroundColor: "#141414", borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: "#262626", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <View>
-              <Text className="text-white/40 text-xs">UP NEXT</Text>
-              <Text className="text-white font-semibold">
-                {nextMovement || "BURPEE BOX JUMPS"}
-              </Text>
+              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>UP NEXT</Text>
+              <Text style={{ color: "white", fontWeight: "600" }}>{nextMovement || "BURPEE BOX JUMPS"}</Text>
             </View>
-            <Text className="text-white/40">→</Text>
+            <Text style={{ color: "rgba(255,255,255,0.4)" }}>→</Text>
           </View>
 
           {/* Stats Row */}
-          <View className="flex-row gap-3 mb-6">
-            <View className="flex-1 bg-surface rounded-xl p-3 border border-border">
-              <Text className="text-white/40 text-xs">TIME</Text>
-              <Text className="text-white text-xl font-bold">
-                {formatElapsedTime(elapsedTime || 0)}
-              </Text>
+          <View style={{ flexDirection: "row", gap: 12, marginBottom: 24 }}>
+            <View style={{ flex: 1, backgroundColor: "#141414", borderRadius: 12, padding: 12, borderWidth: 1, borderColor: "#262626" }}>
+              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>TIME</Text>
+              <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>{formatElapsedTime(elapsedTime || 0)}</Text>
             </View>
-            <View className="flex-1 bg-surface rounded-xl p-3 border border-accent/30">
-              <Text className="text-white/40 text-xs">HR ZONE</Text>
-              <View className="flex-row items-center">
-                <HeartIcon />
-                <Text className="text-accent text-xl font-bold ml-1">Z5</Text>
+            <View style={{ flex: 1, backgroundColor: "#141414", borderRadius: 12, padding: 12, borderWidth: 1, borderColor: "rgba(239, 68, 68, 0.3)" }}>
+              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>HR ZONE</Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ color: "#EF4444", marginRight: 4 }}>❤️</Text>
+                <Text style={{ color: "#EF4444", fontSize: 20, fontWeight: "bold" }}>Z5</Text>
               </View>
             </View>
-            <View className="flex-1 bg-surface rounded-xl p-3 border border-border">
-              <Text className="text-white/40 text-xs">CALS</Text>
-              <Text className="text-white text-xl font-bold">412</Text>
+            <View style={{ flex: 1, backgroundColor: "#141414", borderRadius: 12, padding: 12, borderWidth: 1, borderColor: "#262626" }}>
+              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>CALS</Text>
+              <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>412</Text>
             </View>
           </View>
 
           {/* Control Buttons */}
-          <View className="flex-row gap-4">
+          <View style={{ flexDirection: "row", gap: 16 }}>
             <Pressable
-              className="flex-1 bg-transparent border-2 border-accent rounded-xl py-4 flex-row items-center justify-center active:opacity-80"
+              style={{ flex: 1, backgroundColor: "transparent", borderWidth: 2, borderColor: "#EF4444", borderRadius: 12, paddingVertical: 16, alignItems: "center", justifyContent: "center" }}
               onPress={isRunning ? pauseWorkout : resumeWorkout}
             >
-              <Text className="text-accent font-bold text-lg">
+              <Text style={{ color: "#EF4444", fontWeight: "bold", fontSize: 16 }}>
                 {isRunning ? "❚❚ PAUSE" : "▶ RESUME"}
               </Text>
             </Pressable>
             <Pressable
-              className="bg-surface border border-border rounded-xl px-6 py-4 flex-row items-center justify-center active:opacity-80"
-              onPress={handleSkip}
+              style={{ backgroundColor: "#141414", borderWidth: 1, borderColor: "#262626", borderRadius: 12, paddingHorizontal: 24, paddingVertical: 16, alignItems: "center", justifyContent: "center" }}
+              onPress={() => tick()}
             >
-              <Text className="text-white/60 font-medium">SKIP</Text>
-              <Text className="text-white/40 ml-1">→</Text>
+              <Text style={{ color: "rgba(255,255,255,0.6)", fontWeight: "500" }}>SKIP →</Text>
             </Pressable>
           </View>
         </View>

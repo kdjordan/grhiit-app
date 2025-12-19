@@ -2,7 +2,6 @@ import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { useState } from "react";
-import Svg, { Path } from "react-native-svg";
 
 type FilterType = "ALL" | "TABATA" | "AMRAP" | "CUSTOM";
 
@@ -12,10 +11,9 @@ interface WorkoutItem {
   intervalFormat: string;
   rounds: number;
   duration: number;
-  difficulty: number; // 1-5
+  difficulty: number;
   movements: string[];
   isLocked: boolean;
-  type: FilterType;
 }
 
 const WORKOUTS: WorkoutItem[] = [
@@ -28,7 +26,6 @@ const WORKOUTS: WorkoutItem[] = [
     difficulty: 5,
     movements: ["Burpees", "Mountain Climbers", "Jump Squats"],
     isLocked: false,
-    type: "TABATA",
   },
   {
     id: "tabata-core-burn",
@@ -39,7 +36,6 @@ const WORKOUTS: WorkoutItem[] = [
     difficulty: 4,
     movements: ["Plank Holds", "Russian Twists", "Bicycle Crunches"],
     isLocked: true,
-    type: "TABATA",
   },
   {
     id: "sprint-intervals",
@@ -50,7 +46,6 @@ const WORKOUTS: WorkoutItem[] = [
     difficulty: 4,
     movements: ["High Knees", "Jump Lunges", "Flying Squats"],
     isLocked: false,
-    type: "TABATA",
   },
   {
     id: "oxygen-debt",
@@ -61,27 +56,21 @@ const WORKOUTS: WorkoutItem[] = [
     difficulty: 5,
     movements: ["8-Count Bodybuilders", "Burpees", "Jump Squats", "Flying Squats"],
     isLocked: false,
-    type: "TABATA",
   },
 ];
 
-function LockIcon() {
-  return (
-    <Svg width={16} height={16} viewBox="0 0 24 24" fill="#6B7280">
-      <Path d="M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2zM7 11V7a5 5 0 0110 0v4" />
-    </Svg>
-  );
-}
-
 function DifficultyBar({ level }: { level: number }) {
   return (
-    <View className="flex-row gap-1">
+    <View style={{ flexDirection: "row", gap: 4 }}>
       {[1, 2, 3, 4, 5].map((i) => (
         <View
           key={i}
-          className={`w-5 h-1.5 rounded-sm ${
-            i <= level ? "bg-accent" : "bg-border"
-          }`}
+          style={{
+            width: 20,
+            height: 6,
+            borderRadius: 2,
+            backgroundColor: i <= level ? "#EF4444" : "#262626",
+          }}
         />
       ))}
     </View>
@@ -91,55 +80,58 @@ function DifficultyBar({ level }: { level: number }) {
 function WorkoutCard({ workout, onPress }: { workout: WorkoutItem; onPress: () => void }) {
   return (
     <View
-      className={`bg-surface rounded-2xl p-5 mb-4 border ${
-        workout.isLocked ? "border-border" : "border-accent/30"
-      }`}
+      style={{
+        backgroundColor: "#141414",
+        borderRadius: 16,
+        padding: 20,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: workout.isLocked ? "#262626" : "rgba(239, 68, 68, 0.3)",
+      }}
     >
-      <View className="flex-row items-start justify-between mb-2">
-        <Text className="text-white text-xl font-bold tracking-wide">
+      <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
+        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold", letterSpacing: 0.5 }}>
           {workout.name}
         </Text>
-        {workout.isLocked && <LockIcon />}
+        {workout.isLocked && <Text style={{ color: "#6B7280" }}>🔒</Text>}
       </View>
 
-      <View className="flex-row items-center mb-3">
-        <Text className="text-accent font-mono">
-          {workout.intervalFormat}
-        </Text>
-        <Text className="text-white/40 mx-2">x</Text>
-        <Text className="text-accent font-mono">{workout.rounds}</Text>
-        <Text className="text-white/40 ml-3">|</Text>
-        <Text className="text-white/60 ml-3">{workout.duration} MIN</Text>
+      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
+        <Text style={{ color: "#EF4444", fontFamily: "monospace" }}>{workout.intervalFormat}</Text>
+        <Text style={{ color: "rgba(255,255,255,0.4)", marginHorizontal: 8 }}>x</Text>
+        <Text style={{ color: "#EF4444", fontFamily: "monospace" }}>{workout.rounds}</Text>
+        <Text style={{ color: "rgba(255,255,255,0.4)", marginLeft: 12 }}>|</Text>
+        <Text style={{ color: "rgba(255,255,255,0.6)", marginLeft: 12 }}>{workout.duration} MIN</Text>
       </View>
 
-      <View className="flex-row items-center mb-4">
-        <Text className="text-white/40 text-xs mr-2">DIFFICULTY</Text>
+      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
+        <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, marginRight: 8 }}>DIFFICULTY</Text>
         <DifficultyBar level={workout.difficulty} />
       </View>
 
-      <View className="mb-4">
+      <View style={{ marginBottom: 16 }}>
         {workout.movements.map((movement) => (
-          <View key={movement} className="flex-row items-center mb-1">
-            <View className="w-1.5 h-1.5 bg-accent rounded-full mr-2" />
-            <Text className="text-white/70 text-sm">{movement}</Text>
+          <View key={movement} style={{ flexDirection: "row", alignItems: "center", marginBottom: 4 }}>
+            <View style={{ width: 6, height: 6, backgroundColor: "#EF4444", borderRadius: 3, marginRight: 8 }} />
+            <Text style={{ color: "rgba(255,255,255,0.7)", fontSize: 14 }}>{movement}</Text>
           </View>
         ))}
       </View>
 
       {workout.isLocked ? (
-        <Pressable className="bg-surface border border-border rounded-xl py-3 items-center">
-          <View className="flex-row items-center">
-            <Text className="text-white/40 mr-2">UNLOCK</Text>
-            <LockIcon />
+        <Pressable style={{ backgroundColor: "#141414", borderWidth: 1, borderColor: "#262626", borderRadius: 12, paddingVertical: 12, alignItems: "center" }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text style={{ color: "rgba(255,255,255,0.4)", marginRight: 8 }}>UNLOCK</Text>
+            <Text style={{ color: "#6B7280" }}>🔒</Text>
           </View>
         </Pressable>
       ) : (
         <Pressable
-          className="bg-accent rounded-xl py-3 flex-row items-center justify-center active:opacity-80"
+          style={{ backgroundColor: "#EF4444", borderRadius: 12, paddingVertical: 12, flexDirection: "row", alignItems: "center", justifyContent: "center" }}
           onPress={onPress}
         >
-          <Text className="text-white font-bold mr-2">START</Text>
-          <Text className="text-white">▶</Text>
+          <Text style={{ color: "white", fontWeight: "bold", marginRight: 8 }}>START</Text>
+          <Text style={{ color: "white" }}>▶</Text>
         </Pressable>
       )}
     </View>
@@ -150,37 +142,34 @@ export default function TrainScreen() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("ALL");
   const filters: FilterType[] = ["ALL", "TABATA", "AMRAP", "CUSTOM"];
 
-  const filteredWorkouts =
-    activeFilter === "ALL"
-      ? WORKOUTS
-      : WORKOUTS.filter((w) => w.type === activeFilter);
-
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
       {/* Header */}
-      <View className="px-5 pt-4 pb-2">
-        <Text className="text-white text-2xl font-bold tracking-wider text-center">
+      <View style={{ paddingHorizontal: 20, paddingTop: 16, paddingBottom: 8 }}>
+        <Text style={{ color: "white", fontSize: 24, fontWeight: "bold", letterSpacing: 1, textAlign: "center" }}>
           WORKOUTS
         </Text>
       </View>
 
       {/* Filter Tabs */}
-      <View className="flex-row px-5 mb-4">
+      <View style={{ flexDirection: "row", paddingHorizontal: 20, marginBottom: 16 }}>
         {filters.map((filter) => (
           <Pressable
             key={filter}
             onPress={() => setActiveFilter(filter)}
-            className="mr-6"
+            style={{ marginRight: 24 }}
           >
             <Text
-              className={`text-sm font-medium ${
-                activeFilter === filter ? "text-accent" : "text-white/40"
-              }`}
+              style={{
+                fontSize: 14,
+                fontWeight: "500",
+                color: activeFilter === filter ? "#EF4444" : "rgba(255,255,255,0.4)",
+              }}
             >
               {filter}
             </Text>
             {activeFilter === filter && (
-              <View className="h-0.5 bg-accent mt-1 rounded-full" />
+              <View style={{ height: 2, backgroundColor: "#EF4444", marginTop: 4, borderRadius: 1 }} />
             )}
           </Pressable>
         ))}
@@ -188,15 +177,15 @@ export default function TrainScreen() {
 
       {/* Workout List */}
       <ScrollView
-        className="flex-1 px-5"
+        style={{ flex: 1, paddingHorizontal: 20 }}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 20 }}
       >
-        {filteredWorkouts.map((workout) => (
+        {WORKOUTS.map((workout) => (
           <WorkoutCard
             key={workout.id}
             workout={workout}
-            onPress={() => router.push(`/workout?id=${workout.id}`)}
+            onPress={() => router.push("/workout")}
           />
         ))}
       </ScrollView>

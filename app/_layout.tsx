@@ -1,4 +1,3 @@
-import "../global.css";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
@@ -14,7 +13,6 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="onboarding" />
         <Stack.Screen
           name="workout"
           options={{

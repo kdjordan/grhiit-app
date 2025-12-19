@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -17,65 +17,69 @@ export default function WorkoutCompleteScreen() {
   };
 
   const handleSave = () => {
-    // TODO: Save to Zustand store and Firebase
     router.replace("/(tabs)");
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-1 px-6 pt-12">
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20, paddingTop: 48 }}>
         {/* Completion Header */}
-        <View className="items-center mb-12">
-          <Text className="text-6xl mb-4">✓</Text>
-          <Text className="text-primary text-3xl font-bold">Session Complete</Text>
-          <Text className="text-secondary mt-2">16:32 • 224 reps</Text>
+        <View style={{ alignItems: "center", marginBottom: 48 }}>
+          <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: "#22C55E", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+            <Text style={{ fontSize: 40, color: "white" }}>✓</Text>
+          </View>
+          <Text style={{ color: "white", fontSize: 28, fontWeight: "bold" }}>Session Complete</Text>
+          <Text style={{ color: "rgba(255,255,255,0.6)", marginTop: 8 }}>16:32 • 224 reps</Text>
         </View>
 
         {/* Heart Rate Summary */}
-        <View className="bg-surface rounded-2xl p-6 mb-8 border border-border">
-          <Text className="text-secondary text-sm mb-4">HEART RATE SUMMARY</Text>
-          <View className="flex-row justify-between">
+        <View style={{ backgroundColor: "#141414", borderRadius: 16, padding: 20, marginBottom: 32, borderWidth: 1, borderColor: "#262626" }}>
+          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, letterSpacing: 1, marginBottom: 16 }}>HEART RATE SUMMARY</Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <View>
-              <Text className="text-secondary text-xs">AVG</Text>
-              <Text className="text-primary text-2xl font-bold">-- BPM</Text>
+              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>AVG</Text>
+              <Text style={{ color: "white", fontSize: 24, fontWeight: "bold" }}>-- BPM</Text>
             </View>
             <View>
-              <Text className="text-secondary text-xs">MAX</Text>
-              <Text className="text-accent text-2xl font-bold">-- BPM</Text>
+              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>MAX</Text>
+              <Text style={{ color: "#EF4444", fontSize: 24, fontWeight: "bold" }}>-- BPM</Text>
             </View>
             <View>
-              <Text className="text-secondary text-xs">RECOVERY</Text>
-              <Text className="text-success text-2xl font-bold">--</Text>
+              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>RECOVERY</Text>
+              <Text style={{ color: "#22C55E", fontSize: 24, fontWeight: "bold" }}>--</Text>
             </View>
           </View>
         </View>
 
         {/* Identity Check-in */}
-        <View className="mb-8">
-          <Text className="text-secondary text-sm mb-4">
+        <View style={{ marginBottom: 32 }}>
+          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, letterSpacing: 1, marginBottom: 16 }}>
             HOW DO YOU FEEL? (Identity Check-in)
           </Text>
 
           {IDENTITY_QUESTIONS.map((question) => (
-            <View key={question.id} className="mb-4">
-              <Text className="text-primary mb-2">{question.label}</Text>
-              <View className="flex-row gap-2">
+            <View key={question.id} style={{ marginBottom: 16 }}>
+              <Text style={{ color: "white", marginBottom: 8 }}>{question.label}</Text>
+              <View style={{ flexDirection: "row", gap: 8 }}>
                 {[1, 2, 3, 4, 5].map((rating) => (
                   <Pressable
                     key={rating}
-                    className={`flex-1 py-3 rounded-lg items-center ${
-                      ratings[question.id] === rating
-                        ? "bg-primary"
-                        : "bg-surface border border-border"
-                    }`}
+                    style={{
+                      flex: 1,
+                      paddingVertical: 12,
+                      borderRadius: 8,
+                      alignItems: "center",
+                      backgroundColor: ratings[question.id] === rating ? "white" : "#141414",
+                      borderWidth: 1,
+                      borderColor: ratings[question.id] === rating ? "white" : "#262626",
+                    }}
                     onPress={() => handleRating(question.id, rating)}
                   >
                     <Text
-                      className={
-                        ratings[question.id] === rating
-                          ? "text-background font-bold"
-                          : "text-secondary"
-                      }
+                      style={{
+                        color: ratings[question.id] === rating ? "#0A0A0A" : "rgba(255,255,255,0.6)",
+                        fontWeight: ratings[question.id] === rating ? "bold" : "normal",
+                      }}
                     >
                       {rating}
                     </Text>
@@ -88,17 +92,17 @@ export default function WorkoutCompleteScreen() {
 
         {/* Save Button */}
         <Pressable
-          className="bg-primary rounded-2xl py-5 items-center active:opacity-80"
+          style={{ backgroundColor: "white", borderRadius: 16, paddingVertical: 20, alignItems: "center" }}
           onPress={handleSave}
         >
-          <Text className="text-background text-lg font-bold">SAVE & CONTINUE</Text>
+          <Text style={{ color: "#0A0A0A", fontSize: 18, fontWeight: "bold" }}>SAVE & CONTINUE</Text>
         </Pressable>
 
-        {/* Motivational quote */}
-        <Text className="text-secondary text-center text-sm mt-6 px-4">
+        {/* Quote */}
+        <Text style={{ color: "rgba(255,255,255,0.4)", textAlign: "center", fontSize: 14, marginTop: 24, fontStyle: "italic" }}>
           "Learn what hard actually is."
         </Text>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
