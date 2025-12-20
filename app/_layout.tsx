@@ -3,6 +3,8 @@ import { Stack, Redirect, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
+import { useFonts, ChakraPetch_400Regular, ChakraPetch_500Medium, ChakraPetch_600SemiBold, ChakraPetch_700Bold } from "@expo-google-fonts/chakra-petch";
+import { SpaceGrotesk_400Regular, SpaceGrotesk_500Medium, SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from "@expo-google-fonts/space-grotesk";
 import { useAuthStore } from "@/stores";
 import { AnimatedSplash } from "@/components";
 
@@ -16,14 +18,36 @@ export default function RootLayout() {
   const { user, isInitialized } = useAuthStore();
   const segments = useSegments();
 
+  const [fontsLoaded] = useFonts({
+    ChakraPetch_400Regular,
+    ChakraPetch_500Medium,
+    ChakraPetch_600SemiBold,
+    ChakraPetch_700Bold,
+    SpaceGrotesk_400Regular,
+    SpaceGrotesk_500Medium,
+    SpaceGrotesk_600SemiBold,
+    SpaceGrotesk_700Bold,
+  });
+
   useEffect(() => {
-    // Hide native splash once our app is ready
-    SplashScreen.hideAsync();
-  }, []);
+    // Hide native splash once fonts are loaded
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
   const handleSplashComplete = () => {
     setShowSplash(false);
   };
+
+  // Wait for fonts to load
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
+        {showSplash && <AnimatedSplash onComplete={handleSplashComplete} />}
+      </View>
+    );
+  }
 
   // Skip auth check in development
   if (DEV_SKIP_AUTH) {
@@ -43,6 +67,13 @@ export default function RootLayout() {
             name="workout"
             options={{
               gestureEnabled: false,
+              animation: "slide_from_bottom"
+            }}
+          />
+          <Stack.Screen
+            name="settings"
+            options={{
+              presentation: "modal",
               animation: "slide_from_bottom"
             }}
           />
@@ -86,6 +117,13 @@ export default function RootLayout() {
           name="workout"
           options={{
             gestureEnabled: false,
+            animation: "slide_from_bottom"
+          }}
+        />
+        <Stack.Screen
+          name="settings"
+          options={{
+            presentation: "modal",
             animation: "slide_from_bottom"
           }}
         />

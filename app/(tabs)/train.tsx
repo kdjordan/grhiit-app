@@ -2,6 +2,7 @@ import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { useState } from "react";
+import tw from "@/lib/tw";
 
 type FilterType = "ALL" | "TABATA" | "AMRAP" | "CUSTOM";
 
@@ -61,16 +62,11 @@ const WORKOUTS: WorkoutItem[] = [
 
 function DifficultyBar({ level }: { level: number }) {
   return (
-    <View style={{ flexDirection: "row", gap: 4 }}>
+    <View style={tw`flex-row gap-1`}>
       {[1, 2, 3, 4, 5].map((i) => (
         <View
           key={i}
-          style={{
-            width: 20,
-            height: 6,
-            borderRadius: 2,
-            backgroundColor: i <= level ? "#E8110F" : "#262626",
-          }}
+          style={tw`w-5 h-1.5 rounded-sm ${i <= level ? "bg-grhiit-red" : "bg-[#262626]"}`}
         />
       ))}
     </View>
@@ -80,58 +76,51 @@ function DifficultyBar({ level }: { level: number }) {
 function WorkoutCard({ workout, onPress }: { workout: WorkoutItem; onPress: () => void }) {
   return (
     <View
-      style={{
-        backgroundColor: "#141414",
-        borderRadius: 16,
-        padding: 20,
-        marginBottom: 16,
-        borderWidth: 1,
-        borderColor: workout.isLocked ? "#262626" : "rgba(232, 17, 15, 0.3)",
-      }}
+      style={tw`bg-[#141414] rounded-2xl p-5 mb-4 border ${workout.isLocked ? "border-[#262626]" : "border-grhiit-red/30"}`}
     >
-      <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
-        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold", letterSpacing: 0.5 }}>
+      <View style={tw`flex-row justify-between mb-2`}>
+        <Text style={tw`text-white text-xl font-bold tracking-tight`}>
           {workout.name}
         </Text>
-        {workout.isLocked && <Text style={{ color: "#6B7280" }}>🔒</Text>}
+        {workout.isLocked && <Text style={tw`text-gray-500`}>🔒</Text>}
       </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
-        <Text style={{ color: "#E8110F", fontFamily: "monospace" }}>{workout.intervalFormat}</Text>
-        <Text style={{ color: "rgba(255,255,255,0.4)", marginHorizontal: 8 }}>x</Text>
-        <Text style={{ color: "#E8110F", fontFamily: "monospace" }}>{workout.rounds}</Text>
-        <Text style={{ color: "rgba(255,255,255,0.4)", marginLeft: 12 }}>|</Text>
-        <Text style={{ color: "rgba(255,255,255,0.6)", marginLeft: 12 }}>{workout.duration} MIN</Text>
+      <View style={tw`flex-row items-center mb-3`}>
+        <Text style={tw`text-grhiit-red font-mono`}>{workout.intervalFormat}</Text>
+        <Text style={tw`text-white/40 mx-2`}>x</Text>
+        <Text style={tw`text-grhiit-red font-mono`}>{workout.rounds}</Text>
+        <Text style={tw`text-white/40 ml-3`}>|</Text>
+        <Text style={tw`text-white/60 ml-3`}>{workout.duration} MIN</Text>
       </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
-        <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, marginRight: 8 }}>DIFFICULTY</Text>
+      <View style={tw`flex-row items-center mb-4`}>
+        <Text style={tw`text-white/40 text-xs mr-2`}>DIFFICULTY</Text>
         <DifficultyBar level={workout.difficulty} />
       </View>
 
-      <View style={{ marginBottom: 16 }}>
+      <View style={tw`mb-4`}>
         {workout.movements.map((movement) => (
-          <View key={movement} style={{ flexDirection: "row", alignItems: "center", marginBottom: 4 }}>
-            <View style={{ width: 6, height: 6, backgroundColor: "#E8110F", borderRadius: 3, marginRight: 8 }} />
-            <Text style={{ color: "rgba(255,255,255,0.7)", fontSize: 14 }}>{movement}</Text>
+          <View key={movement} style={tw`flex-row items-center mb-1`}>
+            <View style={tw`w-1.5 h-1.5 bg-grhiit-red rounded-full mr-2`} />
+            <Text style={tw`text-white/70 text-sm`}>{movement}</Text>
           </View>
         ))}
       </View>
 
       {workout.isLocked ? (
-        <Pressable style={{ backgroundColor: "#141414", borderWidth: 1, borderColor: "#262626", borderRadius: 12, paddingVertical: 12, alignItems: "center" }}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={{ color: "rgba(255,255,255,0.4)", marginRight: 8 }}>UNLOCK</Text>
-            <Text style={{ color: "#6B7280" }}>🔒</Text>
+        <Pressable style={tw`bg-[#141414] border border-[#262626] rounded-xl py-3 items-center`}>
+          <View style={tw`flex-row items-center`}>
+            <Text style={tw`text-white/40 mr-2`}>UNLOCK</Text>
+            <Text style={tw`text-gray-500`}>🔒</Text>
           </View>
         </Pressable>
       ) : (
         <Pressable
-          style={{ backgroundColor: "#E8110F", borderRadius: 12, paddingVertical: 12, flexDirection: "row", alignItems: "center", justifyContent: "center" }}
+          style={tw`bg-grhiit-red rounded-xl py-3 flex-row items-center justify-center`}
           onPress={onPress}
         >
-          <Text style={{ color: "white", fontWeight: "bold", marginRight: 8 }}>START</Text>
-          <Text style={{ color: "white" }}>▶</Text>
+          <Text style={tw`text-white font-bold mr-2`}>START</Text>
+          <Text style={tw`text-white`}>▶</Text>
         </Pressable>
       )}
     </View>
@@ -143,33 +132,29 @@ export default function TrainScreen() {
   const filters: FilterType[] = ["ALL", "TABATA", "AMRAP", "CUSTOM"];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
+    <SafeAreaView style={tw`flex-1 bg-grhiit-black`}>
       {/* Header */}
-      <View style={{ paddingHorizontal: 20, paddingTop: 16, paddingBottom: 8 }}>
-        <Text style={{ color: "white", fontSize: 24, fontWeight: "bold", letterSpacing: 1, textAlign: "center" }}>
+      <View style={tw`px-5 pt-4 pb-2`}>
+        <Text style={tw`text-white text-2xl font-bold tracking-wide text-center`}>
           WORKOUTS
         </Text>
       </View>
 
       {/* Filter Tabs */}
-      <View style={{ flexDirection: "row", paddingHorizontal: 20, marginBottom: 16 }}>
+      <View style={tw`flex-row px-5 mb-4`}>
         {filters.map((filter) => (
           <Pressable
             key={filter}
             onPress={() => setActiveFilter(filter)}
-            style={{ marginRight: 24 }}
+            style={tw`mr-6`}
           >
             <Text
-              style={{
-                fontSize: 14,
-                fontWeight: "500",
-                color: activeFilter === filter ? "#E8110F" : "rgba(255,255,255,0.4)",
-              }}
+              style={tw`text-sm font-medium ${activeFilter === filter ? "text-grhiit-red" : "text-white/40"}`}
             >
               {filter}
             </Text>
             {activeFilter === filter && (
-              <View style={{ height: 2, backgroundColor: "#E8110F", marginTop: 4, borderRadius: 1 }} />
+              <View style={tw`h-0.5 bg-grhiit-red mt-1 rounded-full`} />
             )}
           </Pressable>
         ))}
@@ -177,9 +162,9 @@ export default function TrainScreen() {
 
       {/* Workout List */}
       <ScrollView
-        style={{ flex: 1, paddingHorizontal: 20 }}
+        style={tw`flex-1 px-5`}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={tw`pb-5`}
       >
         {WORKOUTS.map((workout) => (
           <WorkoutCard

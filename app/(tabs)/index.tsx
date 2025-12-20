@@ -1,101 +1,118 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import tw from "@/lib/tw";
+import { GrhiitMark, WorkoutGrid, MomentumIndicator } from "@/components";
+import Svg, { Path } from "react-native-svg";
+
+function SettingsIcon() {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+      <Path
+        d="M12 15a3 3 0 100-6 3 3 0 000 6z"
+        stroke="#FFFFFF"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"
+        stroke="#FFFFFF"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
 
 export default function HomeScreen() {
+  // TODO: Get from user store
+  const userName = "Kevin";
+
+  // TODO: Get from workout store
+  const startDate = new Date("2024-12-02"); // Example start date
+  const completedWorkouts = [1, 3, 4, 5]; // Workouts done (skipped #2)
+  const missedWorkouts = [2]; // Missed workout #2
+  const currentWorkout = 6; // Next workout is #6
+  const momentum = 65; // -50% from missed workout
+  const streak = 4; // Days since last miss
+
+  // Next workout details
+  const nextWorkoutName = "Oxygen Debt";
+  const nextWorkoutDate = "Dec 20, 6:00 AM";
+  const nextWorkoutSummary = "4 movements • 13.5 min";
+
   return (
-    <SafeAreaView style={tw`flex-1 bg-[#0A0A0A]`}>
-      <View style={tw`flex-1 p-5`}>
+    <SafeAreaView style={tw`flex-1 bg-grhiit-black`} edges={['top']}>
+      <ScrollView
+        style={tw`flex-1`}
+        contentContainerStyle={tw`p-5 pb-28 flex-grow`}
+        showsVerticalScrollIndicator={false}
+        bounces={true}
+        alwaysBounceVertical={true}
+      >
         {/* Header */}
-        <View style={tw`flex-row items-center mb-6`}>
-          <View style={tw`w-8 h-8 bg-[#E8110F] rounded-lg items-center justify-center mr-3`}>
-            <Text style={tw`text-white font-bold`}>⚡</Text>
-          </View>
-          <Text style={tw`text-white text-sm font-semibold tracking-wider`}>
-            PERFORMANCE LAB
-          </Text>
-        </View>
-
-        {/* Today's Session Label */}
-        <View style={tw`flex-row items-center mb-2`}>
-          <View style={tw`w-2 h-2 bg-[#E8110F] rounded-full mr-2`} />
-          <Text style={tw`text-[#E8110F] text-xs tracking-wider font-medium`}>
-            TODAY'S SESSION • HIGH INTENSITY
-          </Text>
-        </View>
-
-        {/* Workout Title */}
-        <Text style={tw`text-white text-4xl font-bold`}>OXYGEN</Text>
-        <Text style={tw`text-white/60 text-4xl font-bold italic mb-4`}>DEBT 01</Text>
-
-        {/* Workout Stats */}
-        <View style={tw`flex-row gap-6 mb-6`}>
+        <View style={tw`flex-row justify-between items-center mb-6`}>
           <View style={tw`flex-row items-center`}>
-            <Text style={tw`text-[#E8110F] mr-1`}>⏱</Text>
-            <Text style={tw`text-white/80 text-sm`}>45 MIN</Text>
-          </View>
-          <View style={tw`flex-row items-center`}>
-            <Text style={tw`text-[#E8110F] mr-1`}>🔥</Text>
-            <Text style={tw`text-white/80 text-sm`}>850 KCAL</Text>
-          </View>
-          <View style={tw`flex-row items-center`}>
-            <Text style={tw`text-[#E8110F] mr-1`}>📈</Text>
-            <Text style={tw`text-white/80 text-sm`}>ADVANCED</Text>
-          </View>
-        </View>
-
-        {/* Day Streak Card */}
-        <View style={tw`bg-[#141414] rounded-2xl p-5 mb-5 border border-[#262626]`}>
-          <View style={tw`flex-row items-end`}>
-            <Text style={tw`text-[#E8110F] text-6xl font-bold`}>17</Text>
-            <View style={tw`ml-2 mb-2`}>
-              <Text style={tw`text-white text-lg font-semibold`}>DAY</Text>
-              <Text style={tw`text-white/60 text-lg`}>STREAK</Text>
+            <View style={tw`mr-3`}>
+              <GrhiitMark size={32} />
             </View>
-          </View>
-          <View style={tw`mt-4 h-1 bg-[#262626] rounded-full overflow-hidden`}>
-            <View style={tw`h-full w-[57%] bg-[#E8110F] rounded-full`} />
-          </View>
-          <Text style={tw`text-white/40 text-xs mt-2 text-right`}>TARGET: 30 DAYS</Text>
-        </View>
-
-        {/* Performance Metrics */}
-        <Text style={tw`text-white/60 text-xs tracking-wider mb-3`}>PERFORMANCE METRICS</Text>
-        <View style={tw`flex-row gap-4 mb-5`}>
-          <View style={tw`flex-1 bg-[#141414] rounded-xl p-4 border border-[#262626]`}>
-            <Text style={tw`text-white text-3xl font-bold mt-2`}>142</Text>
-            <Text style={tw`text-white/40 text-xs`}>TOTAL SESSIONS</Text>
-          </View>
-          <View style={tw`flex-1 bg-[#141414] rounded-xl p-4 border border-[#262626]`}>
-            <Text style={tw`text-[#E8110F] text-3xl font-bold mt-2`}>Z4</Text>
-            <Text style={tw`text-white/40 text-xs`}>AVG ZONE</Text>
-          </View>
-        </View>
-
-        {/* Mental Toughness */}
-        <View style={tw`bg-[#141414] rounded-xl p-4 border border-[#262626] mb-6`}>
-          <View style={tw`flex-row justify-between mb-2`}>
-            <Text style={tw`text-white/80 text-sm`}>MENTAL TOUGHNESS</Text>
-            <Text style={tw`text-white`}>
-              <Text style={tw`font-bold`}>88</Text>
-              <Text style={tw`text-white/40`}>/100</Text>
+            <Text style={[tw`text-white text-sm tracking-wider`, { fontFamily: "ChakraPetch_600SemiBold" }]}>
+              Welcome back, {userName}
             </Text>
           </View>
-          <View style={tw`h-2 bg-[#262626] rounded-full overflow-hidden`}>
-            <View style={tw`h-full w-[88%] bg-white/80 rounded-full`} />
+          <Pressable
+            style={tw`w-10 h-10 bg-[#141414] rounded-lg items-center justify-center border border-[#262626]`}
+            onPress={() => router.push("/settings")}
+          >
+            <SettingsIcon />
+          </Pressable>
+        </View>
+
+        {/* Workout Grid - Primary Component */}
+        <View style={tw`mb-5`}>
+          <WorkoutGrid
+            startDate={startDate}
+            completedWorkouts={completedWorkouts}
+            missedWorkouts={missedWorkouts}
+            currentWorkout={currentWorkout}
+          />
+        </View>
+
+        {/* Momentum & Streak Row */}
+        <View style={tw`flex-row gap-3 mb-5`}>
+          <View style={tw`flex-1`}>
+            <MomentumIndicator percentage={momentum} />
+          </View>
+          <View style={tw`bg-[#141414] rounded-xl p-4 border border-[#262626] w-24`}>
+            <Text style={tw`text-white/40 text-[10px] tracking-wide`}>STREAK</Text>
+            <Text style={tw`text-grhiit-red text-2xl font-bold`}>{streak}</Text>
+            <Text style={tw`text-white/30 text-[10px]`}>days</Text>
           </View>
         </View>
 
-        {/* Start Workout Button */}
+        {/* Next Workout - Compact */}
+        <View style={tw`bg-[#141414] rounded-xl px-4 py-3 mb-4 border border-[#262626] flex-row justify-between items-center`}>
+          <View>
+            <Text style={tw`text-white text-base font-bold`}>
+              #{currentWorkout} {nextWorkoutName}
+            </Text>
+            <Text style={tw`text-white/40 text-xs`}>{nextWorkoutSummary}</Text>
+          </View>
+          <Text style={tw`text-white/30 text-xs`}>{nextWorkoutDate}</Text>
+        </View>
+
+        {/* Start Workout CTA */}
         <Pressable
-          style={tw`bg-[#E8110F] rounded-2xl py-5 flex-row items-center justify-center`}
+          style={tw`bg-grhiit-red rounded-2xl py-4 items-center justify-center`}
           onPress={() => router.push("/workout")}
         >
-          <Text style={tw`text-white text-lg font-bold mr-2`}>START WORKOUT</Text>
-          <Text style={tw`text-white text-lg`}>▶</Text>
+          <Text style={tw`text-white text-lg font-bold`}>
+            START #{currentWorkout} ▶
+          </Text>
         </Pressable>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

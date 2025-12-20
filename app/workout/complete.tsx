@@ -2,6 +2,7 @@ import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { useState } from "react";
+import tw from "@/lib/tw";
 
 const IDENTITY_QUESTIONS = [
   { id: "toughness", label: "Mental Toughness" },
@@ -21,65 +22,62 @@ export default function WorkoutCompleteScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20, paddingTop: 48 }}>
+    <SafeAreaView style={tw`flex-1 bg-grhiit-black`}>
+      <ScrollView style={tw`flex-1`} contentContainerStyle={tw`p-5 pt-12`}>
         {/* Completion Header */}
-        <View style={{ alignItems: "center", marginBottom: 48 }}>
-          <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: "#22C55E", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-            <Text style={{ fontSize: 40, color: "white" }}>✓</Text>
+        <View style={tw`items-center mb-12`}>
+          <View style={tw`w-20 h-20 rounded-full bg-success items-center justify-center mb-4`}>
+            <Text style={tw`text-4xl text-white`}>✓</Text>
           </View>
-          <Text style={{ color: "white", fontSize: 28, fontWeight: "bold" }}>Session Complete</Text>
-          <Text style={{ color: "rgba(255,255,255,0.6)", marginTop: 8 }}>16:32 • 224 reps</Text>
+          <Text style={tw`text-white text-3xl font-bold`}>Session Complete</Text>
+          <Text style={tw`text-white/60 mt-2`}>16:32 • 224 reps</Text>
         </View>
 
         {/* Heart Rate Summary */}
-        <View style={{ backgroundColor: "#141414", borderRadius: 16, padding: 20, marginBottom: 32, borderWidth: 1, borderColor: "#262626" }}>
-          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, letterSpacing: 1, marginBottom: 16 }}>HEART RATE SUMMARY</Text>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={tw`bg-[#141414] rounded-2xl p-5 mb-8 border border-[#262626]`}>
+          <Text style={tw`text-white/40 text-xs tracking-wide mb-4`}>HEART RATE SUMMARY</Text>
+          <View style={tw`flex-row justify-between`}>
             <View>
-              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>AVG</Text>
-              <Text style={{ color: "white", fontSize: 24, fontWeight: "bold" }}>-- BPM</Text>
+              <Text style={tw`text-white/40 text-xs`}>AVG</Text>
+              <Text style={tw`text-white text-2xl font-bold`}>-- BPM</Text>
             </View>
             <View>
-              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>MAX</Text>
-              <Text style={{ color: "#E8110F", fontSize: 24, fontWeight: "bold" }}>-- BPM</Text>
+              <Text style={tw`text-white/40 text-xs`}>MAX</Text>
+              <Text style={tw`text-grhiit-red text-2xl font-bold`}>-- BPM</Text>
             </View>
             <View>
-              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>RECOVERY</Text>
-              <Text style={{ color: "#22C55E", fontSize: 24, fontWeight: "bold" }}>--</Text>
+              <Text style={tw`text-white/40 text-xs`}>RECOVERY</Text>
+              <Text style={tw`text-success text-2xl font-bold`}>--</Text>
             </View>
           </View>
         </View>
 
         {/* Identity Check-in */}
-        <View style={{ marginBottom: 32 }}>
-          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, letterSpacing: 1, marginBottom: 16 }}>
+        <View style={tw`mb-8`}>
+          <Text style={tw`text-white/40 text-xs tracking-wide mb-4`}>
             HOW DO YOU FEEL? (Identity Check-in)
           </Text>
 
           {IDENTITY_QUESTIONS.map((question) => (
-            <View key={question.id} style={{ marginBottom: 16 }}>
-              <Text style={{ color: "white", marginBottom: 8 }}>{question.label}</Text>
-              <View style={{ flexDirection: "row", gap: 8 }}>
+            <View key={question.id} style={tw`mb-4`}>
+              <Text style={tw`text-white mb-2`}>{question.label}</Text>
+              <View style={tw`flex-row gap-2`}>
                 {[1, 2, 3, 4, 5].map((rating) => (
                   <Pressable
                     key={rating}
-                    style={{
-                      flex: 1,
-                      paddingVertical: 12,
-                      borderRadius: 8,
-                      alignItems: "center",
-                      backgroundColor: ratings[question.id] === rating ? "white" : "#141414",
-                      borderWidth: 1,
-                      borderColor: ratings[question.id] === rating ? "white" : "#262626",
-                    }}
+                    style={tw`flex-1 py-3 rounded-lg items-center border ${
+                      ratings[question.id] === rating
+                        ? "bg-white border-white"
+                        : "bg-[#141414] border-[#262626]"
+                    }`}
                     onPress={() => handleRating(question.id, rating)}
                   >
                     <Text
-                      style={{
-                        color: ratings[question.id] === rating ? "#0A0A0A" : "rgba(255,255,255,0.6)",
-                        fontWeight: ratings[question.id] === rating ? "bold" : "normal",
-                      }}
+                      style={tw`${
+                        ratings[question.id] === rating
+                          ? "text-grhiit-black font-bold"
+                          : "text-white/60"
+                      }`}
                     >
                       {rating}
                     </Text>
@@ -92,14 +90,14 @@ export default function WorkoutCompleteScreen() {
 
         {/* Save Button */}
         <Pressable
-          style={{ backgroundColor: "white", borderRadius: 16, paddingVertical: 20, alignItems: "center" }}
+          style={tw`bg-white rounded-2xl py-5 items-center`}
           onPress={handleSave}
         >
-          <Text style={{ color: "#0A0A0A", fontSize: 18, fontWeight: "bold" }}>SAVE & CONTINUE</Text>
+          <Text style={tw`text-grhiit-black text-lg font-bold`}>SAVE & CONTINUE</Text>
         </Pressable>
 
         {/* Quote */}
-        <Text style={{ color: "rgba(255,255,255,0.4)", textAlign: "center", fontSize: 14, marginTop: 24, fontStyle: "italic" }}>
+        <Text style={tw`text-white/40 text-center text-sm mt-6 italic`}>
           "Learn what hard actually is."
         </Text>
       </ScrollView>

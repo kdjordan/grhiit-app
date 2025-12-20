@@ -1,14 +1,31 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
 import { useAuthStore } from "@/stores";
 import tw from "@/lib/tw";
+import Svg, { Path } from "react-native-svg";
 
-export default function ProfileScreen() {
+function CloseIcon() {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+      <Path
+        d="M18 6L6 18M6 6l12 12"
+        stroke="#FFFFFF"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
+export default function SettingsScreen() {
   const { user, signOut, isLoading } = useAuthStore();
 
   const handleSignOut = async () => {
     try {
       await signOut();
+      router.replace("/(auth)/login");
     } catch {
       // Error handled by store
     }
@@ -17,9 +34,18 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={tw`flex-1 bg-grhiit-black`}>
       <ScrollView style={tw`flex-1`} contentContainerStyle={tw`p-5`} showsVerticalScrollIndicator={false}>
-        <Text style={tw`text-white text-2xl font-bold tracking-wide mb-6`}>
-          PROFILE
-        </Text>
+        {/* Header */}
+        <View style={tw`flex-row justify-between items-center mb-6`}>
+          <Text style={[tw`text-white text-2xl tracking-wide`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+            SETTINGS
+          </Text>
+          <Pressable
+            style={tw`w-10 h-10 bg-[#141414] rounded-lg items-center justify-center border border-[#262626]`}
+            onPress={() => router.back()}
+          >
+            <CloseIcon />
+          </Pressable>
+        </View>
 
         {/* User Info */}
         <View style={tw`bg-[#141414] rounded-2xl p-6 mb-6 border border-[#262626]`}>
@@ -50,7 +76,7 @@ export default function ProfileScreen() {
 
         {/* Settings */}
         <Text style={tw`text-white/40 text-xs tracking-wide mb-4`}>
-          SETTINGS
+          PREFERENCES
         </Text>
 
         {[
