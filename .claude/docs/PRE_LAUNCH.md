@@ -11,6 +11,10 @@ Track all concerns and items to address before App Store release.
   - Disabled due to iOS 18 simulator crash bug
   - Must be enabled for production builds
 
+- [ ] **Disable dev auth bypass**
+  - Set `EXPO_PUBLIC_DEV_SKIP_AUTH=false` in production
+  - Or remove the variable entirely
+
 ---
 
 ## Firebase
