@@ -13,7 +13,7 @@ function WeeklyChart() {
           <View
             style={{
               width: 24,
-              backgroundColor: "rgba(239, 68, 68, 0.8)",
+              backgroundColor: "rgba(232, 17, 15, 0.8)",
               borderTopLeftRadius: 4,
               borderTopRightRadius: 4,
               height: (value / maxValue) * 100,
@@ -55,7 +55,7 @@ export default function StatsScreen() {
         <View style={{ backgroundColor: "#141414", borderRadius: 16, padding: 20, borderWidth: 1, borderColor: "#262626", marginBottom: 20 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 16 }}>
             <Text style={{ color: "white", fontWeight: "600" }}>WEEKLY ACTIVITY</Text>
-            <Text style={{ color: "#EF4444", fontSize: 14 }}>This Week</Text>
+            <Text style={{ color: "#E8110F", fontSize: 14 }}>This Week</Text>
           </View>
           <WeeklyChart />
         </View>
@@ -79,7 +79,7 @@ export default function StatsScreen() {
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <View>
               <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>AVG MAX HR</Text>
-              <Text style={{ color: "#EF4444", fontSize: 28, fontWeight: "bold" }}>172</Text>
+              <Text style={{ color: "#E8110F", fontSize: 28, fontWeight: "bold" }}>172</Text>
               <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>BPM</Text>
             </View>
             <View>
@@ -111,7 +111,7 @@ export default function StatsScreen() {
                 <Text style={{ color: "white", fontWeight: "bold" }}>{item.value}/100</Text>
               </View>
               <View style={{ height: 8, backgroundColor: "#262626", borderRadius: 4, overflow: "hidden" }}>
-                <View style={{ height: "100%", width: `${item.value}%`, backgroundColor: "#EF4444", borderRadius: 4 }} />
+                <View style={{ height: "100%", width: `${item.value}%`, backgroundColor: "#E8110F", borderRadius: 4 }} />
               </View>
             </View>
           ))}

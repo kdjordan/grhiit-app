@@ -124,7 +124,7 @@ function CharacterCell({ char, isLocked }: CharacterCellProps) {
 
   const color = flashOpacity.interpolate({
     inputRange: [0, 1],
-    outputRange: [isLocked ? "#FFFFFF" : "#A3A3A3", "#EF4444"],
+    outputRange: [isLocked ? "#FAFAFA" : "#A3A3A3", "#E8110F"],
   });
 
   return (

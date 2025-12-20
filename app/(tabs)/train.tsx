@@ -69,7 +69,7 @@ function DifficultyBar({ level }: { level: number }) {
             width: 20,
             height: 6,
             borderRadius: 2,
-            backgroundColor: i <= level ? "#EF4444" : "#262626",
+            backgroundColor: i <= level ? "#E8110F" : "#262626",
           }}
         />
       ))}
@@ -86,7 +86,7 @@ function WorkoutCard({ workout, onPress }: { workout: WorkoutItem; onPress: () =
         padding: 20,
         marginBottom: 16,
         borderWidth: 1,
-        borderColor: workout.isLocked ? "#262626" : "rgba(239, 68, 68, 0.3)",
+        borderColor: workout.isLocked ? "#262626" : "rgba(232, 17, 15, 0.3)",
       }}
     >
       <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
@@ -97,9 +97,9 @@ function WorkoutCard({ workout, onPress }: { workout: WorkoutItem; onPress: () =
       </View>
 
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
-        <Text style={{ color: "#EF4444", fontFamily: "monospace" }}>{workout.intervalFormat}</Text>
+        <Text style={{ color: "#E8110F", fontFamily: "monospace" }}>{workout.intervalFormat}</Text>
         <Text style={{ color: "rgba(255,255,255,0.4)", marginHorizontal: 8 }}>x</Text>
-        <Text style={{ color: "#EF4444", fontFamily: "monospace" }}>{workout.rounds}</Text>
+        <Text style={{ color: "#E8110F", fontFamily: "monospace" }}>{workout.rounds}</Text>
         <Text style={{ color: "rgba(255,255,255,0.4)", marginLeft: 12 }}>|</Text>
         <Text style={{ color: "rgba(255,255,255,0.6)", marginLeft: 12 }}>{workout.duration} MIN</Text>
       </View>
@@ -112,7 +112,7 @@ function WorkoutCard({ workout, onPress }: { workout: WorkoutItem; onPress: () =
       <View style={{ marginBottom: 16 }}>
         {workout.movements.map((movement) => (
           <View key={movement} style={{ flexDirection: "row", alignItems: "center", marginBottom: 4 }}>
-            <View style={{ width: 6, height: 6, backgroundColor: "#EF4444", borderRadius: 3, marginRight: 8 }} />
+            <View style={{ width: 6, height: 6, backgroundColor: "#E8110F", borderRadius: 3, marginRight: 8 }} />
             <Text style={{ color: "rgba(255,255,255,0.7)", fontSize: 14 }}>{movement}</Text>
           </View>
         ))}
@@ -127,7 +127,7 @@ function WorkoutCard({ workout, onPress }: { workout: WorkoutItem; onPress: () =
         </Pressable>
       ) : (
         <Pressable
-          style={{ backgroundColor: "#EF4444", borderRadius: 12, paddingVertical: 12, flexDirection: "row", alignItems: "center", justifyContent: "center" }}
+          style={{ backgroundColor: "#E8110F", borderRadius: 12, paddingVertical: 12, flexDirection: "row", alignItems: "center", justifyContent: "center" }}
           onPress={onPress}
         >
           <Text style={{ color: "white", fontWeight: "bold", marginRight: 8 }}>START</Text>
@@ -163,13 +163,13 @@ export default function TrainScreen() {
               style={{
                 fontSize: 14,
                 fontWeight: "500",
-                color: activeFilter === filter ? "#EF4444" : "rgba(255,255,255,0.4)",
+                color: activeFilter === filter ? "#E8110F" : "rgba(255,255,255,0.4)",
               }}
             >
               {filter}
             </Text>
             {activeFilter === filter && (
-              <View style={{ height: 2, backgroundColor: "#EF4444", marginTop: 4, borderRadius: 1 }} />
+              <View style={{ height: 2, backgroundColor: "#E8110F", marginTop: 4, borderRadius: 1 }} />
             )}
           </Pressable>
         ))}

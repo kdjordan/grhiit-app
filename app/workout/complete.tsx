@@ -42,7 +42,7 @@ export default function WorkoutCompleteScreen() {
             </View>
             <View>
               <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>MAX</Text>
-              <Text style={{ color: "#EF4444", fontSize: 24, fontWeight: "bold" }}>-- BPM</Text>
+              <Text style={{ color: "#E8110F", fontSize: 24, fontWeight: "bold" }}>-- BPM</Text>
             </View>
             <View>
               <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>RECOVERY</Text>

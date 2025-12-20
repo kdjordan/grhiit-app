@@ -51,7 +51,7 @@ export default function ActiveWorkoutScreen() {
   }, [currentPhase]);
 
   const isWork = currentPhase === "work";
-  const phaseColor = isWork ? "#EF4444" : "#22C55E";
+  const phaseColor = isWork ? "#E8110F" : "#22C55E";
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
@@ -139,11 +139,11 @@ export default function ActiveWorkoutScreen() {
               <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>TIME</Text>
               <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>{formatElapsedTime(elapsedTime || 0)}</Text>
             </View>
-            <View style={{ flex: 1, backgroundColor: "#141414", borderRadius: 12, padding: 12, borderWidth: 1, borderColor: "rgba(239, 68, 68, 0.3)" }}>
+            <View style={{ flex: 1, backgroundColor: "#141414", borderRadius: 12, padding: 12, borderWidth: 1, borderColor: "rgba(232, 17, 15, 0.3)" }}>
               <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>HR ZONE</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={{ color: "#EF4444", marginRight: 4 }}>❤️</Text>
-                <Text style={{ color: "#EF4444", fontSize: 20, fontWeight: "bold" }}>Z5</Text>
+                <Text style={{ color: "#E8110F", marginRight: 4 }}>❤️</Text>
+                <Text style={{ color: "#E8110F", fontSize: 20, fontWeight: "bold" }}>Z5</Text>
               </View>
             </View>
             <View style={{ flex: 1, backgroundColor: "#141414", borderRadius: 12, padding: 12, borderWidth: 1, borderColor: "#262626" }}>
@@ -155,10 +155,10 @@ export default function ActiveWorkoutScreen() {
           {/* Control Buttons */}
           <View style={{ flexDirection: "row", gap: 16 }}>
             <Pressable
-              style={{ flex: 1, backgroundColor: "transparent", borderWidth: 2, borderColor: "#EF4444", borderRadius: 12, paddingVertical: 16, alignItems: "center", justifyContent: "center" }}
+              style={{ flex: 1, backgroundColor: "transparent", borderWidth: 2, borderColor: "#E8110F", borderRadius: 12, paddingVertical: 16, alignItems: "center", justifyContent: "center" }}
               onPress={isRunning ? pauseWorkout : resumeWorkout}
             >
-              <Text style={{ color: "#EF4444", fontWeight: "bold", fontSize: 16 }}>
+              <Text style={{ color: "#E8110F", fontWeight: "bold", fontSize: 16 }}>
                 {isRunning ? "❚❚ PAUSE" : "▶ RESUME"}
               </Text>
             </Pressable>

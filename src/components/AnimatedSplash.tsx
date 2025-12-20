@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { View, Animated, StyleSheet, Dimensions, Easing } from "react-native";
 import tw from "@/lib/tw";
 import { GrhiitLogo } from "./GrhiitLogo";
+import { GrhiitMark } from "./GrhiitMark";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -10,8 +11,24 @@ interface AnimatedSplashProps {
 }
 
 export function AnimatedSplash({ onComplete }: AnimatedSplashProps) {
+  const [markComplete, setMarkComplete] = useState(false);
+  const [logoComplete, setLogoComplete] = useState(false);
+
   const slideY = useRef(new Animated.Value(0)).current;
+  const logoOpacity = useRef(new Animated.Value(0)).current;
   const taglineOpacity = useRef(new Animated.Value(0)).current;
+
+  const handleMarkComplete = () => {
+    setMarkComplete(true);
+    // Fade in the text logo
+    Animated.timing(logoOpacity, {
+      toValue: 1,
+      duration: 600,
+      useNativeDriver: true,
+    }).start(() => {
+      setLogoComplete(true);
+    });
+  };
 
   const handleLogoComplete = () => {
     // Show tagline, then slide up
@@ -21,7 +38,7 @@ export function AnimatedSplash({ onComplete }: AnimatedSplashProps) {
         duration: 400,
         useNativeDriver: true,
       }),
-      Animated.delay(800),
+      Animated.delay(1000),
       Animated.timing(slideY, {
         toValue: -SCREEN_HEIGHT,
         duration: 600,
@@ -41,12 +58,24 @@ export function AnimatedSplash({ onComplete }: AnimatedSplashProps) {
       ]}
     >
       <View style={tw`items-center`}>
-        <GrhiitLogo
-          width={260}
-          height={58}
+        {/* Logomark - octagon + G */}
+        <GrhiitMark
+          size={120}
           animate
-          onAnimationComplete={handleLogoComplete}
+          onAnimationComplete={handleMarkComplete}
         />
+
+        {/* Text logo - fades in after mark */}
+        <Animated.View style={[tw`mt-8`, { opacity: logoOpacity }]}>
+          <GrhiitLogo
+            width={220}
+            height={50}
+            animate={markComplete}
+            onAnimationComplete={handleLogoComplete}
+          />
+        </Animated.View>
+
+        {/* Tagline - fades in after logo */}
         <Animated.Text
           style={[
             tw`text-secondary text-sm mt-6`,
