@@ -3,4 +3,5 @@ export { AnimatedSplash } from "./AnimatedSplash";
 export { GrhiitLogo } from "./GrhiitLogo";
 export { GrhiitMark } from "./GrhiitMark";
 export { WorkoutGrid } from "./WorkoutGrid";
-export { MomentumIndicator } from "./MomentumIndicator";
+export { SpiralProgress } from "./SpiralProgress";
+export { OctagonGrid } from "./OctagonGrid";

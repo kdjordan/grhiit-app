@@ -2,20 +2,12 @@ import { View, Text } from "react-native";
 import tw from "@/lib/tw";
 
 interface WorkoutGridProps {
-  startDate: Date;
-  completedWorkouts: number[]; // Array of workout numbers [1, 2, 3, etc.]
-  missedWorkouts?: number[]; // Array of missed workout numbers
-  currentWorkout?: number; // e.g., 6
+  completedWorkouts: number[];
+  missedWorkouts?: number[];
+  currentWorkout?: number;
 }
 
-function formatDate(date: Date): string {
-  const month = date.toLocaleDateString("en-US", { month: "short" });
-  const day = date.getDate();
-  return `${month} ${day}`;
-}
-
-
-export function WorkoutGrid({ startDate, completedWorkouts, missedWorkouts = [], currentWorkout }: WorkoutGridProps) {
+export function WorkoutGrid({ completedWorkouts, missedWorkouts = [], currentWorkout }: WorkoutGridProps) {
   const weeks = 8;
   const workoutsPerWeek = 3;
 
@@ -23,83 +15,61 @@ export function WorkoutGrid({ startDate, completedWorkouts, missedWorkouts = [],
   const isMissed = (num: number) => missedWorkouts.includes(num);
   const isCurrent = (num: number) => currentWorkout === num;
 
-  // Determine current week based on current workout
-  const currentWeek = currentWorkout ? Math.ceil(currentWorkout / 3) : 1;
-
-  const getCellStyle = (num: number) => {
-    if (isCompleted(num)) return "bg-grhiit-red";
-    if (isMissed(num)) return "border border-[#333]";
-    if (isCurrent(num)) return "bg-grhiit-red/20 border-2 border-grhiit-red";
-    return "border border-[#333]";
-  };
-
-  const getLabelStyle = (num: number) => {
-    if (isCompleted(num)) return "text-white";
-    if (isMissed(num)) return "text-white/20";
-    if (isCurrent(num)) return "text-grhiit-red";
-    return "text-white/40";
-  };
-
   return (
-    <View style={tw`bg-[#141414] rounded-2xl p-4 border border-[#262626]`}>
-      {/* Header */}
-      <View style={tw`flex-row justify-between items-center mb-4`}>
-        <Text style={[tw`text-white text-xs`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
-          8-WEEK PROGRAM
-        </Text>
-        <Text style={tw`text-white/40 text-xs`}>
-          Started {formatDate(startDate)}
-        </Text>
-      </View>
-
-      {/* Week Rows */}
+    <View style={tw`gap-1`}>
       {Array.from({ length: weeks }, (_, weekIndex) => {
         const weekNum = weekIndex + 1;
-        const isCurrentWeek = weekNum === currentWeek;
 
         return (
           <View
             key={weekNum}
-            style={tw`flex-row items-center mb-1 ${isCurrentWeek ? "bg-grhiit-red/10 -mx-2 px-2 py-0.5 rounded border-l-2 border-grhiit-red" : ""}`}
+            style={tw`flex-row items-center`}
           >
             {/* Week Label */}
-            <View style={tw`w-8 flex-row items-center`}>
-              <Text style={tw`text-[9px] ${isCurrentWeek ? "text-grhiit-red font-bold" : "text-white/30"}`}>
+            <View style={tw`w-10`}>
+              <Text style={[
+                tw`text-xs text-white/20`,
+                { fontFamily: "SpaceGrotesk_500Medium" }
+              ]}>
                 W{weekNum}
               </Text>
-              {isCurrentWeek && (
-                <View style={tw`ml-0.5 w-1 h-1 rounded-full bg-grhiit-red`} />
-              )}
             </View>
 
-            {/* Workout cells for this week */}
+            {/* Workout cells */}
             <View style={tw`flex-1 flex-row gap-1`}>
               {Array.from({ length: workoutsPerWeek }, (_, dayIndex) => {
                 const workoutNum = weekIndex * workoutsPerWeek + dayIndex + 1;
+                const completed = isCompleted(workoutNum);
+                const missed = isMissed(workoutNum);
+                const current = isCurrent(workoutNum);
 
                 return (
                   <View
                     key={workoutNum}
-                    style={tw`flex-1 h-6 rounded items-center justify-center overflow-hidden ${getCellStyle(workoutNum)}`}
+                    style={[
+                      tw`flex-1 h-11 items-center justify-center`,
+                      completed && tw`bg-grhiit-red`,
+                      missed && tw`bg-transparent border border-[#1a1a1a]`,
+                      current && tw`bg-grhiit-red/15 border border-grhiit-red`,
+                      !completed && !missed && !current && tw`bg-[#111]`,
+                      completed && { shadowColor: "#EF4444", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 4 },
+                    ]}
                   >
-                    <Text style={tw`text-[10px] font-bold ${getLabelStyle(workoutNum)}`}>
-                      {workoutNum}
+                    <Text style={[
+                      tw`text-base`,
+                      completed && tw`text-white`,
+                      missed && tw`text-white/10`,
+                      current && tw`text-grhiit-red`,
+                      !completed && !missed && !current && tw`text-white/30`,
+                      { fontFamily: "JetBrainsMono_600SemiBold" }
+                    ]}>
+                      {workoutNum.toString().padStart(2, "0")}
                     </Text>
-                    {/* Red X for missed workouts */}
-                    {isMissed(workoutNum) && (
+                    {/* X for missed */}
+                    {missed && (
                       <>
-                        <View
-                          style={[
-                            tw`absolute w-[140%] h-[1px] bg-grhiit-red/70`,
-                            { transform: [{ rotate: "-45deg" }] }
-                          ]}
-                        />
-                        <View
-                          style={[
-                            tw`absolute w-[140%] h-[1px] bg-grhiit-red/70`,
-                            { transform: [{ rotate: "45deg" }] }
-                          ]}
-                        />
+                        <View style={[tw`absolute w-full h-[1px] bg-grhiit-red/30`, { transform: [{ rotate: "-45deg" }] }]} />
+                        <View style={[tw`absolute w-full h-[1px] bg-grhiit-red/30`, { transform: [{ rotate: "45deg" }] }]} />
                       </>
                     )}
                   </View>
@@ -109,18 +79,6 @@ export function WorkoutGrid({ startDate, completedWorkouts, missedWorkouts = [],
           </View>
         );
       })}
-
-      {/* Progress Footer */}
-      <View style={tw`flex-row justify-between items-center mt-2 pt-3 border-t border-[#262626]`}>
-        <Text style={tw`text-white/40 text-xs`}>
-          {completedWorkouts.length}/24 complete
-        </Text>
-        {missedWorkouts.length > 0 && (
-          <Text style={tw`text-grhiit-red/60 text-xs`}>
-            {missedWorkouts.length} missed
-          </Text>
-        )}
-      </View>
     </View>
   );
 }

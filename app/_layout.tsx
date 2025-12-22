@@ -5,16 +5,18 @@ import { View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts, ChakraPetch_400Regular, ChakraPetch_500Medium, ChakraPetch_600SemiBold, ChakraPetch_700Bold } from "@expo-google-fonts/chakra-petch";
 import { SpaceGrotesk_400Regular, SpaceGrotesk_500Medium, SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from "@expo-google-fonts/space-grotesk";
+import { JetBrainsMono_400Regular, JetBrainsMono_500Medium, JetBrainsMono_600SemiBold, JetBrainsMono_700Bold } from "@expo-google-fonts/jetbrains-mono";
 import { useAuthStore } from "@/stores";
 import { AnimatedSplash } from "@/components";
 
 const DEV_SKIP_AUTH = process.env.EXPO_PUBLIC_DEV_SKIP_AUTH === "true";
+const DEV_SKIP_SPLASH = process.env.EXPO_PUBLIC_DEV_SKIP_SPLASH === "true";
 
 // Keep native splash visible while we load
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(!DEV_SKIP_SPLASH);
   const { user, isInitialized } = useAuthStore();
   const segments = useSegments();
 
@@ -27,6 +29,10 @@ export default function RootLayout() {
     SpaceGrotesk_500Medium,
     SpaceGrotesk_600SemiBold,
     SpaceGrotesk_700Bold,
+    JetBrainsMono_400Regular,
+    JetBrainsMono_500Medium,
+    JetBrainsMono_600SemiBold,
+    JetBrainsMono_700Bold,
   });
 
   useEffect(() => {
