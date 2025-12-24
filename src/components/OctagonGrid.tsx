@@ -71,36 +71,34 @@ function PulsingOctagon({
     outputRange: [0.4, 0.8],
   });
 
+  const fontSize = size > 36 ? 14 : 10;
+
   return (
     <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      {/* Outer glow */}
       <AnimatedPath
         d={path}
         fill="none"
         stroke={GRHIIT_RED}
-        strokeWidth={3}
+        strokeWidth={2}
         strokeOpacity={glowOpacity}
       />
-      {/* Fill */}
       <AnimatedPath
         d={path}
         fill={GRHIIT_RED}
         fillOpacity={fillOpacity}
       />
-      {/* Border */}
       <Path
         d={path}
         fill="none"
         stroke={GRHIIT_RED}
-        strokeWidth={2}
+        strokeWidth={1.5}
       />
-      {/* Number */}
       <SvgText
         x={size / 2}
-        y={size / 2 + 5}
+        y={size / 2 + fontSize / 3}
         textAnchor="middle"
         fill={GRHIIT_RED}
-        fontSize={14}
+        fontSize={fontSize}
         fontFamily="JetBrainsMono_600SemiBold"
       >
         {workoutNum.toString().padStart(2, "0")}
@@ -124,50 +122,47 @@ function OctagonCell({
   onPress?: () => void;
 }) {
   const path = createOctagonPath(size);
+  const fontSize = size > 36 ? 14 : 10;
 
   const content = (
     <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      {/* Background */}
       <Path
         d={path}
         fill={completed ? GRHIIT_RED : "transparent"}
         stroke={completed ? "none" : missed ? "#2a2a2a" : "#3a3a3a"}
-        strokeWidth={2}
+        strokeWidth={1.5}
         strokeOpacity={missed ? 0.5 : 0.7}
       />
-      {/* Glow for completed */}
       {completed && (
         <Path
           d={path}
           fill="none"
           stroke={GRHIIT_RED}
-          strokeWidth={3}
+          strokeWidth={2}
           strokeOpacity={0.4}
         />
       )}
-      {/* Number */}
       <SvgText
         x={size / 2}
-        y={size / 2 + 5}
+        y={size / 2 + fontSize / 3}
         textAnchor="middle"
         fill={completed ? "#FFFFFF" : missed ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.4)"}
-        fontSize={14}
+        fontSize={fontSize}
         fontFamily="JetBrainsMono_600SemiBold"
       >
         {workoutNum.toString().padStart(2, "0")}
       </SvgText>
-      {/* X for missed */}
       {missed && (
         <>
           <Path
             d={`M${size * 0.3},${size * 0.3} L${size * 0.7},${size * 0.7}`}
             stroke="rgba(239,68,68,0.35)"
-            strokeWidth={1.5}
+            strokeWidth={1}
           />
           <Path
             d={`M${size * 0.7},${size * 0.3} L${size * 0.3},${size * 0.7}`}
             stroke="rgba(239,68,68,0.35)"
-            strokeWidth={1.5}
+            strokeWidth={1}
           />
         </>
       )}
@@ -193,36 +188,49 @@ export function OctagonGrid({
 }: OctagonGridProps) {
   const weeks = 8;
   const workoutsPerWeek = 3;
-  const cellSize = 44;
+
+  // Determine active week
+  const activeWeek = currentWorkout ? Math.ceil(currentWorkout / 3) : 1;
 
   const isCompleted = (num: number) => completedWorkouts.includes(num);
   const isMissed = (num: number) => missedWorkouts.includes(num);
   const isCurrent = (num: number) => currentWorkout === num;
 
   return (
-    <View style={tw`gap-2`}>
+    <View style={tw`gap-1`}>
       {Array.from({ length: weeks }, (_, weekIndex) => {
         const weekNum = weekIndex + 1;
+        const isActiveWeek = weekNum === activeWeek;
+
+        // Active week gets larger cells
+        const cellSize = isActiveWeek ? 44 : 28;
+        const rowHeight = isActiveWeek ? 48 : 32;
 
         return (
-          <View key={weekNum} style={tw`flex-row items-center`}>
+          <View
+            key={weekNum}
+            style={[
+              tw`flex-row items-center`,
+              { height: rowHeight }
+            ]}
+          >
             {/* Week Label */}
-            <View style={tw`w-9`}>
-              <Svg width={32} height={20}>
+            <View style={tw`w-16`}>
+              <Svg width={60} height={16}>
                 <SvgText
                   x={0}
-                  y={14}
-                  fill="#6B7280"
-                  fontSize={11}
+                  y={12}
+                  fill={isActiveWeek ? "#FFFFFF" : "#4B5563"}
+                  fontSize={isActiveWeek ? 11 : 9}
                   fontFamily="SpaceGrotesk_500Medium"
                 >
-                  W{weekNum}
+                  WEEK {weekNum}
                 </SvgText>
               </Svg>
             </View>
 
             {/* Workout cells */}
-            <View style={tw`flex-1 flex-row justify-between`}>
+            <View style={tw`flex-1 flex-row items-center`}>
               {Array.from({ length: workoutsPerWeek }, (_, dayIndex) => {
                 const workoutNum = weekIndex * workoutsPerWeek + dayIndex + 1;
                 const completed = isCompleted(workoutNum);
