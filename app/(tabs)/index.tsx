@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import tw from "@/lib/tw";
-import { GrhiitMark, OctagonGrid } from "@/components";
+import { GrhiitMark, ProgressGrid } from "@/components";
 
 // Format date like "TODAY, 23 DECEMBER"
 function getFormattedDate(): string {
@@ -38,11 +38,6 @@ export default function HomeScreen() {
   const nextWorkoutTime = "13:30";
   const nextWorkoutTargetReps = 190;
 
-  const handleCellPress = (workoutNum: number) => {
-    // TODO: Open workout detail modal
-    console.log("Pressed workout:", workoutNum);
-  };
-
   return (
     <SafeAreaView style={tw`flex-1 bg-black`} edges={['top']}>
       <View style={tw`flex-1`}>
@@ -67,11 +62,10 @@ export default function HomeScreen() {
             PROGRESS
           </Text>
           <View style={[tw`bg-[#1a1a1a] p-4`, { borderRadius: 16 }]}>
-            <OctagonGrid
+            <ProgressGrid
               completedWorkouts={completedWorkouts}
               missedWorkouts={missedWorkouts}
               currentWorkout={currentWorkout}
-              onCellPress={handleCellPress}
             />
           </View>
         </View>
@@ -83,55 +77,65 @@ export default function HomeScreen() {
           contentContainerStyle={tw`px-4 py-4 gap-3`}
         >
           {/* Sessions */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center justify-between`, { borderRadius: 16, minWidth: 110, height: 120 }]}>
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
             <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "JetBrainsMono_500Medium", letterSpacing: 0.5 }]}>
               SESSIONS
             </Text>
-            <Feather name="target" size={36} color="#EF4444" />
+            <View style={tw`flex-1 justify-center`}>
+              <Feather name="target" size={40} color="#EF4444" />
+            </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "JetBrainsMono_600SemiBold" }]}>
               {completedCount}/{totalSessions}
             </Text>
           </View>
 
           {/* Time Training */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center justify-between`, { borderRadius: 16, minWidth: 110, height: 120 }]}>
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
             <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "JetBrainsMono_500Medium", letterSpacing: 0.5 }]}>
               TIME
             </Text>
-            <Feather name="clock" size={36} color="#EF4444" />
+            <View style={tw`flex-1 justify-center`}>
+              <Feather name="clock" size={40} color="#EF4444" />
+            </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "JetBrainsMono_600SemiBold" }]}>
               1:03:00
             </Text>
           </View>
 
           {/* Streak */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center justify-between`, { borderRadius: 16, minWidth: 110, height: 120 }]}>
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
             <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "JetBrainsMono_500Medium", letterSpacing: 0.5 }]}>
               STREAK
             </Text>
-            <Feather name="zap" size={36} color="#EF4444" />
+            <View style={tw`flex-1 justify-center`}>
+              <Feather name="zap" size={40} color="#EF4444" />
+            </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "JetBrainsMono_600SemiBold" }]}>
               2 days
             </Text>
           </View>
 
           {/* kCal Burned */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center justify-between`, { borderRadius: 16, minWidth: 110, height: 120 }]}>
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
             <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "JetBrainsMono_500Medium", letterSpacing: 0.5 }]}>
               KCAL
             </Text>
-            <Feather name="activity" size={36} color="#EF4444" />
+            <View style={tw`flex-1 justify-center`}>
+              <Feather name="activity" size={40} color="#EF4444" />
+            </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "JetBrainsMono_600SemiBold" }]}>
               1,280
             </Text>
           </View>
 
           {/* Best Time */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center justify-between`, { borderRadius: 16, minWidth: 110, height: 120 }]}>
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
             <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "JetBrainsMono_500Medium", letterSpacing: 0.5 }]}>
               BEST
             </Text>
-            <Feather name="award" size={36} color="#EF4444" />
+            <View style={tw`flex-1 justify-center`}>
+              <Feather name="award" size={40} color="#EF4444" />
+            </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "JetBrainsMono_600SemiBold" }]}>
               12:45
             </Text>

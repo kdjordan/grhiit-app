@@ -76,13 +76,6 @@ export default function RootLayout() {
               animation: "slide_from_bottom"
             }}
           />
-          <Stack.Screen
-            name="settings"
-            options={{
-              presentation: "modal",
-              animation: "slide_from_bottom"
-            }}
-          />
         </Stack>
         {showSplash && <AnimatedSplash onComplete={handleSplashComplete} />}
       </View>
@@ -123,13 +116,6 @@ export default function RootLayout() {
           name="workout"
           options={{
             gestureEnabled: false,
-            animation: "slide_from_bottom"
-          }}
-        />
-        <Stack.Screen
-          name="settings"
-          options={{
-            presentation: "modal",
             animation: "slide_from_bottom"
           }}
         />

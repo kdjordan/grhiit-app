@@ -1,4 +1,24 @@
-// Workout Types
+// Workout Block Types (for timer)
+export interface WorkoutBlock {
+  id: string;
+  movement: string; // Short code: "8CBB", "JSQ", "BRP", "FLSQ", "REST"
+  displayName: string; // Full name: "8-COUNT BODYBUILDERS"
+  intervals: number; // Number of work intervals
+  workDuration: number; // Seconds (0 for REST/transition blocks)
+  restDuration: number; // Seconds
+  repTarget?: number; // Optional rep goal per interval
+  isTransition?: boolean; // True for REST blocks between exercises
+}
+
+export interface WorkoutProgram {
+  id: string;
+  name: string;
+  week: number;
+  day: number;
+  blocks: WorkoutBlock[];
+}
+
+// Legacy Workout Types (keep for compatibility)
 export interface Workout {
   id: string;
   week: number;
