@@ -1,12 +1,61 @@
 # GRHIIT Development Process
 
-## Current Focus: Preview Screen & Navigation Polish
+## Current Focus: Post-Workout Flow & Viral Sharing
 
-Streamlined workout preview, new LIBRARY tab, progression logic.
+Completed workout complete screen, rep tracking, share flow.
 
 ---
 
-## Latest Session (Dec 25 - Evening)
+## Latest Session (Dec 25 - Night)
+
+### Completed
+- **Post-Workout Complete Screen Redesign**
+  - Red logomark with animated entrance (replaces green checkmark)
+  - "WORKOUT COMPLETE" header (ChakraPetch 28px)
+  - Time display from actual workout elapsed time
+  - Removed HR card (no HealthKit yet)
+  - 5 rapid beeps on completion via `playBlockCompleteBeep()`
+
+- **Summit Rep Tracking**
+  - "SUMMIT REPS" section with context: "How many reps per Tabata interval?"
+  - Two tap-to-select buttons: BRP (4-12 range) and FLSQ (8-25 range)
+  - Red "TAP" buttons by default → show number after selection
+  - Modal picker with number grid for each movement
+  - No keyboard needed - just tap the number
+
+- **Difficulty Rating**
+  - "How hard was this?" 1-5 scale
+  - Red highlight on selected rating
+  - "Easy" / "Brutal" labels
+
+- **DONE Button Gating**
+  - Button disabled (gray) until all 3 inputs filled:
+    - BRP reps
+    - FLSQ reps
+    - Difficulty (1-5)
+  - Enables with red background + glow when complete
+
+- **Share Screen (`/workout/share`)**
+  - Prompts user to share after completing workout
+  - 4 template previews: Minimal, Brutal, Stats, Dark
+  - Each template shows actual workout data (reps, week/day)
+  - Platform buttons: Instagram, TikTok, X, Save to Photos
+  - "Skip for now" option at bottom
+  - Data passed via route params from complete screen
+
+### Technical Decisions
+- **Rep tracking model**: Reps per interval (pace held), not cumulative total
+- **Tap picker vs input**: Modal grid picker for exhausted users - no keyboard
+- **Required fields**: All three inputs required before proceeding
+- **Share flow**: Complete → Share → Home (share is skippable)
+
+### Files Changed
+- `app/workout/complete.tsx` - Full redesign with rep pickers
+- `app/workout/share.tsx` - New share screen with templates
+
+---
+
+## Earlier Session (Dec 25 - Evening)
 
 ### Completed
 - **Workout Preview Screen Redesign**
@@ -280,11 +329,12 @@ Using `expo-audio` with `createAudioPlayer`:
 
 ## Next Steps
 
-1. **Test on device** - Verify timer animation + audio performance
-2. **Complete screen** - Post-workout identity check-in, show stats
-3. **Connect workout completion** - Call `completeWorkout()` on finish
-4. **Rep tracking UI** - Tap to count reps during intervals (deferred)
+1. **Test on device** - Verify complete flow + share screen
+2. **Implement actual share** - `react-native-view-shot` + `react-native-share`
+3. **Dynamic rep pickers** - Pull movements from actual workout data (not hardcoded BRP/FLSQ)
+4. **Persist rep data** - Store in userStore for stats/history
 5. **Remove JetBrains Mono** - Clean up unused font from bundle
+6. **Add more share templates** - Per viral.md roadmap (200+ templates goal)
 
 ---
 

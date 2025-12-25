@@ -507,3 +507,117 @@ const isUnlocked = isDevMode || workoutNumber <= currentWorkoutNumber;
 - `expo-audio` - Sound playback (beeps)
 - `expo-video` - Video playback (future)
 - `expo-av` - **REMOVED** (deprecated SDK 54)
+
+---
+
+## Post-Workout Complete Screen
+
+### Layout (top to bottom)
+1. **Red Logomark** - GrhiitMark 100px, animated entrance
+2. **"WORKOUT COMPLETE"** - ChakraPetch 28px, letter-spacing 2
+3. **Time** - SpaceGrotesk 18px, white/60
+4. **Summit Reps Section** - Primary data capture
+5. **Rate This Session** - 1-5 difficulty scale
+6. **DONE Button** - Disabled until all inputs filled
+7. **Quote** - Italic, white/30
+
+### Summit Reps UI
+```
+SUMMIT REPS
+How many reps per Tabata interval?
+
+   BRP              FLSQ
+[ TAP ]          [ TAP ]     ← Red bg, white text (unfilled)
+[  4  ]          [  8  ]     ← Dark bg, red border (filled)
+```
+
+**Rep Picker Modal**:
+- Dark overlay (black/80)
+- Card with movement name header
+- Grid of number buttons (56×56px, 12px radius)
+- BRP range: 4-12
+- FLSQ range: 8-25
+- Selected number highlighted red
+- Tap outside to dismiss
+
+### Difficulty Rating
+```
+RATE THIS SESSION
+How hard was this?
+
+[1] [2] [3] [4] [5]
+Easy            Brutal
+```
+- 1-5 buttons, selected = red fill
+- Scale labels below
+
+### Button States
+**DONE disabled**: `#262626` bg, `#4B5563` text, no shadow
+**DONE enabled**: `#EF4444` bg, white text, red glow shadow
+
+### Required Inputs (all must be filled)
+- BRP reps (not null)
+- FLSQ reps (not null)
+- Difficulty (not null)
+
+---
+
+## Share Screen
+
+### Purpose
+Prompt users to share workout completion on social media (viral growth mechanism).
+
+### Layout
+1. **Header**: "SHARE YOUR SESSION" + "Show the world what you just did"
+2. **Template Carousel**: Horizontal scroll of 4 template previews
+3. **Platform Buttons**: Instagram, TikTok, X, Save
+4. **Skip Option**: "Skip for now" (gray text, bottom)
+
+### Template Styles
+| Template | Background | Numbers | Accent |
+|----------|------------|---------|--------|
+| Minimal  | Black      | White   | Red    |
+| Brutal   | Dark       | Red     | White  |
+| Stats    | Gray       | White   | Red    |
+| Dark     | Black      | White   | White  |
+
+### Template Preview (160px wide, 9:16 aspect)
+- Mini logomark (32px)
+- Workout stats (reps, week/day)
+- Week/Day badge at bottom
+- Selected template has red border
+
+### Platform Buttons
+- Equal width, side by side
+- Dark surface (#1a1a1a), border (#262626)
+- Platform icon + label
+- Icons: Instagram (pink), TikTok (white), X (blue), Save (green)
+
+### Data Flow
+Complete screen passes via route params:
+- `time`: formatted elapsed time
+- `brp`: burpee reps per interval
+- `flsq`: flying squat reps per interval
+- `difficulty`: 1-5 rating
+
+---
+
+## Workout Flow (Complete)
+
+```
+Home Screen
+  ↓ "START NEXT SESSION"
+Preview Screen (/workout)
+  ↓ "LET'S GO"
+Active Timer (/workout/active)
+  ↓ Workout complete
+Complete Screen (/workout/complete)
+  - Enter summit reps (BRP, FLSQ)
+  - Rate difficulty (1-5)
+  ↓ "DONE"
+Share Screen (/workout/share)
+  - Select template
+  - Share to platform OR skip
+  ↓
+Home Screen
+```
