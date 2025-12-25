@@ -8,6 +8,7 @@ export interface WorkoutBlock {
   restDuration: number; // Seconds
   repTarget?: number; // Optional rep goal per interval
   isTransition?: boolean; // True for REST blocks between exercises
+  group?: string; // Group tag for collapsing into "rounds" in preview
 }
 
 export interface WorkoutProgram {

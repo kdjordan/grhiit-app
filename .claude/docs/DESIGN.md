@@ -183,9 +183,10 @@ Layout uses flex-1 wrapper around icon to center it vertically between title and
 
 ## Tab Navigation
 
-4 tabs with Feather icons:
+5 tabs with Feather icons:
 - HOME (`home`)
 - TRAIN (`zap`)
+- LIBRARY (`book-open`) - Movement reference
 - STATS (`bar-chart-2`)
 - SETTINGS (`settings`)
 
@@ -331,17 +332,40 @@ During workout, only essentials shown:
 
 ## Pre-workout Preview Screen
 
-### Layout
-- Back button with arrow
-- Workout title: "WEEK 1 • DAY 1" subtitle, workout name
-- Stats row: Duration, exercise count, movement count
-- Full block breakdown (scrollable)
-- Fixed "LET'S GO" button at bottom
+### Layout (Collapsed by Default)
+1. Back button + dev shortcuts
+2. Workout title: "WEEK 1 • DAY 1", name, tagline (italic)
+3. Stats row: Duration, intervals, movements
+4. Video placeholder (16:9, SESSION WALKTHROUGH label)
+5. "VIEW BREAKDOWN" toggle button
+6. Fixed "LET'S GO" button at bottom (no icon)
 
-### Block Display
-- Exercise blocks: Card with name, intervals × timing, rep target badge
-- REST transitions: Divider line with "30s REST" text
-- Duration bar showing relative block length
+### Taglines
+Auto-generated from workout name:
+- "Foundation" → "Learn the rhythm"
+- "Build" → "Establish the pattern"
+- Week-based fallbacks for unknown names
+
+### Expanded Breakdown
+Grouped by workout sections:
+- **RAMP-UP** (↗ trending-up) - Warmup blocks
+- **SUMMIT** (⚡ zap, red accent) - Grouped rounds at peak intensity
+- **RUN-OUT** (» chevrons-right) - Maintain intensity while fatigued
+
+### Section Header Component
+```
+↗ RAMP-UP                    2:30
+──────────────────────────────────
+```
+- Icon + label left, duration right
+- SUMMIT gets red accent color
+
+### Inline REST Display
+REST periods shown as divider lines between blocks:
+```
+──────────── 30s ────────────
+```
+No separate REST cards
 
 ---
 
@@ -373,9 +397,113 @@ During workout, only essentials shown:
 
 ---
 
+## Workout Data Pipeline
+
+### CSV → JSON Build System
+Workouts are authored in CSV and converted to JSON at build time.
+
+**Source**: `workouts/csv/weekX-dayX.csv`
+```csv
+movement,intervals,work,rest,Time,Group
+8CBB,10,6,3,90,
+REST,,,30,30,
+BRP + FLSQ,2,20,10,60,A
+```
+
+**Output**: `assets/workouts/level-1.json`
+
+**CSV parsing rules**:
+- REST rows: empty `intervals`/`work`, only `rest` value
+- Combo movements (`BRP + FLSQ`): split into separate blocks (1 interval each)
+- Time column: ignored (calculated by script)
+- **Group column**: Tags blocks for collapsing into "rounds" in preview
+
+**Round grouping**:
+- Blocks with same Group tag (e.g., "A") collapse into "X ROUNDS" in preview
+- REST blocks between grouped items absorbed as "30s rest between rounds"
+- Preview shows pattern: "BRP + FLSQ" with timing
+
+**Scripts**:
+- `npm run convert-workouts` - Manual conversion
+- `npm run prebuild` - Auto-runs converter before Expo prebuild
+
+**Movement codes**: 8CBB, JSQ, BRP, FLSQ, PU, MC, LNG, JLNG, HK, REST
+
+---
+
+## Workout Loading Architecture
+
+**Files**:
+- `src/lib/workoutLoader.ts` - Load workouts from JSON
+- `src/stores/devStore.ts` - Dev mode state (selected workout)
+
+**Flow**:
+1. Home screen → Preview loads workout from JSON via `workoutLoader`
+2. Preview sets workout in `workoutStore`
+3. Active screen reads from `workoutStore`
+
+**Dev mode** (`EXPO_PUBLIC_DEV_WORKOUT_SELECT=true`):
+- Progress grid shows green borders on available workouts
+- Tap any workout to select and preview it
+- Shows "DEV MODE: week1-day2" badge in preview
+
+---
+
+## TRAIN Screen
+
+### Layout
+- Header: "Sessions" title, workout count
+- Scrollable list of workout cards
+
+### Workout Card States
+- **Completed** (green check icon): `workoutNumber < currentWorkoutNumber`
+- **Current** (red play icon, red border): `workoutNumber === currentWorkoutNumber`
+- **Locked** (lock icon, dimmed): `workoutNumber > currentWorkoutNumber`
+
+### Card Content
+- Week/Day label + workout name
+- Duration badge (clock icon)
+- Movement tags (gray pills)
+- Action button: START / REPEAT / LOCKED
+
+### Progression Logic
+```typescript
+const workoutNumber = (week - 1) * 3 + day;
+const isUnlocked = isDevMode || workoutNumber <= currentWorkoutNumber;
+```
+
+---
+
+## LIBRARY Screen
+
+### Layout
+- Header: "Movement Library" + subtitle
+- Scrollable list of movement cards
+
+### Movement Card
+- Name (white, bold) + code badge (gray pill)
+- Description (gray text)
+- "Video coming soon" placeholder
+
+### Movements (8 total)
+8CBB, JSQ, BRP, FLSQ, PU, MC, LNG, JLNG
+(High Knees removed - not used in program)
+
+---
+
 ## Dev Environment Notes
 
 - `EXPO_PUBLIC_DEV_SKIP_AUTH=true` - Skip auth for faster iteration
 - `EXPO_PUBLIC_DEV_SKIP_SPLASH=true` - Skip splash animation
+- `EXPO_PUBLIC_DEV_WORKOUT_SELECT=true` - Enable workout selection in progress grid
 - Expo dev server runs in separate terminal
 - Icons: `@expo/vector-icons` (Feather set)
+
+### Dev Shortcuts
+- Preview screen: "SKIP → COMPLETE" button (orange) - jumps to post-workout screen
+- TRAIN screen: All workouts unlocked in dev mode
+
+### Dependencies
+- `expo-audio` - Sound playback (beeps)
+- `expo-video` - Video playback (future)
+- `expo-av` - **REMOVED** (deprecated SDK 54)

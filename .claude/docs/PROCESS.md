@@ -1,12 +1,53 @@
 # GRHIIT Development Process
 
-## Current Focus: Active Workout Screen Polish
+## Current Focus: Preview Screen & Navigation Polish
 
-Minimal, focused UI during max effort. Audio beeps implemented.
+Streamlined workout preview, new LIBRARY tab, progression logic.
 
 ---
 
-## Latest Session (Dec 25)
+## Latest Session (Dec 25 - Evening)
+
+### Completed
+- **Workout Preview Screen Redesign**
+  - Collapsed by default with "VIEW BREAKDOWN" toggle
+  - Section headers: RAMP-UP → SUMMIT → RUN-OUT (not "cool-down")
+  - Inline REST indicators (divider lines with duration)
+  - Auto-generated taglines per workout name
+  - Video placeholder container (16:9 aspect ratio)
+  - LayoutAnimation for smooth expand/collapse
+
+- **LIBRARY Tab Added**
+  - New tab between TRAIN and STATS
+  - Icon: `book-open`
+  - Lists 8 movements with descriptions (removed High Knees)
+  - Each card shows: name, code badge, description, video placeholder
+
+- **TRAIN Screen Overhaul**
+  - Loads actual workouts from JSON (Foundation, Build, Push, Fortify)
+  - Removed difficulty bars and filter tabs
+  - Shows movement tags per workout
+  - Progression locking: must complete previous workout to unlock next
+  - States: Completed (green check), Current (red play), Locked (lock icon)
+  - Dev mode bypasses locks
+
+- **UI Cleanup**
+  - Removed play icons from START buttons (text only)
+  - Removed duplicate `index 2.tsx` file causing extra tab
+  - Dev shortcut: "SKIP → COMPLETE" button on preview screen
+
+- **Dependency Cleanup**
+  - Removed `expo-av` (deprecated in SDK 54)
+  - Using `expo-audio` for sounds, `expo-video` for future video
+
+### Technical Decisions
+- **Section naming**: RUN-OUT (not COOL-DOWN) - maintaining intensity while fatigued
+- **Taglines**: Auto-generated from workout name map with week fallbacks
+- **Progression**: `workoutNumber = (week - 1) * 3 + day`
+
+---
+
+## Earlier Session (Dec 25)
 
 ### Completed
 - **Color scheme corrected for red-lining philosophy**
@@ -250,8 +291,18 @@ Using `expo-audio` with `createAudioPlayer`:
 ## Dev Commands
 
 ```bash
-npm start       # Expo dev server (run in separate terminal)
-npm run ios     # iOS simulator
+npm start              # Expo dev server (run in separate terminal)
+npm run ios            # iOS simulator
+npm run convert-workouts  # Convert CSV → JSON (workouts/csv/ → assets/workouts/)
+npm run prebuild       # Runs convert-workouts + expo prebuild
+```
+
+**Workout CSV format:** `workouts/csv/weekX-dayX.csv`
+```csv
+movement,intervals,work,rest,Time
+8CBB,10,6,3,90
+REST,,,30,30
+BRP + FLSQ,2,20,10,60
 ```
 
 **Dev flags:**

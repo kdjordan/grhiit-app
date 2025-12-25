@@ -1,0 +1,16 @@
+movement,intervals,work,rest,Time ,Group
+8CBB,10,6,3,90,
+REST,,,30,30,
+JSQ,10,6,3,90,
+REST,,,30,30,
+BRP + FLSQ,2,20,10,60,A
+REST,,,30,30,
+BRP + FLSQ,2,20,10,60,A
+REST,,,30,30,
+BRP + FLSQ,2,20,10,60,A
+REST,,,30,30,
+BRP + FLSQ,2,20,10,60,A
+REST,,,30,30,
+JSQ,10,6,3,90,
+REST,,,30,30,
+8CBB,10,6,3,90,

@@ -5,6 +5,8 @@ import { Feather } from "@expo/vector-icons";
 import tw from "@/lib/tw";
 import { GrhiitMark, ProgressGrid } from "@/components";
 import { useUserStore } from "@/stores/userStore";
+import { useDevStore, isDevWorkoutSelectEnabled } from "@/stores/devStore";
+import { getWorkoutByNumber } from "@/lib/workoutLoader";
 
 // Format date like "TODAY, 23 DECEMBER"
 function getFormattedDate(): string {
@@ -22,12 +24,27 @@ export default function HomeScreen() {
     completedWorkoutIds,
     missedWorkoutIds,
     getCurrentWorkoutNumber,
+    resetProgress,
   } = useUserStore();
+
+  // DEV: Workout selection mode
+  const { selectedWorkoutId, selectWorkout, clearSelection } = useDevStore();
+  const isDevMode = isDevWorkoutSelectEnabled();
+  const isDev = process.env.EXPO_PUBLIC_DEV_SKIP_AUTH === "true";
 
   const userName = "KEVIN"; // TODO: Get from auth
   const completedWorkouts = completedWorkoutIds;
   const missedWorkouts = missedWorkoutIds;
   const currentWorkout = getCurrentWorkoutNumber();
+
+  // Handle workout selection in dev mode
+  const handleSelectWorkout = (workoutNum: number) => {
+    const workout = getWorkoutByNumber(workoutNum);
+    if (workout) {
+      selectWorkout(workout.id);
+      router.push("/workout");
+    }
+  };
 
   // Calculate stats
   const totalSessions = 24;
@@ -47,29 +64,50 @@ export default function HomeScreen() {
       <View style={tw`flex-1`}>
         {/* Header */}
         <View style={tw`px-5 pt-4`}>
-          <View style={tw`flex-row items-center`}>
-            <GrhiitMark size={32} />
-            <View style={tw`ml-3`}>
-              <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
-                {formattedDate}
-              </Text>
-              <Text style={[tw`text-white text-lg mt-0.5`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-                Welcome Back, {userName}
-              </Text>
+          <View style={tw`flex-row items-center justify-between`}>
+            <View style={tw`flex-row items-center`}>
+              <GrhiitMark size={32} />
+              <View style={tw`ml-3`}>
+                <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
+                  {formattedDate}
+                </Text>
+                <Text style={[tw`text-white text-lg mt-0.5`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
+                  Welcome Back, {userName}
+                </Text>
+              </View>
             </View>
+            {isDev && (
+              <Pressable
+                onPress={resetProgress}
+                style={tw`px-3 py-1.5 bg-[#262626] rounded-lg`}
+              >
+                <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                  RESET
+                </Text>
+              </Pressable>
+            )}
           </View>
         </View>
 
         {/* Progress Bento */}
         <View style={tw`px-4 pt-6`}>
-          <Text style={[tw`text-[#6B7280] text-xs mb-2 ml-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
-            PROGRESS
-          </Text>
+          <View style={tw`flex-row items-center justify-between mb-2 ml-1`}>
+            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
+              PROGRESS
+            </Text>
+            {isDevMode && (
+              <Text style={[tw`text-[#22C55E] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                TAP TO SELECT
+              </Text>
+            )}
+          </View>
           <View style={[tw`bg-[#1a1a1a] p-4`, { borderRadius: 16 }]}>
             <ProgressGrid
               completedWorkouts={completedWorkouts}
               missedWorkouts={missedWorkouts}
               currentWorkout={currentWorkout}
+              devMode={isDevMode}
+              onSelectWorkout={handleSelectWorkout}
             />
           </View>
         </View>
@@ -161,7 +199,6 @@ export default function HomeScreen() {
             ]}
             onPress={() => router.push("/workout")}
           >
-            <Feather name="play" size={20} color="#FFFFFF" style={tw`mr-2`} />
             <Text style={[tw`text-white text-base`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
               START NEXT SESSION
             </Text>

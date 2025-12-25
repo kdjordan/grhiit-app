@@ -1,32 +1,325 @@
-import { View, Text, Pressable, ScrollView } from "react-native";
+import { View, Text, Pressable, ScrollView, LayoutAnimation, Platform, UIManager } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import tw from "@/lib/tw";
 import { useWorkoutStore } from "@/stores/workoutStore";
+import { useUserStore } from "@/stores/userStore";
+import { useDevStore, isDevWorkoutSelectEnabled } from "@/stores/devStore";
 import {
-  SAMPLE_WORKOUT,
+  getWorkoutById,
+  getWorkoutByNumber,
   calculateWorkoutDuration,
   formatDuration,
   getUniqueMovements,
-} from "@/constants/sampleWorkout";
-import { WorkoutBlock } from "@/types";
+} from "@/lib/workoutLoader";
+import { WorkoutBlock, WorkoutProgram } from "@/types";
+
+// Enable LayoutAnimation for Android
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+// Types for grouped display
+type DisplayItem =
+  | { type: "block"; block: WorkoutBlock; restAfter?: number }
+  | { type: "rounds"; rounds: number; pattern: string; timing: string; restBetween: number; totalDuration: number; restAfter?: number };
+
+type WorkoutSection = "RAMP-UP" | "SUMMIT" | "RUN-OUT";
+
+interface SectionGroup {
+  section: WorkoutSection;
+  items: DisplayItem[];
+  totalDuration: number;
+}
+
+/**
+ * Generate a tagline for the workout
+ */
+function generateTagline(name: string, week: number): string {
+  const taglines: Record<string, string> = {
+    "Foundation": "Learn the rhythm",
+    "Build": "Establish the pattern",
+    "Push": "Find your edge",
+    "Fortify": "Solidify the base",
+    "Endure": "Build your capacity",
+    "Surge": "Increase the tempo",
+    "Peak": "Maximum intensity",
+    "Finish": "Complete the journey",
+  };
+
+  if (taglines[name]) {
+    return taglines[name];
+  }
+
+  // Week-based fallbacks
+  const weekDescriptors: Record<number, string> = {
+    1: "Building your foundation",
+    2: "Developing consistency",
+    3: "Increasing intensity",
+    4: "Testing your limits",
+    5: "Breaking through plateaus",
+    6: "Refining your technique",
+    7: "Peak performance",
+    8: "Final push",
+  };
+
+  return weekDescriptors[week] || "Push your limits";
+}
+
+/**
+ * Groups consecutive blocks with same group tag into "rounds" display items
+ * Attaches restAfter to items instead of creating separate REST entries
+ */
+function groupBlocksForDisplay(blocks: WorkoutBlock[]): DisplayItem[] {
+  const items: DisplayItem[] = [];
+  let i = 0;
+
+  while (i < blocks.length) {
+    const block = blocks[i];
+
+    // If block has a group, collect all consecutive blocks with same group
+    if (block.group && !block.isTransition) {
+      const groupName = block.group;
+      const groupedBlocks: WorkoutBlock[] = [];
+      const restDurations: number[] = [];
+      let j = i;
+
+      // Collect all blocks and rests in this group
+      while (j < blocks.length) {
+        const current = blocks[j];
+
+        if (current.group === groupName && !current.isTransition) {
+          groupedBlocks.push(current);
+          j++;
+        } else if (current.isTransition && j > i) {
+          // Check if next non-rest block is still in same group
+          const nextNonRest = blocks.slice(j + 1).find(b => !b.isTransition);
+          if (nextNonRest?.group === groupName) {
+            restDurations.push(current.restDuration);
+            j++;
+          } else {
+            break;
+          }
+        } else {
+          break;
+        }
+      }
+
+      // Count rounds
+      const firstBlock = groupedBlocks[0];
+      const pattern = getPatternFromBlocks(groupedBlocks);
+      const blocksPerRound = pattern.split(" + ").length;
+      const roundCount = Math.ceil(groupedBlocks.length / blocksPerRound);
+
+      // Calculate total duration
+      const totalDuration = groupedBlocks.reduce((sum, b) =>
+        sum + (b.workDuration + b.restDuration) * b.intervals, 0
+      ) + restDurations.reduce((sum, r) => sum + r, 0);
+
+      // Check if there's a REST after this group
+      let restAfter: number | undefined;
+      if (j < blocks.length && blocks[j].isTransition) {
+        restAfter = blocks[j].restDuration;
+        j++; // Skip the rest block
+      }
+
+      items.push({
+        type: "rounds",
+        rounds: roundCount,
+        pattern: pattern,
+        timing: `${firstBlock.intervals} × (${firstBlock.workDuration}s/${firstBlock.restDuration}s)`,
+        restBetween: restDurations[0] || 30,
+        totalDuration,
+        restAfter,
+      });
+
+      i = j;
+      continue;
+    }
+
+    // Regular block (skip REST transitions - attach to previous item)
+    if (block.isTransition) {
+      // Attach rest to previous item
+      if (items.length > 0) {
+        items[items.length - 1].restAfter = block.restDuration;
+      }
+      i++;
+      continue;
+    }
+
+    items.push({ type: "block", block });
+    i++;
+  }
+
+  return items;
+}
+
+/**
+ * Detect sections (RAMP-UP / SUMMIT / COOL-DOWN) from display items
+ */
+function detectSections(items: DisplayItem[]): SectionGroup[] {
+  // Find first and last "rounds" type
+  const roundsIndices = items
+    .map((item, i) => item.type === "rounds" ? i : -1)
+    .filter(i => i !== -1);
+
+  if (roundsIndices.length === 0) {
+    // No summit - all RAMP-UP
+    const totalDuration = items.reduce((sum, item) => {
+      if (item.type === "block") {
+        const blockDur = (item.block.workDuration + item.block.restDuration) * item.block.intervals;
+        return sum + blockDur + (item.restAfter || 0);
+      }
+      return sum + (item.restAfter || 0);
+    }, 0);
+
+    return [{ section: "RAMP-UP", items, totalDuration }];
+  }
+
+  const firstRoundsIdx = Math.min(...roundsIndices);
+  const lastRoundsIdx = Math.max(...roundsIndices);
+
+  const sections: SectionGroup[] = [];
+
+  // RAMP-UP: items before first rounds
+  if (firstRoundsIdx > 0) {
+    const rampUpItems = items.slice(0, firstRoundsIdx);
+    const totalDuration = rampUpItems.reduce((sum, item) => {
+      if (item.type === "block") {
+        const blockDur = (item.block.workDuration + item.block.restDuration) * item.block.intervals;
+        return sum + blockDur + (item.restAfter || 0);
+      }
+      return sum + (item.restAfter || 0);
+    }, 0);
+    sections.push({ section: "RAMP-UP", items: rampUpItems, totalDuration });
+  }
+
+  // SUMMIT: all rounds items (and any items between them)
+  const summitItems = items.slice(firstRoundsIdx, lastRoundsIdx + 1);
+  const summitDuration = summitItems.reduce((sum, item) => {
+    if (item.type === "rounds") {
+      return sum + item.totalDuration + (item.restAfter || 0);
+    }
+    if (item.type === "block") {
+      const blockDur = (item.block.workDuration + item.block.restDuration) * item.block.intervals;
+      return sum + blockDur + (item.restAfter || 0);
+    }
+    return sum;
+  }, 0);
+  sections.push({ section: "SUMMIT", items: summitItems, totalDuration: summitDuration });
+
+  // RUN-OUT: items after last rounds (maintain intensity while fatigued)
+  if (lastRoundsIdx < items.length - 1) {
+    const runOutItems = items.slice(lastRoundsIdx + 1);
+    const totalDuration = runOutItems.reduce((sum, item) => {
+      if (item.type === "block") {
+        const blockDur = (item.block.workDuration + item.block.restDuration) * item.block.intervals;
+        return sum + blockDur + (item.restAfter || 0);
+      }
+      return sum + (item.restAfter || 0);
+    }, 0);
+    sections.push({ section: "RUN-OUT", items: runOutItems, totalDuration });
+  }
+
+  return sections;
+}
+
+/**
+ * Extract movement pattern from grouped blocks (e.g., "BRP + FLSQ")
+ */
+function getPatternFromBlocks(blocks: WorkoutBlock[]): string {
+  const seen = new Set<string>();
+  const movements: string[] = [];
+
+  for (const block of blocks) {
+    if (!seen.has(block.movement)) {
+      seen.add(block.movement);
+      movements.push(block.movement);
+    }
+  }
+
+  return movements.join(" + ");
+}
 
 export default function WorkoutPreviewScreen() {
   const { setWorkout } = useWorkoutStore();
+  const { getCurrentWorkoutNumber } = useUserStore();
+  const { selectedWorkoutId, clearSelection } = useDevStore();
+  const isDevMode = isDevWorkoutSelectEnabled();
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  // Load sample workout on mount
+  // Get workout from JSON
+  const workout = useMemo((): WorkoutProgram | null => {
+    if (isDevMode && selectedWorkoutId) {
+      return getWorkoutById(selectedWorkoutId);
+    }
+    return getWorkoutByNumber(getCurrentWorkoutNumber());
+  }, [selectedWorkoutId, isDevMode]);
+
+  // Load workout into store on mount
   useEffect(() => {
-    setWorkout(SAMPLE_WORKOUT);
-  }, []);
+    if (workout) {
+      setWorkout(workout);
+    }
+  }, [workout]);
 
-  const totalDuration = calculateWorkoutDuration(SAMPLE_WORKOUT);
-  const uniqueMovements = getUniqueMovements(SAMPLE_WORKOUT);
-  const totalBlocks = SAMPLE_WORKOUT.blocks.filter((b) => !b.isTransition).length;
+  // Clear dev selection when leaving
+  useEffect(() => {
+    return () => {
+      if (isDevMode) {
+        clearSelection();
+      }
+    };
+  }, [isDevMode]);
+
+  // Toggle expand/collapse with animation
+  const toggleExpanded = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setIsExpanded(!isExpanded);
+  };
+
+  // Handle no workout found
+  if (!workout) {
+    return (
+      <SafeAreaView style={tw`flex-1 bg-grhiit-black items-center justify-center`}>
+        <Text style={tw`text-white text-lg mb-4`}>Workout not found</Text>
+        <Pressable
+          style={tw`bg-[#262626] px-6 py-3 rounded-xl`}
+          onPress={() => router.back()}
+        >
+          <Text style={tw`text-white`}>Go Back</Text>
+        </Pressable>
+      </SafeAreaView>
+    );
+  }
+
+  const totalDuration = calculateWorkoutDuration(workout);
+  const uniqueMovements = getUniqueMovements(workout);
+  const exerciseBlocks = workout.blocks.filter((b) => !b.isTransition);
+  const totalIntervals = exerciseBlocks.reduce((sum, b) => sum + b.intervals, 0);
+  const tagline = generateTagline(workout.name, workout.week);
+
+  // Group blocks for display
+  const displayItems = useMemo(
+    () => groupBlocksForDisplay(workout.blocks),
+    [workout]
+  );
+
+  // Detect sections
+  const sections = useMemo(
+    () => detectSections(displayItems),
+    [displayItems]
+  );
 
   const handleStart = () => {
     router.push("/workout/active");
+  };
+
+  // Dev shortcut to skip to complete screen
+  const handleDevSkipToComplete = () => {
+    router.push("/workout/complete");
   };
 
   return (
@@ -46,21 +339,50 @@ export default function WorkoutPreviewScreen() {
             <Text style={tw`text-gray-500 ml-2`}>Back</Text>
           </Pressable>
 
-          {/* Workout Title */}
+          {/* Dev mode indicator + shortcuts */}
+          {isDevMode && (
+            <View style={tw`flex-row items-center gap-2 mb-4`}>
+              {selectedWorkoutId && (
+                <View style={tw`bg-[#22C55E]/20 px-3 py-1.5 rounded-lg`}>
+                  <Text style={[tw`text-[#22C55E] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                    DEV: {workout.id}
+                  </Text>
+                </View>
+              )}
+              <Pressable
+                onPress={handleDevSkipToComplete}
+                style={tw`bg-[#F59E0B]/20 px-3 py-1.5 rounded-lg`}
+              >
+                <Text style={[tw`text-[#F59E0B] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                  SKIP → COMPLETE
+                </Text>
+              </Pressable>
+            </View>
+          )}
+
+          {/* Workout Title + Tagline */}
           <Text style={tw`text-white/50 text-xs tracking-widest mb-1`}>
-            WEEK {SAMPLE_WORKOUT.week} • DAY {SAMPLE_WORKOUT.day}
+            WEEK {workout.week} • DAY {workout.day}
           </Text>
           <Text
             style={[
-              tw`text-white text-3xl font-bold mb-2`,
+              tw`text-white text-3xl font-bold`,
               { fontFamily: "ChakraPetch_700Bold" },
             ]}
           >
-            {SAMPLE_WORKOUT.name}
+            {workout.name}
+          </Text>
+          <Text
+            style={[
+              tw`text-white/40 text-base mt-1 mb-6`,
+              { fontFamily: "SpaceGrotesk_400Regular", fontStyle: "italic" },
+            ]}
+          >
+            {tagline}
           </Text>
 
           {/* Stats Row */}
-          <View style={tw`flex-row items-center gap-4 mb-8`}>
+          <View style={tw`flex-row items-center gap-4 mb-6`}>
             <View style={tw`flex-row items-center`}>
               <Feather name="clock" size={14} color="#6B7280" />
               <Text style={tw`text-gray-500 ml-1`}>
@@ -68,9 +390,9 @@ export default function WorkoutPreviewScreen() {
               </Text>
             </View>
             <View style={tw`flex-row items-center`}>
-              <Feather name="layers" size={14} color="#6B7280" />
+              <Feather name="repeat" size={14} color="#6B7280" />
               <Text style={tw`text-gray-500 ml-1`}>
-                {totalBlocks} exercises
+                {totalIntervals} intervals
               </Text>
             </View>
             <View style={tw`flex-row items-center`}>
@@ -80,18 +402,54 @@ export default function WorkoutPreviewScreen() {
               </Text>
             </View>
           </View>
+
+          {/* Video Preview */}
+          <VideoPreview week={workout.week} day={workout.day} />
+
+          {/* Expand/Collapse Button */}
+          <Pressable
+            onPress={toggleExpanded}
+            style={tw`flex-row items-center justify-center py-3 border border-[#333] rounded-xl`}
+          >
+            <Text
+              style={[
+                tw`text-white/60 text-sm mr-2`,
+                { fontFamily: "SpaceGrotesk_500Medium" },
+              ]}
+            >
+              {isExpanded ? "HIDE BREAKDOWN" : "VIEW BREAKDOWN"}
+            </Text>
+            <Feather
+              name={isExpanded ? "chevron-up" : "chevron-down"}
+              size={16}
+              color="#9CA3AF"
+            />
+          </Pressable>
         </View>
 
-        {/* Workout Breakdown */}
-        <View style={tw`px-5`}>
-          <Text style={tw`text-white/40 text-xs tracking-widest mb-4`}>
-            SESSION BREAKDOWN
-          </Text>
+        {/* Expanded Breakdown */}
+        {isExpanded && (
+          <View style={tw`px-5`}>
+            {sections.map((section, sectionIdx) => (
+              <View key={section.section} style={tw`mb-4`}>
+                {/* Section Header */}
+                <SectionHeader
+                  section={section.section}
+                  duration={section.totalDuration}
+                />
 
-          {SAMPLE_WORKOUT.blocks.map((block, index) => (
-            <BlockRow key={block.id} block={block} index={index} />
-          ))}
-        </View>
+                {/* Section Items */}
+                {section.items.map((item, itemIdx) => (
+                  <DisplayRow
+                    key={`${sectionIdx}-${itemIdx}`}
+                    item={item}
+                    isLast={itemIdx === section.items.length - 1}
+                  />
+                ))}
+              </View>
+            ))}
+          </View>
+        )}
       </ScrollView>
 
       {/* Fixed Bottom Button */}
@@ -109,10 +467,9 @@ export default function WorkoutPreviewScreen() {
           ]}
           onPress={handleStart}
         >
-          <Feather name="play" size={20} color="#FFFFFF" />
           <Text
             style={[
-              tw`text-white text-lg font-bold ml-2 tracking-wide`,
+              tw`text-white text-lg font-bold tracking-wide`,
               { fontFamily: "SpaceGrotesk_700Bold" },
             ]}
           >
@@ -124,74 +481,188 @@ export default function WorkoutPreviewScreen() {
   );
 }
 
-// Block row component
-function BlockRow({ block, index }: { block: WorkoutBlock; index: number }) {
-  if (block.isTransition) {
-    // REST transition - show as divider
-    return (
-      <View style={tw`flex-row items-center py-3`}>
-        <View style={tw`flex-1 h-px bg-[#262626]`} />
-        <Text style={tw`text-white/30 text-xs mx-4 tracking-wide`}>
-          {block.restDuration}s REST
+// Video preview component - placeholder until videos are added
+// TODO: Replace with expo-video when videos are ready
+function VideoPreview({ week, day }: { week: number; day: number }) {
+  return (
+    <View style={tw`mb-4`}>
+      <Text
+        style={[
+          tw`text-white/40 text-xs tracking-widest mb-3`,
+          { fontFamily: "SpaceGrotesk_500Medium" },
+        ]}
+      >
+        SESSION WALKTHROUGH
+      </Text>
+
+      <View
+        style={[
+          tw`bg-[#1a1a1a] rounded-2xl overflow-hidden border border-[#262626]`,
+          { aspectRatio: 16 / 9 },
+        ]}
+      >
+        {/* Placeholder state - no video configured yet */}
+        <View style={tw`flex-1 items-center justify-center bg-[#141414]`}>
+          <View
+            style={[
+              tw`bg-[#262626] items-center justify-center mb-3`,
+              { width: 64, height: 64, borderRadius: 32 },
+            ]}
+          >
+            <Feather name="video" size={28} color="#6B7280" />
+          </View>
+          <Text
+            style={[
+              tw`text-white/60 text-sm mb-1`,
+              { fontFamily: "SpaceGrotesk_600SemiBold" },
+            ]}
+          >
+            Week {week} • Day {day}
+          </Text>
+          <Text
+            style={[
+              tw`text-white/30 text-xs`,
+              { fontFamily: "SpaceGrotesk_400Regular" },
+            ]}
+          >
+            Video coming soon
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+// Section header component
+function SectionHeader({ section, duration }: { section: WorkoutSection; duration: number }) {
+  const isSummit = section === "SUMMIT";
+
+  const icons: Record<WorkoutSection, string> = {
+    "RAMP-UP": "trending-up",
+    "SUMMIT": "zap",
+    "RUN-OUT": "chevrons-right",
+  };
+
+  return (
+    <View
+      style={[
+        tw`flex-row items-center justify-between py-2 mb-2 border-b`,
+        isSummit ? tw`border-grhiit-red/30` : tw`border-[#333]`,
+      ]}
+    >
+      <View style={tw`flex-row items-center`}>
+        <Feather
+          name={icons[section] as any}
+          size={14}
+          color={isSummit ? "#EF4444" : "#6B7280"}
+        />
+        <Text
+          style={[
+            tw`text-xs ml-2 tracking-widest`,
+            isSummit ? tw`text-grhiit-red` : tw`text-white/50`,
+            { fontFamily: "SpaceGrotesk_600SemiBold" },
+          ]}
+        >
+          {section}
         </Text>
-        <View style={tw`flex-1 h-px bg-[#262626]`} />
+      </View>
+      <Text
+        style={[
+          tw`text-xs`,
+          isSummit ? tw`text-grhiit-red/70` : tw`text-white/30`,
+          { fontFamily: "SpaceGrotesk_500Medium" },
+        ]}
+      >
+        {formatDuration(duration)}
+      </Text>
+    </View>
+  );
+}
+
+// Display row component with inline rest
+function DisplayRow({ item, isLast }: { item: DisplayItem; isLast: boolean }) {
+  if (item.type === "rounds") {
+    return (
+      <View style={tw`mb-2`}>
+        <View
+          style={tw`bg-[#1a1a1a] rounded-xl py-3 px-4 border border-grhiit-red/20`}
+        >
+          <View style={tw`flex-row items-center justify-between mb-1`}>
+            <View style={tw`flex-row items-center`}>
+              <View style={tw`bg-grhiit-red/20 px-2 py-0.5 rounded mr-2`}>
+                <Text style={[tw`text-grhiit-red text-xs`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                  {item.rounds} ROUNDS
+                </Text>
+              </View>
+            </View>
+            <Text
+              style={[
+                tw`text-white/40 text-sm`,
+                { fontFamily: "SpaceGrotesk_500Medium" },
+              ]}
+            >
+              {formatDuration(item.totalDuration)}
+            </Text>
+          </View>
+          <Text style={[tw`text-white text-sm`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
+            {item.pattern}
+          </Text>
+          <Text style={[tw`text-white/50 text-xs mt-0.5`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
+            {item.timing} • {item.restBetween}s rest between
+          </Text>
+        </View>
+        {/* Inline rest indicator */}
+        {item.restAfter && !isLast && (
+          <View style={tw`flex-row items-center justify-center py-1`}>
+            <View style={tw`h-px bg-[#333] flex-1`} />
+            <Text style={[tw`text-white/30 text-xs mx-2`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
+              {item.restAfter}s
+            </Text>
+            <View style={tw`h-px bg-[#333] flex-1`} />
+          </View>
+        )}
       </View>
     );
   }
 
   // Regular exercise block
-  return (
-    <View
-      style={tw`bg-[#141414] rounded-xl p-4 mb-2 border border-[#262626]`}
-    >
-      <View style={tw`flex-row items-start justify-between`}>
-        <View style={tw`flex-1`}>
-          <Text style={tw`text-white font-semibold text-base`}>
-            {block.displayName}
-          </Text>
-          <Text style={tw`text-white/50 text-sm mt-1`}>
-            {block.intervals} × ({block.workDuration}s work / {block.restDuration}s rest)
-          </Text>
-        </View>
+  const block = item.block;
+  const blockDuration = (block.workDuration + block.restDuration) * block.intervals;
 
-        {/* Rep target badge */}
-        {block.repTarget && (
-          <View
-            style={tw`bg-grhiit-red/20 px-3 py-1 rounded-full border border-grhiit-red/30`}
-          >
-            <Text style={tw`text-grhiit-red text-xs font-semibold`}>
-              TARGET: {block.repTarget}
+  return (
+    <View style={tw`mb-2`}>
+      <View
+        style={tw`bg-[#141414] rounded-xl py-3 px-4 border border-[#262626]`}
+      >
+        <View style={tw`flex-row items-center justify-between`}>
+          <View style={tw`flex-1`}>
+            <Text style={[tw`text-white text-sm`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
+              {block.displayName}
+            </Text>
+            <Text style={[tw`text-white/50 text-xs mt-0.5`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
+              {block.intervals} × ({block.workDuration}s/{block.restDuration}s)
             </Text>
           </View>
-        )}
-      </View>
-
-      {/* Duration */}
-      <View style={tw`flex-row items-center mt-3`}>
-        <View style={tw`h-1 flex-1 bg-[#262626] rounded-full overflow-hidden`}>
-          <View
+          <Text
             style={[
-              tw`h-full bg-grhiit-red/50 rounded-full`,
-              {
-                width: `${Math.min(
-                  ((block.workDuration + block.restDuration) * block.intervals) / 5,
-                  100
-                )}%`,
-              },
+              tw`text-white/40 text-sm`,
+              { fontFamily: "SpaceGrotesk_500Medium" },
             ]}
-          />
+          >
+            {formatDuration(blockDuration)}
+          </Text>
         </View>
-        <Text
-          style={[
-            tw`text-white/40 text-xs ml-3`,
-            { fontFamily: "SpaceGrotesk_400Regular" },
-          ]}
-        >
-          {formatDuration(
-            (block.workDuration + block.restDuration) * block.intervals
-          )}
-        </Text>
       </View>
+      {/* Inline rest indicator */}
+      {item.restAfter && !isLast && (
+        <View style={tw`flex-row items-center justify-center py-1`}>
+          <View style={tw`h-px bg-[#333] flex-1`} />
+          <Text style={[tw`text-white/30 text-xs mx-2`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
+            {item.restAfter}s
+          </Text>
+          <View style={tw`h-px bg-[#333] flex-1`} />
+        </View>
+      )}
     </View>
   );
 }

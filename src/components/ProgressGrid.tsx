@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
-import { View, Text, Animated, Easing } from "react-native";
+import { View, Text, Animated, Easing, Pressable } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 import tw from "@/lib/tw";
+import { getWorkoutByNumber } from "@/lib/workoutLoader";
 
 const GRHIIT_RED = "#EF4444";
 
@@ -32,6 +33,8 @@ interface ProgressGridProps {
   completedWorkouts: number[];
   missedWorkouts?: number[];
   currentWorkout?: number;
+  devMode?: boolean;
+  onSelectWorkout?: (workoutNum: number) => void;
 }
 
 // Pulsing bar for current workout
@@ -90,6 +93,8 @@ export function ProgressGrid({
   completedWorkouts,
   missedWorkouts = [],
   currentWorkout,
+  devMode = false,
+  onSelectWorkout,
 }: ProgressGridProps) {
   const weeks = 8;
   const workoutsPerWeek = 3;
@@ -100,6 +105,8 @@ export function ProgressGrid({
   const isCompleted = (num: number) => completedWorkouts.includes(num);
   const isMissed = (num: number) => missedWorkouts.includes(num);
   const isCurrent = (num: number) => currentWorkout === num;
+  // Check if workout has JSON data available
+  const hasData = (num: number) => getWorkoutByNumber(num) !== null;
 
   return (
     <View style={tw`gap-1`}>
@@ -140,40 +147,67 @@ export function ProgressGrid({
                 const completed = isCompleted(workoutNum);
                 const missed = isMissed(workoutNum);
                 const current = isCurrent(workoutNum);
+                const available = hasData(workoutNum);
 
-                if (current) {
+                if (current && !devMode) {
                   return <PulsingBar key={workoutNum} isLarge={isActiveWeek} workoutNum={workoutNum} />;
                 }
 
                 // Text color: white on completed (red), gray on incomplete
+                // In dev mode: green border if data available
                 const textColor = completed ? "#FFFFFF" : "#6B7280";
 
-                return (
-                  <View key={workoutNum} style={tw`flex-1 mx-1`}>
-                    <View
-                      style={[
-                        {
-                          height: barHeight,
-                          borderRadius: 4,
-                          backgroundColor: completed
-                            ? GRHIIT_RED
+                const bar = (
+                  <View
+                    style={[
+                      {
+                        height: barHeight,
+                        borderRadius: 4,
+                        backgroundColor: completed
+                          ? GRHIIT_RED
+                          : current
+                            ? "rgba(239, 68, 68, 0.3)"
                             : missed
                               ? "transparent"
                               : "#2a2a2a",
-                          borderWidth: missed ? 1 : 0,
-                          borderColor: missed ? "#3a3a3a" : "transparent",
-                        },
-                        tw`items-center justify-center`
-                      ]}
+                        borderWidth: devMode && available ? 2 : missed ? 1 : current ? 2 : 0,
+                        borderColor: devMode && available
+                          ? "#22C55E"
+                          : current
+                            ? GRHIIT_RED
+                            : missed
+                              ? "#3a3a3a"
+                              : "transparent",
+                      },
+                      tw`items-center justify-center`
+                    ]}
+                  >
+                    <Text style={{
+                      fontSize: isActiveWeek ? 12 : 9,
+                      color: current ? "#FFFFFF" : textColor,
+                      fontFamily: "SpaceGrotesk_500Medium"
+                    }}>
+                      {toRoman(workoutNum)}
+                    </Text>
+                  </View>
+                );
+
+                // In dev mode, make available workouts tappable
+                if (devMode && available && onSelectWorkout) {
+                  return (
+                    <Pressable
+                      key={workoutNum}
+                      style={tw`flex-1 mx-1`}
+                      onPress={() => onSelectWorkout(workoutNum)}
                     >
-                      <Text style={{
-                        fontSize: isActiveWeek ? 12 : 9,
-                        color: textColor,
-                        fontFamily: "SpaceGrotesk_500Medium"
-                      }}>
-                        {toRoman(workoutNum)}
-                      </Text>
-                    </View>
+                      {bar}
+                    </Pressable>
+                  );
+                }
+
+                return (
+                  <View key={workoutNum} style={tw`flex-1 mx-1`}>
+                    {bar}
                   </View>
                 );
               })}

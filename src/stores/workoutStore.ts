@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { WorkoutProgram, WorkoutBlock } from "@/types";
-import { calculateWorkoutDuration } from "@/constants/sampleWorkout";
+import { calculateWorkoutDuration } from "@/lib/workoutLoader";
 
 // Countdown duration before workout starts
 const COUNTDOWN_DURATION = 15;

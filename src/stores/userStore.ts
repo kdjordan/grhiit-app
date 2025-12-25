@@ -26,6 +26,7 @@ interface UserState {
   quitWorkout: () => void; // Mark current workout as quit
   setOnboardingComplete: () => void;
   getCurrentWorkoutNumber: () => number;
+  resetProgress: () => void; // DEV: Reset to workout 1
 }
 
 export const useUserStore = create<UserState>()(
@@ -95,6 +96,17 @@ export const useUserStore = create<UserState>()(
 
       setOnboardingComplete: () => {
         set({ hasCompletedOnboarding: true });
+      },
+
+      resetProgress: () => {
+        set({
+          currentWeek: 1,
+          currentDay: 1,
+          completedWorkouts: 0,
+          completedWorkoutIds: [],
+          missedWorkoutIds: [],
+          totalMinutes: 0,
+        });
       },
     }),
     {

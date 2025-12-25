@@ -24,7 +24,7 @@ const restBlock = (n: number): WorkoutBlock => ({
 });
 
 // BRP + FLSQ combo block factory (creates 2 blocks)
-const brpFlsqCombo = (n: number): WorkoutBlock[] => [
+const brpFlsqCombo = (n: number, group?: string): WorkoutBlock[] => [
   {
     id: id("brp", n),
     movement: "BRP",
@@ -32,6 +32,7 @@ const brpFlsqCombo = (n: number): WorkoutBlock[] => [
     intervals: 1,
     workDuration: 20,
     restDuration: 10,
+    ...(group && { group }),
   },
   {
     id: id("flsq", n),
@@ -40,6 +41,7 @@ const brpFlsqCombo = (n: number): WorkoutBlock[] => [
     intervals: 1,
     workDuration: 20,
     restDuration: 10,
+    ...(group && { group }),
   },
 ];
 
@@ -83,16 +85,16 @@ export const SAMPLE_WORKOUT: WorkoutProgram = {
     },
     restBlock(2),
 
-    // Summit: BRP + FLSQ combo (5 sets)
-    ...brpFlsqCombo(1),
+    // Summit: BRP + FLSQ combo (5 sets) - grouped as "A"
+    ...brpFlsqCombo(1, "A"),
     restBlock(3),
-    ...brpFlsqCombo(2),
+    ...brpFlsqCombo(2, "A"),
     restBlock(4),
-    ...brpFlsqCombo(3),
+    ...brpFlsqCombo(3, "A"),
     restBlock(5),
-    ...brpFlsqCombo(4),
+    ...brpFlsqCombo(4, "A"),
     restBlock(6),
-    ...brpFlsqCombo(5),
+    ...brpFlsqCombo(5, "A"),
     restBlock(7),
 
     // Cool-down: JSQ

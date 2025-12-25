@@ -1,176 +1,196 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { useState } from "react";
+import { Feather } from "@expo/vector-icons";
 import tw from "@/lib/tw";
+import { useDevStore, isDevWorkoutSelectEnabled } from "@/stores/devStore";
+import { useUserStore } from "@/stores/userStore";
+import {
+  getAllWorkouts,
+  getUniqueMovements,
+} from "@/lib/workoutLoader";
+import { WorkoutProgram } from "@/types";
 
-type FilterType = "ALL" | "TABATA" | "AMRAP" | "CUSTOM";
-
-interface WorkoutItem {
-  id: string;
-  name: string;
-  intervalFormat: string;
-  rounds: number;
-  duration: number;
-  difficulty: number;
-  movements: string[];
-  isLocked: boolean;
+interface WorkoutCardProps {
+  workout: WorkoutProgram;
+  workoutNumber: number;
+  currentWorkoutNumber: number;
+  isDevMode: boolean;
+  onPress: () => void;
 }
 
-const WORKOUTS: WorkoutItem[] = [
-  {
-    id: "burpee-gauntlet",
-    name: "BURPEE GAUNTLET",
-    intervalFormat: "20:10",
-    rounds: 8,
-    duration: 28,
-    difficulty: 5,
-    movements: ["Burpees", "Mountain Climbers", "Jump Squats"],
-    isLocked: false,
-  },
-  {
-    id: "tabata-core-burn",
-    name: "TABATA CORE BURN",
-    intervalFormat: "20:10",
-    rounds: 12,
-    duration: 36,
-    difficulty: 4,
-    movements: ["Plank Holds", "Russian Twists", "Bicycle Crunches"],
-    isLocked: true,
-  },
-  {
-    id: "sprint-intervals",
-    name: "SPRINT INTERVALS",
-    intervalFormat: "30:30",
-    rounds: 10,
-    duration: 20,
-    difficulty: 4,
-    movements: ["High Knees", "Jump Lunges", "Flying Squats"],
-    isLocked: false,
-  },
-  {
-    id: "oxygen-debt",
-    name: "OXYGEN DEBT 01",
-    intervalFormat: "20:10",
-    rounds: 8,
-    duration: 45,
-    difficulty: 5,
-    movements: ["8-Count Bodybuilders", "Burpees", "Jump Squats", "Flying Squats"],
-    isLocked: false,
-  },
-];
+function WorkoutCard({ workout, workoutNumber, currentWorkoutNumber, isDevMode, onPress }: WorkoutCardProps) {
+  const movements = getUniqueMovements(workout);
+  const durationMinutes = Math.round(workout.totalDuration / 60);
 
-function DifficultyBar({ level }: { level: number }) {
-  return (
-    <View style={tw`flex-row gap-1`}>
-      {[1, 2, 3, 4, 5].map((i) => (
-        <View
-          key={i}
-          style={tw`w-5 h-1.5 rounded-sm ${i <= level ? "bg-grhiit-red" : "bg-[#262626]"}`}
-        />
-      ))}
-    </View>
-  );
-}
+  // Workout is unlocked if it's <= current workout number, or if in dev mode
+  const isUnlocked = isDevMode || workoutNumber <= currentWorkoutNumber;
+  const isCompleted = workoutNumber < currentWorkoutNumber;
+  const isCurrent = workoutNumber === currentWorkoutNumber;
 
-function WorkoutCard({ workout, onPress }: { workout: WorkoutItem; onPress: () => void }) {
   return (
     <View
-      style={tw`bg-[#141414] rounded-2xl p-5 mb-4 border ${workout.isLocked ? "border-[#262626]" : "border-grhiit-red/30"}`}
+      style={[
+        tw`bg-[#141414] rounded-2xl p-5 mb-4 border`,
+        isCurrent ? tw`border-grhiit-red/40` : tw`border-[#262626]`,
+        !isUnlocked && tw`opacity-60`,
+      ]}
     >
-      <View style={tw`flex-row justify-between mb-2`}>
-        <Text style={tw`text-white text-xl font-bold tracking-tight`}>
-          {workout.name}
-        </Text>
-        {workout.isLocked && <Text style={tw`text-gray-500`}>🔒</Text>}
+      {/* Header */}
+      <View style={tw`flex-row justify-between items-start mb-3`}>
+        <View style={tw`flex-row items-center`}>
+          {/* Status indicator */}
+          {isCompleted && (
+            <View style={tw`bg-[#22C55E]/20 p-1.5 rounded-full mr-3`}>
+              <Feather name="check" size={14} color="#22C55E" />
+            </View>
+          )}
+          {isCurrent && (
+            <View style={tw`bg-grhiit-red/20 p-1.5 rounded-full mr-3`}>
+              <Feather name="play" size={14} color="#EF4444" />
+            </View>
+          )}
+          {!isUnlocked && (
+            <View style={tw`bg-[#262626] p-1.5 rounded-full mr-3`}>
+              <Feather name="lock" size={14} color="#6B7280" />
+            </View>
+          )}
+          <View>
+            <Text
+              style={[
+                tw`text-white/50 text-xs tracking-widest mb-1`,
+                { fontFamily: "SpaceGrotesk_500Medium" },
+              ]}
+            >
+              WEEK {workout.week} • DAY {workout.day}
+            </Text>
+            <Text
+              style={[
+                tw`text-white text-xl`,
+                { fontFamily: "ChakraPetch_700Bold" },
+              ]}
+            >
+              {workout.name}
+            </Text>
+          </View>
+        </View>
+        <View style={tw`flex-row items-center`}>
+          <Feather name="clock" size={14} color="#6B7280" />
+          <Text
+            style={[
+              tw`text-white/50 text-sm ml-1`,
+              { fontFamily: "SpaceGrotesk_500Medium" },
+            ]}
+          >
+            {durationMinutes} min
+          </Text>
+        </View>
       </View>
 
-      <View style={tw`flex-row items-center mb-3`}>
-        <Text style={tw`text-grhiit-red font-mono`}>{workout.intervalFormat}</Text>
-        <Text style={tw`text-white/40 mx-2`}>x</Text>
-        <Text style={tw`text-grhiit-red font-mono`}>{workout.rounds}</Text>
-        <Text style={tw`text-white/40 ml-3`}>|</Text>
-        <Text style={tw`text-white/60 ml-3`}>{workout.duration} MIN</Text>
-      </View>
-
-      <View style={tw`flex-row items-center mb-4`}>
-        <Text style={tw`text-white/40 text-xs mr-2`}>DIFFICULTY</Text>
-        <DifficultyBar level={workout.difficulty} />
-      </View>
-
-      <View style={tw`mb-4`}>
-        {workout.movements.map((movement) => (
-          <View key={movement} style={tw`flex-row items-center mb-1`}>
-            <View style={tw`w-1.5 h-1.5 bg-grhiit-red rounded-full mr-2`} />
-            <Text style={tw`text-white/70 text-sm`}>{movement}</Text>
+      {/* Movements */}
+      <View style={tw`flex-row flex-wrap gap-2 mb-4`}>
+        {movements.map((movement) => (
+          <View
+            key={movement}
+            style={tw`bg-[#262626] px-2.5 py-1 rounded-lg`}
+          >
+            <Text
+              style={[
+                tw`text-white/60 text-xs`,
+                { fontFamily: "SpaceGrotesk_500Medium" },
+              ]}
+            >
+              {movement}
+            </Text>
           </View>
         ))}
       </View>
 
-      {workout.isLocked ? (
-        <Pressable style={tw`bg-[#141414] border border-[#262626] rounded-xl py-3 items-center`}>
-          <View style={tw`flex-row items-center`}>
-            <Text style={tw`text-white/40 mr-2`}>UNLOCK</Text>
-            <Text style={tw`text-gray-500`}>🔒</Text>
-          </View>
-        </Pressable>
-      ) : (
+      {/* Action Button */}
+      {isUnlocked ? (
         <Pressable
-          style={tw`bg-grhiit-red rounded-xl py-3 flex-row items-center justify-center`}
+          style={tw`bg-grhiit-red rounded-xl py-3 items-center justify-center`}
           onPress={onPress}
         >
-          <Text style={tw`text-white font-bold mr-2`}>START</Text>
-          <Text style={tw`text-white`}>▶</Text>
+          <Text
+            style={[
+              tw`text-white`,
+              { fontFamily: "SpaceGrotesk_700Bold" },
+            ]}
+          >
+            {isCompleted ? "REPEAT" : "START"}
+          </Text>
         </Pressable>
+      ) : (
+        <View style={tw`bg-[#262626] rounded-xl py-3 items-center justify-center`}>
+          <Text
+            style={[
+              tw`text-white/30`,
+              { fontFamily: "SpaceGrotesk_700Bold" },
+            ]}
+          >
+            LOCKED
+          </Text>
+        </View>
       )}
     </View>
   );
 }
 
 export default function TrainScreen() {
-  const [activeFilter, setActiveFilter] = useState<FilterType>("ALL");
-  const filters: FilterType[] = ["ALL", "TABATA", "AMRAP", "CUSTOM"];
+  const { setSelectedWorkoutId } = useDevStore();
+  const { getCurrentWorkoutNumber } = useUserStore();
+  const workouts = getAllWorkouts();
+  const isDevMode = isDevWorkoutSelectEnabled();
+  const currentWorkoutNumber = getCurrentWorkoutNumber();
+
+  const handleSelectWorkout = (workout: WorkoutProgram) => {
+    // Set the selected workout and navigate to preview
+    setSelectedWorkoutId(workout.id);
+    router.push("/workout");
+  };
+
+  // Calculate workout number from week/day (week 1 day 1 = 1, week 1 day 2 = 2, etc.)
+  const getWorkoutNumber = (workout: WorkoutProgram): number => {
+    return (workout.week - 1) * 3 + workout.day;
+  };
 
   return (
     <SafeAreaView style={tw`flex-1 bg-grhiit-black`}>
       {/* Header */}
-      <View style={tw`px-5 pt-4 pb-2`}>
-        <Text style={tw`text-white text-2xl font-bold tracking-wide text-center`}>
-          WORKOUTS
+      <View style={tw`px-5 pt-4 pb-4`}>
+        <Text
+          style={[
+            tw`text-white text-2xl`,
+            { fontFamily: "ChakraPetch_700Bold" },
+          ]}
+        >
+          Sessions
         </Text>
-      </View>
-
-      {/* Filter Tabs */}
-      <View style={tw`flex-row px-5 mb-4`}>
-        {filters.map((filter) => (
-          <Pressable
-            key={filter}
-            onPress={() => setActiveFilter(filter)}
-            style={tw`mr-6`}
-          >
-            <Text
-              style={tw`text-sm font-medium ${activeFilter === filter ? "text-grhiit-red" : "text-white/40"}`}
-            >
-              {filter}
-            </Text>
-            {activeFilter === filter && (
-              <View style={tw`h-0.5 bg-grhiit-red mt-1 rounded-full`} />
-            )}
-          </Pressable>
-        ))}
+        <Text
+          style={[
+            tw`text-white/40 text-sm mt-1`,
+            { fontFamily: "SpaceGrotesk_400Regular" },
+          ]}
+        >
+          {workouts.length} workouts available
+        </Text>
       </View>
 
       {/* Workout List */}
       <ScrollView
         style={tw`flex-1 px-5`}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={tw`pb-5`}
+        contentContainerStyle={tw`pb-8`}
       >
-        {WORKOUTS.map((workout) => (
+        {workouts.map((workout) => (
           <WorkoutCard
             key={workout.id}
             workout={workout}
-            onPress={() => router.push("/workout")}
+            workoutNumber={getWorkoutNumber(workout)}
+            currentWorkoutNumber={currentWorkoutNumber}
+            isDevMode={isDevMode}
+            onPress={() => handleSelectWorkout(workout)}
           />
         ))}
       </ScrollView>
