@@ -1,8 +1,73 @@
 # GRHIIT Development Process
 
-## Current Focus: Workout Timer Flow (Complete)
+## Current Focus: Active Workout Screen Polish
 
-The full workout timer flow is now implemented with block-based progression, variable timings, REST-first intervals, 15-second countdown, and the active timer UI with phase-colored bento design.
+Minimal, focused UI during max effort. Audio beeps implemented.
+
+---
+
+## Latest Session (Dec 25)
+
+### Completed
+- **Color scheme corrected for red-lining philosophy**
+  - WORK = RED background (#991B1B) - intensity, brand
+  - REST = BLACK background (#0A0A0A) - recovery
+  - Ring: red for work, white for rest
+
+- **MASSIVE timer number** - 168px font, fills the circle
+  - Timer size: 280px diameter, 8px stroke
+  - Number dominates screen during countdown
+
+- **Minimal UI during workout**
+  - Removed stats row (elapsed, remaining, progress %)
+  - Removed WORK/REST label - color communicates state
+  - Kept only: interval counter, movement name, timer, up next, buttons
+
+- **Audio beeps implemented**
+  - Using `expo-audio` with `createAudioPlayer`
+  - Single beep: work start, rest start, countdown (3, 2, 1)
+  - 5 rapid beeps: when full interval block completes
+  - Sound file: `assets/sounds/single-beep.wav`
+
+- **Quit workout tracking**
+  - Quitting marks workout as MISSED (X) in progress grid
+  - Added `quitWorkout()` to userStore
+  - Added `completedWorkoutIds[]` and `missedWorkoutIds[]` arrays
+  - Home screen now reads from userStore (not hardcoded test data)
+
+- **Removed rep target** from sample workout (feature deferred)
+
+### Technical Decisions
+- **expo-audio vs expo-av**: Using expo-audio (expo-av deprecated in SDK 54)
+- **Quit consequences**: Quitting advances to next workout AND marks as missed
+
+---
+
+## Earlier (Dec 24)
+
+### Completed
+- **Circular progress timer** replaced flip clock
+  - `CircularTimer` component using `react-native-svg`
+  - Smooth 60fps animation via React Native Animated API
+  - Avoids Reanimated worklet issues
+
+---
+
+## Earlier (Dec 24)
+
+### Completed
+- **Roman numerals on Progress Grid**: Added I-XXIV to workout bricks
+  - White on completed (red) bars, gray on incomplete
+  - `toRoman()` helper function in ProgressGrid.tsx
+
+- **Font unification**: Changed all numbers from JetBrains Mono → Space Grotesk
+  - Removed dotted zeros (programmer aesthetic didn't fit)
+  - Updated: Home screen stats, active timer, pre-workout preview
+  - Files changed: `app/(tabs)/index.tsx`, `app/workout/active.tsx`, `app/workout/index.tsx`
+
+---
+
+## Previous Session: Workout Timer Flow (Complete)
 
 ---
 
@@ -153,13 +218,16 @@ Complete Screen (/workout/complete)
 ## Technical Notes
 
 ### Animation Approach
-Uses React Native's built-in `Animated` API (not reanimated):
-- Spring animation for rolling ones digit
-- No opacity changes to avoid flashing
-- Tension: 100, Friction: 12
+Uses React Native's built-in `Animated` API (not Reanimated):
+- `CircularTimer` with `Animated.createAnimatedComponent(Circle)`
+- Single animation runs for full interval duration
+- `strokeDashoffset` interpolation for smooth ring fill
 
-### Audio Package
-Using `expo-audio` (expo-av is deprecated). Currently stubbed with console.logs until bundled audio files are added.
+### Audio System
+Using `expo-audio` with `createAudioPlayer`:
+- Sound preloaded on init: `assets/sounds/single-beep.wav`
+- `playBeep()` - seeks to 0, plays
+- `playBeepMultiple(5, 150)` - 5 beeps with 150ms delay for block complete
 
 ### Timer Implementation
 - 1-second interval via `setInterval`
@@ -171,11 +239,11 @@ Using `expo-audio` (expo-av is deprecated). Currently stubbed with console.logs 
 
 ## Next Steps
 
-1. **Add real audio files** - Bundle beep sounds, use expo-audio
-2. **Rep tracking UI** - Tap to count reps during intervals
-3. **Complete screen** - Post-workout identity check-in
-4. **Connect to user progress** - Update stats on completion
-5. **Test on device** - Verify timer accuracy and audio
+1. **Test on device** - Verify timer animation + audio performance
+2. **Complete screen** - Post-workout identity check-in, show stats
+3. **Connect workout completion** - Call `completeWorkout()` on finish
+4. **Rep tracking UI** - Tap to count reps during intervals (deferred)
+5. **Remove JetBrains Mono** - Clean up unused font from bundle
 
 ---
 

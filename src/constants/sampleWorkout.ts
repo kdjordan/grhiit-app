@@ -80,7 +80,6 @@ export const SAMPLE_WORKOUT: WorkoutProgram = {
       intervals: 10,
       workDuration: 6,
       restDuration: 3,
-      repTarget: 3,
     },
     restBlock(2),
 
@@ -104,7 +103,6 @@ export const SAMPLE_WORKOUT: WorkoutProgram = {
       intervals: 10,
       workDuration: 6,
       restDuration: 3,
-      repTarget: 3,
     },
     restBlock(8),
 

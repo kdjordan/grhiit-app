@@ -1,64 +1,92 @@
 // Audio utilities for workout timer
-// TODO: Add bundled audio files and use expo-audio for playback
+import { createAudioPlayer, AudioPlayer } from "expo-audio";
 
-// For now, we'll use a simple flag to track if audio is enabled
-// Real implementation will use bundled audio files
+// Audio player reference
+let beepPlayer: AudioPlayer | null = null;
 let audioEnabled = true;
 
+// Sound source
+const beepSource = require("../../assets/sounds/single-beep.wav");
+
 /**
- * Initialize audio mode
- * Note: expo-audio handles this automatically
+ * Initialize audio - create the player
  */
 export async function initializeAudio() {
-  // expo-audio configures audio mode automatically
-  audioEnabled = true;
+  try {
+    beepPlayer = createAudioPlayer(beepSource);
+    audioEnabled = true;
+  } catch (error) {
+    console.warn("Failed to initialize audio:", error);
+    audioEnabled = false;
+  }
 }
 
 /**
- * Play a beep sound for work phase start
- * TODO: Replace with bundled audio file
+ * Play beep sound once
+ */
+async function playBeep() {
+  if (!audioEnabled || !beepPlayer) return;
+
+  try {
+    beepPlayer.seekTo(0);
+    beepPlayer.play();
+  } catch (error) {
+    console.warn("Failed to play beep:", error);
+  }
+}
+
+/**
+ * Play beep multiple times with delay
+ */
+async function playBeepMultiple(times: number, delayMs: number = 150) {
+  for (let i = 0; i < times; i++) {
+    await playBeep();
+    if (i < times - 1) {
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+}
+
+/**
+ * Play beep for work phase start (single beep)
  */
 export async function playWorkBeep() {
-  if (!audioEnabled) return;
-
-  // For now, log the beep - we'll add real audio files later
-  console.log("🔴 WORK BEEP");
-
-  // When you have bundled audio files, use:
-  // const player = useAudioPlayer(require('@/assets/sounds/work-beep.mp3'));
-  // player.play();
+  await playBeep();
 }
 
 /**
- * Play a beep sound for rest phase start
- * TODO: Replace with bundled audio file
+ * Play beep for rest phase start (single beep)
  */
 export async function playRestBeep() {
-  if (!audioEnabled) return;
-
-  // For now, log the beep - we'll add real audio files later
-  console.log("🟢 REST BEEP");
+  await playBeep();
 }
 
 /**
- * Play countdown beeps (3, 2, 1)
- * TODO: Replace with bundled audio file
+ * Play countdown beep (single beep)
  */
 export async function playCountdownBeep() {
-  if (!audioEnabled) return;
+  await playBeep();
+}
 
-  console.log("⏱️ COUNTDOWN BEEP");
+/**
+ * Play beep for block completion (5 beeps)
+ */
+export async function playBlockCompleteBeep() {
+  await playBeepMultiple(5, 150);
 }
 
 /**
  * Cleanup audio resources
  */
 export async function cleanupAudio() {
-  // expo-audio handles cleanup automatically
+  if (beepPlayer) {
+    beepPlayer.remove();
+    beepPlayer = null;
+  }
 }
 
 /**
- * Disable audio (for testing)
+ * Disable audio
  */
 export function disableAudio() {
   audioEnabled = false;

@@ -25,14 +25,17 @@ The home screen features a **bento-style layout** with a bar-based progress grid
 
 | Use Case | Font | Notes |
 |----------|------|-------|
-| Numbers (time, reps, stats) | JetBrains Mono | Monospace for precision feel |
+| Numbers (time, reps, stats) | Space Grotesk | Clean zeros without dot (changed from JetBrains Mono) |
 | Labels and text | Space Grotesk | Readable, clean |
 | Button text | Space Grotesk Bold | Clean and bold |
-| Bento titles | JetBrains Mono | Uppercase, letter-spaced |
+| Movement names | Chakra Petch Bold | Uppercase, intense |
+
+**Font change rationale**: JetBrains Mono has a dotted zero which looked too programmer-oriented. Space Grotesk provides clean, modern numbers that fit the premium fitness aesthetic.
 
 Fonts loaded in `app/_layout.tsx`:
-- JetBrains Mono (400, 500, 600, 700)
+- JetBrains Mono (400, 500, 600, 700) - legacy, may remove
 - Space Grotesk (400, 500, 600, 700)
+- Chakra Petch (700)
 
 ---
 
@@ -130,7 +133,11 @@ import { Feather } from "@expo/vector-icons";
 - **Upcoming**: Dark gray fill (#2a2a2a)
 - **Missed**: Transparent with gray border (#3a3a3a)
 
-**No numbers on bars** - clean minimal look
+**Roman numerals on bars**: Each workout displays I through XXIV
+- White text on completed (red) bars
+- Gray text (#6B7280) on incomplete bars
+- Font: Space Grotesk 500 Medium
+- Scaled font size: 12px (active week), 9px (inactive weeks)
 
 **Animation**: React Native Animated API for pulse effect on current workout
 
@@ -260,45 +267,65 @@ COUNTDOWN:  Gray (#FFFFFF text, #1F2937 background)
    - ELAPSED: Time since workout started
    - REMAINING: Time until completion
    - PROGRESS: Percentage complete (green accent)
-   - JetBrains Mono for numbers
+   - Space Grotesk for numbers
 
 5. **Control Buttons**
    - RESTART: Restart icon, gray styling
    - CANCEL: X icon, transparent with border
    - Both trigger confirmation dialogs
 
-### Timer Animation
-**Rolling ones digit only**:
-- Tens digit: Static, no animation
-- Ones digit: Spring animation from bottom (translateY)
-- No opacity changes, no flashing
+### Color Philosophy (Red-lining)
+GRHIIT is about intensity. Colors reflect effort state:
+- **WORK**: RED background (`#991B1B`) - intensity, red-lining, brand color
+- **REST**: BLACK background (`#0A0A0A`) - recovery, reset
+- **COUNTDOWN**: Dark gray (`#141414`) - preparation
 
-```tsx
-// Tens = static
-<Text>{tensDigit}</Text>
+Ring colors match:
+- Work: Red ring (`#EF4444`)
+- Rest/Countdown: White ring on dark background
 
-// Ones = animated roll
-<Animated.Text style={{ transform: [{ translateY: onesTranslateY }] }}>
-  {onesDigit}
-</Animated.Text>
-```
+### Timer Animation - Circular Progress
+**Circular progress indicator** with smooth continuous animation:
+- SVG circle fills 360° as interval progresses
+- MASSIVE seconds number dominates the screen
+- Ring animates smoothly at 60fps (not chunky per-second updates)
 
-Animation uses React Native's built-in Animated API (not reanimated) with spring physics:
-- Tension: 100
-- Friction: 12
-- Start from +60 translateY, animate to 0
+**Implementation**:
+- `CircularTimer` component using `react-native-svg`
+- Uses React Native's built-in `Animated` API (not Reanimated - avoids worklet issues)
+- `Animated.createAnimatedComponent(Circle)` for smooth strokeDashoffset animation
+- Animation kicks off when interval starts, runs for full interval duration
+- `strokeDasharray` / `strokeDashoffset` technique for ring fill effect
 
-### Timer Typography
-- Font: JetBrains Mono Bold
-- Size: 120px
-- Line height: 140px
-- Container overflow: hidden (clips animation)
+**Dimensions**:
+- Timer size: 280px diameter
+- Stroke width: 8px (thinner, refined)
+- Center font size: **168px** (MASSIVE - fills the circle)
+- Ring starts at 12 o'clock, fills clockwise
+
+**Technical notes**:
+- `useNativeDriver: false` required (strokeDashoffset doesn't support native driver)
+- Constants: `RADIUS`, `CIRCUMFERENCE` pre-calculated for performance
+- Phase key tracking prevents animation restart on every render
+
+### Minimal Timer UI
+During workout, only essentials shown:
+- Interval counter ("INTERVAL 3/10") - work phase only
+- Movement name
+- MASSIVE countdown number in circular progress
+- UP NEXT card
+- RESTART / CANCEL buttons
+
+**Removed for focus**:
+- ~~Stats row~~ (elapsed, remaining, progress %) - moved to post-workout
+- ~~WORK/REST label~~ - color communicates state
+- ~~Phase indicator badge~~ - redundant
 
 ### Control Button Philosophy
 - **No pause button**: Once started, the workout runs continuously
 - **No skip button**: Can't skip intervals or blocks
 - **RESTART**: Confirms via Alert, then resets and restarts
-- **CANCEL**: Confirms via Alert, then returns to home
+- **CANCEL/QUIT**: Confirms via Alert, marks workout as MISSED (X in grid), advances to next
 
 ---
 

@@ -184,7 +184,7 @@ function BlockRow({ block, index }: { block: WorkoutBlock; index: number }) {
         <Text
           style={[
             tw`text-white/40 text-xs ml-3`,
-            { fontFamily: "JetBrainsMono_400Regular" },
+            { fontFamily: "SpaceGrotesk_400Regular" },
           ]}
         >
           {formatDuration(

@@ -3,25 +3,113 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { useEffect, useRef } from "react";
 import { Feather } from "@expo/vector-icons";
+import Svg, { Circle } from "react-native-svg";
 import { useWorkoutStore } from "@/stores/workoutStore";
-import { formatDuration } from "@/constants/sampleWorkout";
-import { initializeAudio, playWorkBeep, playRestBeep, cleanupAudio } from "@/lib/audio";
+import { useUserStore } from "@/stores/userStore";
+import { initializeAudio, playWorkBeep, playRestBeep, playBlockCompleteBeep, cleanupAudio } from "@/lib/audio";
 import tw from "@/lib/tw";
 
-// Phase colors - WORK is green, REST is red, TRANSITION is yellow
+// Circular timer dimensions - MASSIVE for intensity
+const TIMER_SIZE = 280;
+const STROKE_WIDTH = 8;
+const RADIUS = (TIMER_SIZE - STROKE_WIDTH) / 2;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+// Create animated circle
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+
+// Circular Progress Timer Component
+function CircularTimer({
+  seconds,
+  totalDuration,
+  color,
+}: {
+  seconds: number;
+  totalDuration: number; // Total seconds for this interval
+  color: string;
+}) {
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  const lastPhaseKey = useRef<string>("");
+
+  // Create a unique key for this phase/interval
+  const phaseKey = `${totalDuration}-${seconds === totalDuration}`;
+
+  useEffect(() => {
+    // When a new interval starts (seconds equals totalDuration), restart animation
+    if (seconds === totalDuration && phaseKey !== lastPhaseKey.current) {
+      lastPhaseKey.current = phaseKey;
+      animatedValue.setValue(0);
+
+      Animated.timing(animatedValue, {
+        toValue: 1,
+        duration: totalDuration * 1000,
+        useNativeDriver: false, // strokeDashoffset doesn't support native driver
+      }).start();
+    }
+  }, [seconds, totalDuration, phaseKey]);
+
+  // Map animated value to stroke offset
+  const strokeDashoffset = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [CIRCUMFERENCE, 0],
+  });
+
+  return (
+    <View style={{ width: TIMER_SIZE, height: TIMER_SIZE, alignItems: "center", justifyContent: "center" }}>
+      <Svg width={TIMER_SIZE} height={TIMER_SIZE} style={{ position: "absolute" }}>
+        {/* Background circle */}
+        <Circle
+          cx={TIMER_SIZE / 2}
+          cy={TIMER_SIZE / 2}
+          r={RADIUS}
+          stroke="rgba(255,255,255,0.15)"
+          strokeWidth={STROKE_WIDTH}
+          fill="transparent"
+        />
+        {/* Progress circle */}
+        <AnimatedCircle
+          cx={TIMER_SIZE / 2}
+          cy={TIMER_SIZE / 2}
+          r={RADIUS}
+          stroke={color}
+          strokeWidth={STROKE_WIDTH}
+          fill="transparent"
+          strokeDasharray={CIRCUMFERENCE}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+          transform={`rotate(-90 ${TIMER_SIZE / 2} ${TIMER_SIZE / 2})`}
+        />
+      </Svg>
+      {/* Center seconds display - MASSIVE, nothing else matters */}
+      <Text
+        style={[
+          tw`text-white font-bold`,
+          {
+            fontSize: 168,
+            fontFamily: "SpaceGrotesk_700Bold",
+            includeFontPadding: false,
+          },
+        ]}
+      >
+        {seconds}
+      </Text>
+    </View>
+  );
+}
+
+// Phase colors - WORK is RED (intensity/brand), REST is muted
 const COLORS = {
-  work: "#22C55E",      // Green for work
-  rest: "#EF4444",      // Red for rest
-  transition: "#F59E0B", // Yellow/amber for transitions
-  countdown: "#374151",  // Gray for countdown
+  work: "#EF4444",      // RED for work - brand color, intensity
+  rest: "#FFFFFF",      // White ring on dark background
+  countdown: "#FFFFFF", // White for countdown
 };
 
-// Solid background colors for bento
+// Background colors - RED for intensity, BLACK for recovery
 const BG_COLORS = {
-  work: "#166534",      // Dark green
-  rest: "#991B1B",      // Dark red
-  transition: "#92400E", // Dark amber
-  countdown: "#1F2937",  // Dark gray
+  work: "#991B1B",      // Deep red - red-lining
+  rest: "#0A0A0A",      // Pure black - recovery
+  transition: "#0A0A0A", // Pure black - recovery
+  countdown: "#141414",  // Dark gray - preparation
 };
 
 export default function ActiveWorkoutScreen() {
@@ -32,8 +120,6 @@ export default function ActiveWorkoutScreen() {
     currentBlockIndex,
     currentIntervalInBlock,
     isRunning,
-    elapsedTime,
-    totalDuration,
     startWorkout,
     resetWorkout,
     tick,
@@ -44,17 +130,26 @@ export default function ActiveWorkoutScreen() {
   const currentBlock = getCurrentBlock();
   const progressPercent = getProgressPercent();
 
-  // Split time into tens and ones digits
-  const timeStr = timeRemaining.toString().padStart(2, "0");
-  const tensDigit = timeStr[0];
-  const onesDigit = timeStr[1];
+  // Get total duration for current phase (used for smooth animation)
+  const getIntervalDuration = () => {
+    if (currentPhase === "countdown") {
+      return 15; // COUNTDOWN_DURATION
+    }
+    if (!currentBlock) return 0;
+    if (currentPhase === "work") {
+      return currentBlock.workDuration;
+    }
+    if (currentPhase === "rest" || currentPhase === "transition") {
+      return currentBlock.restDuration;
+    }
+    return 0;
+  };
 
-  // Animation for ones digit only
-  const onesTranslateY = useRef(new Animated.Value(0)).current;
-  const prevOnesRef = useRef(onesDigit);
+  const intervalDuration = getIntervalDuration();
 
-  // Track previous phase for audio triggers
+  // Track previous phase and block for audio triggers
   const prevPhaseRef = useRef(currentPhase);
+  const prevBlockIndexRef = useRef(currentBlockIndex);
 
   // Initialize audio on mount
   useEffect(() => {
@@ -69,22 +164,6 @@ export default function ActiveWorkoutScreen() {
     startWorkout();
   }, []);
 
-  // Animate only the ones digit rolling
-  useEffect(() => {
-    if (prevOnesRef.current !== onesDigit) {
-      // Reset position instantly, then animate up
-      onesTranslateY.setValue(60); // Start from below
-      Animated.spring(onesTranslateY, {
-        toValue: 0,
-        useNativeDriver: true,
-        tension: 100,
-        friction: 12,
-      }).start();
-
-      prevOnesRef.current = onesDigit;
-    }
-  }, [onesDigit]);
-
   // Play audio on phase changes
   useEffect(() => {
     if (prevPhaseRef.current !== currentPhase) {
@@ -96,6 +175,14 @@ export default function ActiveWorkoutScreen() {
       prevPhaseRef.current = currentPhase;
     }
   }, [currentPhase]);
+
+  // Play 5 beeps when a block completes (block index changes)
+  useEffect(() => {
+    if (prevBlockIndexRef.current !== currentBlockIndex && currentBlockIndex > 0) {
+      playBlockCompleteBeep();
+    }
+    prevBlockIndexRef.current = currentBlockIndex;
+  }, [currentBlockIndex]);
 
   // Countdown beeps at 3, 2, 1
   useEffect(() => {
@@ -141,17 +228,20 @@ export default function ActiveWorkoutScreen() {
     );
   };
 
-  // Handle cancel
+  // Handle cancel - mark as quit (X in progress grid)
+  const quitWorkout = useUserStore((state) => state.quitWorkout);
+
   const handleCancel = () => {
     Alert.alert(
-      "Cancel Workout?",
-      "Are you sure you want to quit? This session won't be saved.",
+      "Quit Workout?",
+      "Quitting will mark this workout as missed. Are you sure?",
       [
         { text: "Keep Going", style: "cancel" },
         {
           text: "Quit",
           style: "destructive",
           onPress: () => {
+            quitWorkout(); // Mark as missed in progress grid
             resetWorkout();
             router.replace("/(tabs)");
           },
@@ -163,25 +253,12 @@ export default function ActiveWorkoutScreen() {
   // Determine phase states
   const isCountdown = currentPhase === "countdown";
   const isWork = currentPhase === "work";
-  const isTransition = currentPhase === "transition";
-  const isRest = currentPhase === "rest";
 
-  // Get phase color for text
-  const phaseColor = isCountdown
-    ? "#FFFFFF"
-    : isWork
-    ? COLORS.work
-    : isTransition
-    ? COLORS.transition
-    : COLORS.rest;
-
-  // Get solid background color for bento
+  // Get background color - RED for work (intensity), BLACK for rest (recovery)
   const bentoBgColor = isCountdown
     ? BG_COLORS.countdown
     : isWork
     ? BG_COLORS.work
-    : isTransition
-    ? BG_COLORS.transition
     : BG_COLORS.rest;
 
   // Get display values
@@ -205,12 +282,12 @@ export default function ActiveWorkoutScreen() {
 
   return (
     <SafeAreaView style={tw`flex-1 bg-grhiit-black`}>
-      {/* Progress Bar */}
+      {/* Progress Bar - RED (brand color) */}
       <View style={tw`w-full h-1 bg-[#262626]`}>
         <View
           style={[
             tw`h-full`,
-            { width: `${progressPercent}%`, backgroundColor: COLORS.work },
+            { width: `${progressPercent}%`, backgroundColor: "#EF4444" },
           ]}
         />
       </View>
@@ -238,9 +315,8 @@ export default function ActiveWorkoutScreen() {
                 <Text style={tw`text-white/50`}>/{currentBlock?.intervals}</Text>
               </Text>
             ) : (
-              <Text style={tw`text-white/50 text-sm tracking-wide`}>
-                {isTransition ? "TRANSITION" : ""}
-              </Text>
+              // Empty during rest/transition - the color and movement name communicate state
+              <View />
             )}
             <View style={tw`w-10 h-10`} />
           </View>
@@ -268,56 +344,18 @@ export default function ActiveWorkoutScreen() {
               </View>
             )}
 
-            {!showRepTarget && <View style={tw`mb-6`} />}
+            {!showRepTarget && <View style={tw`mb-4`} />}
 
-            {/* Large Timer - tens digit static, ones digit rolls */}
-            <View style={tw`flex-row items-center justify-center`}>
-              {/* Tens digit - static */}
-              <Text
-                style={[
-                  tw`font-bold text-white`,
-                  {
-                    fontSize: 120,
-                    lineHeight: 140,
-                    fontFamily: "JetBrainsMono_700Bold",
-                  },
-                ]}
-              >
-                {tensDigit}
-              </Text>
-
-              {/* Ones digit - animated roll */}
-              <View style={[tw`overflow-hidden`, { height: 140, width: 72 }]}>
-                <Animated.Text
-                  style={[
-                    tw`font-bold text-white`,
-                    {
-                      fontSize: 120,
-                      lineHeight: 140,
-                      fontFamily: "JetBrainsMono_700Bold",
-                      transform: [{ translateY: onesTranslateY }],
-                    },
-                  ]}
-                >
-                  {onesDigit}
-                </Animated.Text>
-              </View>
-            </View>
-
-            {/* Phase Indicator */}
-            <View
-              style={tw`bg-white/20 px-8 py-2 rounded-lg mt-4`}
-            >
-              <Text
-                style={tw`text-white text-lg font-bold tracking-widest`}
-              >
-                {isCountdown ? "GET READY" : isWork ? "WORK" : "REST"}
-              </Text>
-            </View>
+            {/* Circular Timer - color communicates state, no label needed */}
+            <CircularTimer
+              seconds={timeRemaining}
+              totalDuration={intervalDuration}
+              color={isWork ? COLORS.work : COLORS.rest}
+            />
 
             {/* Show first exercise during countdown */}
             {isCountdown && workout && (
-              <View style={tw`mt-6 items-center`}>
+              <View style={tw`mt-8 items-center`}>
                 <Text style={tw`text-white/50 text-xs tracking-wide mb-1`}>
                   FIRST UP
                 </Text>
@@ -347,52 +385,6 @@ export default function ActiveWorkoutScreen() {
               <Feather name="arrow-right" size={16} color="#6B7280" />
             </View>
           )}
-
-          {/* Stats Row */}
-          <View style={tw`flex-row gap-3 mb-4`}>
-            <View
-              style={tw`flex-1 bg-[#141414] rounded-xl p-3 border border-[#262626]`}
-            >
-              <Text style={tw`text-white/40 text-xs`}>ELAPSED</Text>
-              <Text
-                style={[
-                  tw`text-white text-xl font-bold`,
-                  { fontFamily: "JetBrainsMono_600SemiBold" },
-                ]}
-              >
-                {formatDuration(elapsedTime)}
-              </Text>
-            </View>
-            <View
-              style={tw`flex-1 bg-[#141414] rounded-xl p-3 border border-[#262626]`}
-            >
-              <Text style={tw`text-white/40 text-xs`}>REMAINING</Text>
-              <Text
-                style={[
-                  tw`text-white text-xl font-bold`,
-                  { fontFamily: "JetBrainsMono_600SemiBold" },
-                ]}
-              >
-                {formatDuration(Math.max(0, totalDuration - elapsedTime))}
-              </Text>
-            </View>
-            <View
-              style={[
-                tw`flex-1 bg-[#141414] rounded-xl p-3 border`,
-                { borderColor: `${COLORS.work}50` },
-              ]}
-            >
-              <Text style={tw`text-white/40 text-xs`}>PROGRESS</Text>
-              <Text
-                style={[
-                  tw`text-xl font-bold`,
-                  { fontFamily: "JetBrainsMono_600SemiBold", color: COLORS.work },
-                ]}
-              >
-                {Math.round(progressPercent)}%
-              </Text>
-            </View>
-          </View>
 
           {/* Control Buttons */}
           <View style={tw`flex-row gap-4`}>

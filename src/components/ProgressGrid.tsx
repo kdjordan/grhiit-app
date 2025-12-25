@@ -1,9 +1,32 @@
 import { useEffect, useRef } from "react";
-import { View, Animated, Easing } from "react-native";
+import { View, Text, Animated, Easing } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 import tw from "@/lib/tw";
 
 const GRHIIT_RED = "#EF4444";
+
+// Convert number to Roman numeral
+function toRoman(num: number): string {
+  const romanNumerals: [number, string][] = [
+    [10, "X"],
+    [9, "IX"],
+    [5, "V"],
+    [4, "IV"],
+    [1, "I"],
+  ];
+
+  let result = "";
+  let remaining = num;
+
+  for (const [value, symbol] of romanNumerals) {
+    while (remaining >= value) {
+      result += symbol;
+      remaining -= value;
+    }
+  }
+
+  return result;
+}
 
 interface ProgressGridProps {
   completedWorkouts: number[];
@@ -12,7 +35,7 @@ interface ProgressGridProps {
 }
 
 // Pulsing bar for current workout
-function PulsingBar({ isLarge }: { isLarge: boolean }) {
+function PulsingBar({ isLarge, workoutNum }: { isLarge: boolean; workoutNum: number }) {
   const pulseAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -48,9 +71,17 @@ function PulsingBar({ isLarge }: { isLarge: boolean }) {
       <Animated.View
         style={[
           { height, borderRadius: 4, borderWidth: 2, borderColor: GRHIIT_RED },
-          { backgroundColor }
+          { backgroundColor },
+          tw`items-center justify-center`
         ]}
-      />
+      >
+        <Text style={[
+          tw`text-white`,
+          { fontSize: isLarge ? 12 : 9, fontFamily: "SpaceGrotesk_500Medium" }
+        ]}>
+          {toRoman(workoutNum)}
+        </Text>
+      </Animated.View>
     </View>
   );
 }
@@ -111,8 +142,11 @@ export function ProgressGrid({
                 const current = isCurrent(workoutNum);
 
                 if (current) {
-                  return <PulsingBar key={workoutNum} isLarge={isActiveWeek} />;
+                  return <PulsingBar key={workoutNum} isLarge={isActiveWeek} workoutNum={workoutNum} />;
                 }
+
+                // Text color: white on completed (red), gray on incomplete
+                const textColor = completed ? "#FFFFFF" : "#6B7280";
 
                 return (
                   <View key={workoutNum} style={tw`flex-1 mx-1`}>
@@ -128,9 +162,18 @@ export function ProgressGrid({
                               : "#2a2a2a",
                           borderWidth: missed ? 1 : 0,
                           borderColor: missed ? "#3a3a3a" : "transparent",
-                        }
+                        },
+                        tw`items-center justify-center`
                       ]}
-                    />
+                    >
+                      <Text style={{
+                        fontSize: isActiveWeek ? 12 : 9,
+                        color: textColor,
+                        fontFamily: "SpaceGrotesk_500Medium"
+                      }}>
+                        {toRoman(workoutNum)}
+                      </Text>
+                    </View>
                   </View>
                 );
               })}
