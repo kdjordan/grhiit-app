@@ -329,13 +329,13 @@ Using `expo-audio` with `createAudioPlayer`:
 
 ## Next Steps
 
-1. **Test on device** - Verify complete flow + share screen
+1. **Test on device** - Verify complete flow + share screen + stats persistence
 2. **Implement actual share** - `react-native-view-shot` + `react-native-share`
 3. **Dynamic rep pickers** - Pull movements from actual workout data (not hardcoded BRP/FLSQ)
-4. **Persist rep data** - Store in userStore for stats/history
+4. **HealthKit integration** - Replace mock data with real Apple Health data
 5. **Remove JetBrains Mono** - Clean up unused font from bundle
 6. **Add more share templates** - Per viral.md roadmap (200+ templates goal)
-7. **Remove debug console.log** - `share.tsx:333` before production
+7. **Remove debug console.log** - `share.tsx` before production
 
 ## Code Review Status
 
@@ -367,3 +367,5 @@ BRP + FLSQ,2,20,10,60
 **Dev flags:**
 - `EXPO_PUBLIC_DEV_SKIP_AUTH=true` - Skip auth
 - `EXPO_PUBLIC_DEV_SKIP_SPLASH=true` - Skip splash animation
+- `EXPO_PUBLIC_DEV_WORKOUT_SELECT=true` - Tap progress grid to select any workout
+- `EXPO_PUBLIC_DEV_PERSIST_STATS=true` - Generate mock HealthKit data (calories, HR)

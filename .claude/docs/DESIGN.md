@@ -183,7 +183,7 @@ Layout uses flex-1 wrapper around icon to center it vertically between title and
 
 ## Tab Navigation
 
-5 tabs with Feather icons:
+5 tabs with Feather icons (icons only, no labels):
 - HOME (`home`)
 - TRAIN (`zap`)
 - LIBRARY (`book-open`) - Movement reference
@@ -195,6 +195,8 @@ Tab bar styling:
 - Border: #262626
 - Active: #E8110F (red)
 - Inactive: #6B7280 (gray)
+- Height: 70px (compact, icons only)
+- `tabBarShowLabel: false`
 
 ---
 
@@ -221,6 +223,46 @@ Tab bar styling:
 - Cleaner, more minimal look
 - Taller stat bentos (150px) with better spacing
 - Icons centered with flex-1 wrapper
+
+---
+
+## Design System (Unified)
+
+All screens follow these patterns:
+
+### Colors
+- **Background**: `#000000` (pure black)
+- **Bento cards**: `#1a1a1a` (no borders)
+- **Secondary surface**: `#262626` (icon backgrounds, dividers)
+- **Text primary**: `#FFFFFF`
+- **Text secondary**: `#6B7280`
+- **Accent**: `#EF4444` (red)
+
+### Typography
+- **Headers**: `SpaceGrotesk_700Bold`, 24px, white
+- **Section labels**: `SpaceGrotesk_500Medium`, 12px, gray `#6B7280`, letter-spacing: 1
+- **Values**: `SpaceGrotesk_600SemiBold`, 20-24px, white
+- **Body**: `SpaceGrotesk_500Medium`, 14-16px
+
+### Bento Cards
+- Background: `#1a1a1a`
+- Border radius: 16px
+- No borders
+- Padding: 16-20px
+- Icons: 40px Feather, red `#EF4444`
+
+### Section Headers
+```tsx
+<Text style={[tw`text-[#6B7280] text-xs mb-3 ml-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
+  SECTION NAME
+</Text>
+```
+
+### Horizontal Scroll Stats
+- Width: 110px min
+- Height: 150px
+- Gap: 12px (gap-3)
+- Content: Label (top) → Icon (center, flex-1) → Value (bottom)
 
 ---
 
@@ -599,6 +641,25 @@ Complete screen passes via route params:
 - `brp`: burpee reps per interval
 - `flsq`: flying squat reps per interval
 - `difficulty`: 1-5 rating
+- `brpIntervals`: number of BRP intervals in workout
+- `flsqIntervals`: number of FLSQ intervals in workout
+- `totalSummitIntervals`: total Tabata intervals
+- `week`, `day`, `workoutName`: workout metadata
+- `otherMovements`: JSON string of non-summit movements (8CBB, JSQ, etc.)
+
+### Total Reps Calculation
+Share screen calculates totals from reps-per-interval × interval count:
+- `totalBrpReps = brp × brpIntervals`
+- `totalFlsqReps = flsq × flsqIntervals`
+- `totalSummitReps = totalBrpReps + totalFlsqReps`
+
+### Template Content (Updated)
+| Template | Shows |
+|----------|-------|
+| Minimal  | Total BRP/FLSQ reps with breakdown (e.g., "18 BURPEES (3×6)") |
+| Brutal   | Big summit total + "X TABATA INTERVALS" |
+| Stats    | Full breakdown: summit reps + Tabata count + other movements |
+| Dark     | Summit total with calculation (e.g., "6×3 + 12×3") |
 
 ---
 

@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import tw from "@/lib/tw";
 import { GrhiitMark } from "@/components/GrhiitMark";
 import { useWorkoutStore } from "@/stores/workoutStore";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore, SessionStats } from "@/stores/userStore";
 import { playBlockCompleteBeep } from "@/lib/audio";
 
 // Format seconds to MM:SS
@@ -105,8 +105,54 @@ export default function WorkoutCompleteScreen() {
 
   // Get workout data
   const elapsedTime = useWorkoutStore((state) => state.elapsedTime);
+  const workout = useWorkoutStore((state) => state.workout);
   const resetWorkout = useWorkoutStore((state) => state.resetWorkout);
   const completeWorkout = useUserStore((state) => state.completeWorkout);
+
+  // Calculate workout summary from blocks
+  const workoutSummary = (() => {
+    if (!workout) return null;
+
+    const blocks = workout.blocks;
+    let brpIntervals = 0;
+    let flsqIntervals = 0;
+    const otherMovements: { movement: string; displayName: string; intervals: number; work: number; rest: number }[] = [];
+
+    blocks.forEach((block) => {
+      if (block.isTransition) return; // Skip REST blocks
+
+      if (block.movement === "BRP") {
+        brpIntervals += block.intervals;
+      } else if (block.movement === "FLSQ") {
+        flsqIntervals += block.intervals;
+      } else {
+        // Non-summit movements (8CBB, JSQ, etc.)
+        // Check if we already have this movement
+        const existing = otherMovements.find(m => m.movement === block.movement);
+        if (existing) {
+          existing.intervals += block.intervals;
+        } else {
+          otherMovements.push({
+            movement: block.movement,
+            displayName: block.displayName,
+            intervals: block.intervals,
+            work: block.workDuration,
+            rest: block.restDuration,
+          });
+        }
+      }
+    });
+
+    return {
+      week: workout.week,
+      day: workout.day,
+      name: workout.name,
+      brpIntervals,
+      flsqIntervals,
+      totalSummitIntervals: brpIntervals + flsqIntervals,
+      otherMovements,
+    };
+  })();
 
   // Play completion sound and animate on mount
   useEffect(() => {
@@ -130,10 +176,22 @@ export default function WorkoutCompleteScreen() {
   };
 
   const handleDone = () => {
-    // Mark workout as complete in user store
-    // Convert elapsed seconds to minutes
-    const minutes = Math.round(elapsedTime / 60);
-    completeWorkout(minutes);
+    // Build session stats for user store
+    const sessionStats: SessionStats = {
+      brpReps: burpeeReps || 0,
+      flsqReps: flyingSquatReps || 0,
+      brpIntervals: workoutSummary?.brpIntervals || 0,
+      flsqIntervals: workoutSummary?.flsqIntervals || 0,
+      otherMovements: (workoutSummary?.otherMovements || []).map(m => ({
+        movement: m.movement,
+        intervals: m.intervals,
+      })),
+      difficulty: difficulty || 3,
+      durationSeconds: elapsedTime,
+    };
+
+    // Mark workout as complete in user store (persists stats)
+    completeWorkout(sessionStats);
 
     // Reset workout store
     resetWorkout();
@@ -146,6 +204,16 @@ export default function WorkoutCompleteScreen() {
         brp: burpeeReps?.toString() || "0",
         flsq: flyingSquatReps?.toString() || "0",
         difficulty: difficulty?.toString() || "0",
+        // Summit interval counts
+        brpIntervals: workoutSummary?.brpIntervals.toString() || "0",
+        flsqIntervals: workoutSummary?.flsqIntervals.toString() || "0",
+        totalSummitIntervals: workoutSummary?.totalSummitIntervals.toString() || "0",
+        // Workout info
+        week: workoutSummary?.week.toString() || "1",
+        day: workoutSummary?.day.toString() || "1",
+        workoutName: workoutSummary?.name || "",
+        // Other movements as JSON string
+        otherMovements: JSON.stringify(workoutSummary?.otherMovements || []),
       },
     });
   };

@@ -25,6 +25,9 @@ export default function HomeScreen() {
     missedWorkoutIds,
     getCurrentWorkoutNumber,
     resetProgress,
+    totalMinutes,
+    totalCalories,
+    recentSessions,
   } = useUserStore();
 
   // DEV: Workout selection mode
@@ -47,17 +50,68 @@ export default function HomeScreen() {
   };
 
   // Calculate stats
-  const totalSessions = 24;
+  const totalSessionsInProgram = 24;
   const completedCount = completedWorkouts.length;
+
+  // Format total time (minutes to H:MM:SS or M:SS)
+  const formatTotalTime = (mins: number): string => {
+    if (mins === 0) return "0:00";
+    const hours = Math.floor(mins / 60);
+    const minutes = mins % 60;
+    if (hours > 0) {
+      return `${hours}:${minutes.toString().padStart(2, "0")}:00`;
+    }
+    return `${minutes}:00`;
+  };
+
+  // Calculate streak (consecutive days with sessions)
+  const calculateStreak = (): number => {
+    if (recentSessions.length === 0) return 0;
+
+    let streak = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Sort sessions by date descending
+    const sortedSessions = [...recentSessions].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
+    // Check each day backwards
+    for (let i = 0; i < 30; i++) {
+      const checkDate = new Date(today);
+      checkDate.setDate(checkDate.getDate() - i);
+      checkDate.setHours(0, 0, 0, 0);
+
+      const hasSession = sortedSessions.some(s => {
+        const sessionDate = new Date(s.date);
+        sessionDate.setHours(0, 0, 0, 0);
+        return sessionDate.getTime() === checkDate.getTime();
+      });
+
+      if (hasSession) {
+        streak++;
+      } else if (i > 0) {
+        // Break if we miss a day (allow today to be empty)
+        break;
+      }
+    }
+
+    return streak;
+  };
+
+  // Calculate best session (highest reps)
+  const getBestReps = (): number => {
+    if (recentSessions.length === 0) return 0;
+    return Math.max(...recentSessions.map(s => s.totalReps));
+  };
+
+  const streak = calculateStreak();
+  const bestReps = getBestReps();
 
   // Calculate session label
   const currentWeek = Math.ceil(currentWorkout / 3);
   const sessionLabel = `W${currentWeek}:${currentWorkout.toString().padStart(2, "0")}`;
-
-  // Next workout details
-  const nextWorkoutMovements = 4;
-  const nextWorkoutTime = "13:30";
-  const nextWorkoutTargetReps = 190;
 
   return (
     <SafeAreaView style={tw`flex-1 bg-black`} edges={['top']}>
@@ -127,7 +181,7 @@ export default function HomeScreen() {
               <Feather name="target" size={40} color="#EF4444" />
             </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              {completedCount}/{totalSessions}
+              {completedCount}/{totalSessionsInProgram}
             </Text>
           </View>
 
@@ -140,7 +194,7 @@ export default function HomeScreen() {
               <Feather name="clock" size={40} color="#EF4444" />
             </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              1:03:00
+              {formatTotalTime(totalMinutes)}
             </Text>
           </View>
 
@@ -153,7 +207,7 @@ export default function HomeScreen() {
               <Feather name="zap" size={40} color="#EF4444" />
             </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              2 days
+              {streak} {streak === 1 ? "day" : "days"}
             </Text>
           </View>
 
@@ -166,11 +220,11 @@ export default function HomeScreen() {
               <Feather name="activity" size={40} color="#EF4444" />
             </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              1,280
+              {totalCalories.toLocaleString()}
             </Text>
           </View>
 
-          {/* Best Time */}
+          {/* Best Reps */}
           <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
             <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
               BEST
@@ -179,7 +233,7 @@ export default function HomeScreen() {
               <Feather name="award" size={40} color="#EF4444" />
             </View>
             <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              12:45
+              {bestReps} reps
             </Text>
           </View>
         </ScrollView>

@@ -6,6 +6,15 @@ import { Feather } from "@expo/vector-icons";
 import tw from "@/lib/tw";
 import { GrhiitMark } from "@/components/GrhiitMark";
 
+// Other movement type from route params
+interface OtherMovement {
+  movement: string;
+  displayName: string;
+  intervals: number;
+  work: number;
+  rest: number;
+}
+
 // Template types
 interface ShareTemplate {
   id: string;
@@ -28,7 +37,21 @@ function TemplatePreview({
   onSelect,
 }: {
   template: ShareTemplate;
-  data: { time: string; brp: string; flsq: string; week: string; day: string };
+  data: {
+    time: string;
+    brpPerInterval: string;
+    flsqPerInterval: string;
+    totalBrpReps: string;
+    totalFlsqReps: string;
+    totalSummitReps: string;
+    brpIntervals: string;
+    flsqIntervals: string;
+    totalSummitIntervals: string;
+    week: string;
+    day: string;
+    workoutName: string;
+    otherMovements: OtherMovement[];
+  };
   selected: boolean;
   onSelect: () => void;
 }) {
@@ -103,137 +126,145 @@ function TemplatePreview({
           <GrhiitMark size={32} color={colors.accent} />
         </View>
 
-        {/* Stats */}
+        {/* Stats - Minimal: Total reps prominently */}
         {template.style === "minimal" && (
           <View style={tw`items-center`}>
             <Text
               style={{
                 fontFamily: "SpaceGrotesk_700Bold",
-                fontSize: 24,
+                fontSize: 28,
                 color: colors.textPrimary,
               }}
             >
-              {data.brp}
+              {data.totalBrpReps}
             </Text>
             <Text
               style={{
                 fontFamily: "SpaceGrotesk_500Medium",
-                fontSize: 8,
+                fontSize: 7,
                 color: colors.textSecondary,
                 letterSpacing: 1,
               }}
             >
-              BURPEES
+              BURPEES ({data.brpIntervals}×{data.brpPerInterval})
             </Text>
             <Text
               style={{
                 fontFamily: "SpaceGrotesk_700Bold",
-                fontSize: 24,
+                fontSize: 28,
                 color: colors.textPrimary,
-                marginTop: 8,
+                marginTop: 6,
               }}
             >
-              {data.flsq}
+              {data.totalFlsqReps}
             </Text>
             <Text
               style={{
                 fontFamily: "SpaceGrotesk_500Medium",
-                fontSize: 8,
+                fontSize: 7,
                 color: colors.textSecondary,
                 letterSpacing: 1,
               }}
             >
-              FLYING SQUATS
+              FLYING SQUATS ({data.flsqIntervals}×{data.flsqPerInterval})
             </Text>
           </View>
         )}
 
+        {/* Brutal: Big summit total */}
         {template.style === "brutal" && (
           <View style={tw`items-center`}>
             <Text
               style={{
                 fontFamily: "ChakraPetch_700Bold",
-                fontSize: 28,
+                fontSize: 36,
                 color: colors.textPrimary,
               }}
             >
-              {data.brp}
+              {data.totalSummitReps}
             </Text>
             <Text
               style={{
                 fontFamily: "ChakraPetch_700Bold",
-                fontSize: 10,
+                fontSize: 8,
                 color: colors.textSecondary,
                 letterSpacing: 2,
               }}
             >
-              BRP
+              SUMMIT REPS
             </Text>
             <View
               style={{
                 width: 40,
                 height: 2,
                 backgroundColor: colors.accent,
-                marginVertical: 8,
+                marginVertical: 6,
               }}
             />
             <Text
               style={{
-                fontFamily: "ChakraPetch_700Bold",
-                fontSize: 28,
-                color: colors.textPrimary,
-              }}
-            >
-              {data.flsq}
-            </Text>
-            <Text
-              style={{
-                fontFamily: "ChakraPetch_700Bold",
-                fontSize: 10,
+                fontFamily: "SpaceGrotesk_500Medium",
+                fontSize: 9,
                 color: colors.textSecondary,
-                letterSpacing: 2,
               }}
             >
-              FLSQ
+              {data.totalSummitIntervals} TABATA INTERVALS
             </Text>
           </View>
         )}
 
+        {/* Stats: Full breakdown with other movements */}
         {template.style === "stats" && (
-          <View style={tw`items-center`}>
+          <View style={tw`items-center w-full px-2`}>
             <Text
               style={{
                 fontFamily: "SpaceGrotesk_500Medium",
-                fontSize: 8,
+                fontSize: 7,
                 color: colors.textSecondary,
                 letterSpacing: 1,
-                marginBottom: 4,
+                marginBottom: 3,
               }}
             >
               SESSION COMPLETE
             </Text>
+            {/* Summit stats */}
             <Text
               style={{
                 fontFamily: "SpaceGrotesk_700Bold",
-                fontSize: 18,
+                fontSize: 14,
                 color: colors.textPrimary,
               }}
             >
-              {data.brp} BRP • {data.flsq} FLSQ
+              {data.totalBrpReps} BRP • {data.totalFlsqReps} FLSQ
             </Text>
             <Text
               style={{
                 fontFamily: "SpaceGrotesk_500Medium",
-                fontSize: 10,
-                color: colors.textSecondary,
-                marginTop: 4,
+                fontSize: 7,
+                color: colors.accent,
+                marginTop: 2,
               }}
             >
-              W{data.week}:D{data.day} • {data.time}
+              {data.totalSummitIntervals} TABATA @ 20/10
             </Text>
+            {/* Other movements */}
+            {data.otherMovements.slice(0, 2).map((m, i) => (
+              <Text
+                key={i}
+                style={{
+                  fontFamily: "SpaceGrotesk_500Medium",
+                  fontSize: 7,
+                  color: colors.textSecondary,
+                  marginTop: 2,
+                }}
+              >
+                {m.intervals}× {m.movement} @ {m.work}/{m.rest}
+              </Text>
+            ))}
           </View>
         )}
 
+        {/* Dark: Summit focus with context */}
         {template.style === "dark" && (
           <View style={tw`items-center`}>
             <Text
@@ -243,18 +274,28 @@ function TemplatePreview({
                 color: colors.textPrimary,
               }}
             >
-              {data.brp}/{data.flsq}
+              {data.totalSummitReps}
+            </Text>
+            <Text
+              style={{
+                fontFamily: "SpaceGrotesk_500Medium",
+                fontSize: 7,
+                color: colors.textSecondary,
+                letterSpacing: 1,
+                marginTop: 2,
+              }}
+            >
+              TOTAL SUMMIT REPS
             </Text>
             <Text
               style={{
                 fontFamily: "SpaceGrotesk_500Medium",
                 fontSize: 8,
-                color: colors.textSecondary,
-                letterSpacing: 1,
+                color: colors.accent,
                 marginTop: 4,
               }}
             >
-              REPS PER INTERVAL
+              {data.brpPerInterval}×{data.brpIntervals} + {data.flsqPerInterval}×{data.flsqIntervals}
             </Text>
           </View>
         )}
@@ -302,21 +343,53 @@ export default function ShareScreen() {
     brp: string;
     flsq: string;
     difficulty: string;
+    brpIntervals: string;
+    flsqIntervals: string;
+    totalSummitIntervals: string;
+    week: string;
+    day: string;
+    workoutName: string;
+    otherMovements: string;
   }>();
 
   const [selectedTemplate, setSelectedTemplate] = useState<string>("minimal");
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  // Get user progress (mock for now - would come from userStore)
-  const week = "1";
-  const day = "1";
+  // Parse workout data from params
+  const brpRepsPerInterval = parseInt(params.brp || "0", 10);
+  const flsqRepsPerInterval = parseInt(params.flsq || "0", 10);
+  const brpIntervals = parseInt(params.brpIntervals || "0", 10);
+  const flsqIntervals = parseInt(params.flsqIntervals || "0", 10);
+  const totalSummitIntervals = parseInt(params.totalSummitIntervals || "0", 10);
+
+  // Calculate total reps
+  const totalBrpReps = brpRepsPerInterval * brpIntervals;
+  const totalFlsqReps = flsqRepsPerInterval * flsqIntervals;
+  const totalSummitReps = totalBrpReps + totalFlsqReps;
+
+  // Parse other movements (8CBB, JSQ, etc.)
+  const otherMovements: OtherMovement[] = (() => {
+    try {
+      return JSON.parse(params.otherMovements || "[]");
+    } catch {
+      return [];
+    }
+  })();
 
   const shareData = {
     time: params.time || "0:00",
-    brp: params.brp || "0",
-    flsq: params.flsq || "0",
-    week,
-    day,
+    brpPerInterval: params.brp || "0",
+    flsqPerInterval: params.flsq || "0",
+    totalBrpReps: totalBrpReps.toString(),
+    totalFlsqReps: totalFlsqReps.toString(),
+    totalSummitReps: totalSummitReps.toString(),
+    brpIntervals: brpIntervals.toString(),
+    flsqIntervals: flsqIntervals.toString(),
+    totalSummitIntervals: totalSummitIntervals.toString(),
+    week: params.week || "1",
+    day: params.day || "1",
+    workoutName: params.workoutName || "",
+    otherMovements,
   };
 
   useEffect(() => {
