@@ -23,16 +23,18 @@ function CircularTimer({
   seconds,
   totalDuration,
   color,
+  phase,
 }: {
   seconds: number;
   totalDuration: number; // Total seconds for this interval
   color: string;
+  phase: string; // Current phase for unique key generation
 }) {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const lastPhaseKey = useRef<string>("");
 
-  // Create a unique key for this phase/interval
-  const phaseKey = `${totalDuration}-${seconds === totalDuration}`;
+  // Create a unique key for this phase/interval - include phase to differentiate work/rest with same duration
+  const phaseKey = `${phase}-${totalDuration}-${seconds === totalDuration}`;
 
   useEffect(() => {
     // When a new interval starts (seconds equals totalDuration), restart animation
@@ -253,20 +255,47 @@ export default function ActiveWorkoutScreen() {
   // Determine phase states
   const isCountdown = currentPhase === "countdown";
   const isWork = currentPhase === "work";
+  const isRest = currentPhase === "rest" || currentPhase === "transition";
+  const isSmoker = currentBlock?.isSmoker || currentBlock?.type === "SM";
 
   // Get background color - RED for work (intensity), BLACK for rest (recovery)
+  // SMOKER: Always red (no true rest - hold position is active work)
   const bentoBgColor = isCountdown
     ? BG_COLORS.countdown
     : isWork
     ? BG_COLORS.work
+    : isSmoker
+    ? BG_COLORS.work // Smoker stays red during "rest" (hold phase)
     : BG_COLORS.rest;
 
   // Get display values
-  const movementName = isCountdown
-    ? "GET READY"
-    : currentBlock?.displayName || "GET READY";
+  // SMOKER: During rest phase, show the hold movement name (e.g., "PLANK")
+  const getMovementName = () => {
+    if (isCountdown) return "GET READY";
+    if (!currentBlock) return "GET READY";
+
+    if (isSmoker && isRest && currentBlock.holdMovement) {
+      return currentBlock.holdMovement.displayName;
+    }
+    if (isSmoker && isWork && currentBlock.workMovement) {
+      return currentBlock.workMovement.displayName;
+    }
+    return currentBlock.displayName;
+  };
+
+  const movementName = getMovementName();
   const showIntervalCounter = currentBlock && !currentBlock.isTransition && !isCountdown;
-  const showRepTarget = currentBlock?.repTarget && isWork;
+
+  // Show rep target during work phase (or smoker work phase)
+  const getRepTarget = () => {
+    if (!currentBlock || !isWork) return null;
+    if (isSmoker && currentBlock.workMovement?.repTarget) {
+      return currentBlock.workMovement.repTarget;
+    }
+    return currentBlock.repTarget;
+  };
+  const repTarget = getRepTarget();
+  const showRepTarget = !!repTarget;
 
   // Find next non-transition block for "UP NEXT"
   const getUpNextBlock = () => {
@@ -339,7 +368,7 @@ export default function ActiveWorkoutScreen() {
                 style={tw`bg-white/20 px-4 py-1 rounded-full mb-6`}
               >
                 <Text style={tw`text-white text-sm font-semibold`}>
-                  TARGET: {currentBlock.repTarget}
+                  TARGET: {repTarget}
                 </Text>
               </View>
             )}
@@ -347,10 +376,12 @@ export default function ActiveWorkoutScreen() {
             {!showRepTarget && <View style={tw`mb-4`} />}
 
             {/* Circular Timer - color communicates state, no label needed */}
+            {/* SMOKER: Ring stays red during hold phase */}
             <CircularTimer
               seconds={timeRemaining}
               totalDuration={intervalDuration}
-              color={isWork ? COLORS.work : COLORS.rest}
+              color={isWork ? COLORS.work : isSmoker ? COLORS.work : COLORS.rest}
+              phase={currentPhase}
             />
 
             {/* Show first exercise during countdown */}

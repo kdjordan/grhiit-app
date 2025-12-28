@@ -195,7 +195,7 @@ export const useUserStore = create<UserState>()(
         const totalCalories = state.totalCalories + sessionCalories;
 
         // Running average for heart rate
-        const avgHeartRate = state.totalSessions === 0
+        const averageHeartRate = state.totalSessions === 0
           ? mockHealth.avgHR
           : Math.round((state.averageHeartRate * state.totalSessions + mockHealth.avgHR) / (state.totalSessions + 1));
         const maxHeartRate = Math.max(state.maxHeartRate, mockHealth.maxHR);

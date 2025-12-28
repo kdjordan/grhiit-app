@@ -1,14 +1,44 @@
 // Workout Block Types (for timer)
 export interface WorkoutBlock {
   id: string;
-  movement: string; // Short code: "8CBB", "JSQ", "BRP", "FLSQ", "REST"
-  displayName: string; // Full name: "8-COUNT BODYBUILDERS"
+  movement: string; // Short code: "8CBB", "JSQ", "OGBRP", "PUBRP", "FLSQ", "REST" or combo "OGBRP>FLSQ"
+  displayName: string; // Full name: "8-COUNT BODYBUILDERS" or "BURPEES → FLYING SQUATS"
   intervals: number; // Number of work intervals
   workDuration: number; // Seconds (0 for REST/transition blocks)
-  restDuration: number; // Seconds
-  repTarget?: number; // Optional rep goal per interval
+  restDuration: number; // Seconds (for smoker: hold duration)
+  repTarget?: string; // Optional rep goal per interval - "8" or "8-12" for ranges
   isTransition?: boolean; // True for REST blocks between exercises
   group?: string; // Group tag for collapsing into "rounds" in preview
+  type?: string; // Block type: "SM" for smoker, empty for standard
+
+  // Smoker-specific (Type = SM)
+  isSmoker?: boolean; // True for smoker blocks (no true rest)
+  holdMovement?: {
+    code: string;
+    displayName: string;
+    repTarget?: string;
+  };
+  workMovement?: {
+    code: string;
+    displayName: string;
+    repTarget?: string;
+  };
+
+  // Sequence-specific (movement contains ">")
+  isSequence?: boolean; // True for sequence blocks (multiple movements in one work phase)
+  sequence?: Array<{
+    code: string;
+    displayName: string;
+    repTarget?: string;
+  }>;
+
+  // Choice-specific (movement contains "/")
+  isChoice?: boolean; // True for choice blocks (user picks one movement)
+  choices?: Array<{
+    code: string;
+    displayName: string;
+    repTarget?: string;
+  }>;
 }
 
 export interface WorkoutProgram {

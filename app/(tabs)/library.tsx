@@ -5,12 +5,27 @@ import tw from "@/lib/tw";
 
 // Movement codes and their full names
 const MOVEMENTS = [
+  // Bodybuilders
   { code: "8CBB", name: "8-Count Bodybuilders", description: "Full-body compound movement combining squat thrust, push-up, and jump" },
+  { code: "6CBB", name: "6-Count Bodybuilders", description: "Streamlined bodybuilder without the push-up - squat thrust and jump" },
+  // Squats
   { code: "JSQ", name: "Jump Squats", description: "Explosive squat with vertical jump at the top" },
-  { code: "BRP", name: "Burpees", description: "Full-body exercise from standing to floor and back" },
   { code: "FLSQ", name: "Flying Squats", description: "Dynamic squat with lateral movement" },
+  { code: "STPSQ", name: "Stop Squats", description: "Controlled squat with pause at the bottom - builds strength and stability" },
+  // Burpees
+  { code: "OGBRP", name: "Burpees", description: "Continuous flow burpee without push-up. Down, out, in, up - keep the rhythm" },
+  { code: "PUBRP", name: "Push-up Burpees", description: "Isolated single-rep burpee with full push-up. Form-critical - one perfect rep at a time" },
+  // Upper body
   { code: "PU", name: "Push-ups", description: "Upper body press from plank position" },
+  { code: "TH", name: "Thrusters", description: "Explosive full-body movement combining squat and overhead press" },
+  { code: "ZPR", name: "Zippers", description: "Dynamic core movement alternating knee drives" },
+  // Core / Cardio
   { code: "MC", name: "Mountain Climbers", description: "Core-focused running motion in plank position" },
+  { code: "PL", name: "Plank", description: "Isometric core hold - foundation position for smoker sets" },
+  { code: "JJ", name: "Jumping Jacks", description: "Full-body cardio movement with arm and leg coordination" },
+  { code: "JK", name: "Jacks", description: "Lower body explosive jack movement" },
+  { code: "HK", name: "High Knees", description: "Running in place with exaggerated knee lift" },
+  // Lunges
   { code: "LNG", name: "Lunges", description: "Single-leg lower body movement" },
   { code: "JLNG", name: "Jump Lunges", description: "Explosive alternating lunge with jump switch" },
 ];

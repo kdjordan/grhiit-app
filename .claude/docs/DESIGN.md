@@ -370,6 +370,20 @@ During workout, only essentials shown:
 - **RESTART**: Confirms via Alert, then resets and restarts
 - **CANCEL/QUIT**: Confirms via Alert, marks workout as MISSED (X in grid), advances to next
 
+### Smoker Block Behavior
+Smoker blocks (Type=SM) have no true rest - the "rest" phase is an active hold position.
+
+**Display**:
+- Background stays RED during both phases (no black rest)
+- Ring stays RED during both phases
+- Movement name alternates: work movement (BURPEES) ↔ hold movement (PLANK)
+- Interval counter continues normally
+
+**Example**: `PL > OGBRP` with 3s work, 3s rest
+- [3s] BURPEES (work) → [3s] PLANK (hold) → [3s] BURPEES → [3s] PLANK...
+
+**Technical**: Phase included in CircularTimer's phaseKey to ensure animation restarts when work/rest have same duration.
+
 ---
 
 ## Pre-workout Preview Screen
@@ -446,30 +460,57 @@ Workouts are authored in CSV and converted to JSON at build time.
 
 **Source**: `workouts/csv/weekX-dayX.csv`
 ```csv
-movement,intervals,work,rest,Time,Group
-8CBB,10,6,3,90,
-REST,,,30,30,
-BRP + FLSQ,2,20,10,60,A
+movement,intervals,work,rest,Time,Group,Type
+8CBB,10,6,3,90,,
+REST,1,,30,30,,
+JSQ(2-3) + OGBRP(2-3) + JLNG(2),18,6,3,162,,
+PL > OGBRP,20,3,3,120,,SM
+JLNG/LNG,10,6,3,90,,
+OGBRP + FLSQ,8,20,10,240,A,
 ```
 
 **Output**: `assets/workouts/level-1.json`
 
-**CSV parsing rules**:
-- REST rows: empty `intervals`/`work`, only `rest` value
-- Combo movements (`BRP + FLSQ`): split into separate blocks (1 interval each)
-- Time column: ignored (calculated by script)
-- **Group column**: Tags blocks for collapsing into "rounds" in preview
+### Movement Notation
 
-**Round grouping**:
-- Blocks with same Group tag (e.g., "A") collapse into "X ROUNDS" in preview
-- REST blocks between grouped items absorbed as "30s rest between rounds"
-- Preview shows pattern: "BRP + FLSQ" with timing
+| Notation | Example | Meaning |
+|----------|---------|---------|
+| Single | `8CBB` | Standard movement |
+| Rep target | `OGBRP (8)` | Exact target: 8 reps |
+| Rep range | `FLSQ (2-3)` | Range target: 2-3 reps |
+| Combo (+) | `A + B + C` | Cycle through (A→B→C→A→B→C...) |
+| Sequence (>) | `FLSQ (2) > OGBRP` | Both in one work phase |
+| Choice (/) | `JLNG/LNG` | User picks either |
+| Smoker | `PL > OGBRP` + Type=SM | No rest, hold position |
+
+### CSV Columns
+- **movement**: Movement code(s) with notation
+- **intervals**: Total number of work intervals
+- **work**: Work duration in seconds
+- **rest**: Rest duration in seconds (for smoker: hold duration)
+- **Time**: Ignored (calculated by script)
+- **Group**: Tag for round grouping in preview (e.g., "A")
+- **Type**: `SM` = smoker, empty = standard
+
+### Parsing Rules
+- REST rows: `intervals=1`, empty work, rest value
+- Combo (+): Creates cycling 1-interval blocks (not sequential)
+- Orphan total row at bottom (just a number) is ignored
+- File naming: `week2-day1.csv` (days reset per week, not continuous)
 
 **Scripts**:
 - `npm run convert-workouts` - Manual conversion
 - `npm run prebuild` - Auto-runs converter before Expo prebuild
 
-**Movement codes**: 8CBB, JSQ, BRP, FLSQ, PU, MC, LNG, JLNG, HK, REST
+### Movement Codes (17 total)
+
+**Bodybuilders**: 8CBB, 6CBB
+**Squats**: JSQ, FLSQ, STPSQ
+**Burpees**: OGBRP (no push-up), PUBRP (with push-up)
+**Upper body**: PU, TH, ZPR
+**Core/Cardio**: MC, PL, JJ, JK, HK
+**Lunges**: LNG, JLNG
+**Special**: REST
 
 ---
 
@@ -527,9 +568,13 @@ const isUnlocked = isDevMode || workoutNumber <= currentWorkoutNumber;
 - Description (gray text)
 - "Video coming soon" placeholder
 
-### Movements (8 total)
-8CBB, JSQ, BRP, FLSQ, PU, MC, LNG, JLNG
-(High Knees removed - not used in program)
+### Movements (17 total)
+**Bodybuilders**: 8CBB, 6CBB
+**Squats**: JSQ, FLSQ, STPSQ
+**Burpees**: OGBRP, PUBRP
+**Upper body**: PU, TH, ZPR
+**Core/Cardio**: MC, PL, JJ, JK, HK
+**Lunges**: LNG, JLNG
 
 ---
 

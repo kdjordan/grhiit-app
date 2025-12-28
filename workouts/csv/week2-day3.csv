@@ -1,0 +1,15 @@
+movement,intervals,work,rest,Time ,Group,Type
+PL > OGBRP(1),20,3,3,120,,SM
+REST,1,,30,30,,
+JLNG/LNG(5),5,10,5,75,,
+REST,1,,30,30,,
+OGBRP(8-10),2,20,10,60,A,
+REST,1,,30,30,,
+FLSQ(15-20),6,20,10,180,B,
+REST,1,,30,30,,
+OGBRP(8-10),2,20,10,60,A,
+REST,1,,30,30,,
+JLNG/LNG(5),5,10,5,75,,
+REST,1,,30,30,,
+PL > OGBRP(1),20,3,3,120,,SM
+,,,,14.5,,

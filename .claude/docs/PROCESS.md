@@ -1,12 +1,69 @@
 # GRHIIT Development Process
 
-## Current Focus: Post-Workout Flow & Viral Sharing
+## Current Focus: CSV Pipeline & Movement Expansion
 
-Completed workout complete screen, rep tracking, share flow.
+Major overhaul of workout CSV format to support complex interval types.
 
 ---
 
-## Latest Session (Dec 25 - Night)
+## Latest Session (Dec 27)
+
+### Completed
+- **CSV Pipeline Major Overhaul**
+  - New format: `movement,intervals,work,rest,Time,Group,Type`
+  - Type column: `SM` = smoker (no true rest, hold position)
+  - REST rows now have `intervals=1` (not empty)
+  - Orphan total row at bottom is ignored
+
+- **Movement Notation System**
+  - `+` = combo cycling (A → B → C → A → B → C... not sequential blocks)
+  - `>` = sequence (multiple movements in one work phase)
+  - `/` = choice (user picks either movement, e.g., `JLNG/LNG`)
+  - `(X)` = exact rep target (e.g., `OGBRP (8)`)
+  - `(X-Y)` = range rep target (e.g., `FLSQ (2-3)`)
+
+- **New Movement Codes**
+  - `6CBB` - 6-Count Bodybuilders
+  - `STPSQ` - Stop Squats
+  - `OGBRP` - Original Burpee (no push-up, continuous)
+  - `PUBRP` - Push-up Burpee (with push-up, isolated)
+  - `TH` - Thrusters
+  - `ZPR` - Zippers
+  - `PL` - Plank
+  - `JJ` - Jumping Jacks
+  - `JK` - Jacks
+
+- **Smoker Block Support**
+  - `PL > OGBRP` with Type=SM = plank hold during "rest"
+  - Timer stays red (no true rest)
+  - Movement name alternates: BURPEES → PLANK → BURPEES
+
+- **Active Timer Fixes**
+  - Fixed CircularTimer animation for same-duration phases
+  - Added phase to phaseKey for unique animation triggers
+  - Rep target display supports string ranges
+
+- **Library Screen**
+  - Expanded to 17 movements with descriptions
+
+### Technical Decisions
+- **OGBRP vs PUBRP**: Original burpee displays as "BURPEES", push-up variant as "PUSH-UP BURPEES"
+- **Combo cycling**: `A + B + C` with 18 intervals = 6 cycles, each movement once per cycle
+- **File naming**: `week2-day1.csv` not `week2-day4.csv` (days reset per week)
+
+### Bug Fixes
+- Fixed `averageHeartRate` variable name mismatch in userStore.ts
+
+### Files Changed
+- `scripts/convert-workouts.js` - Major rewrite for new notation
+- `src/types/index.ts` - Added smoker, sequence, choice block properties
+- `app/workout/active.tsx` - Smoker display, animation fix
+- `app/(tabs)/library.tsx` - 17 movements
+- `src/stores/userStore.ts` - Variable name fix
+
+---
+
+## Earlier Session (Dec 25 - Night)
 
 ### Completed
 - **Post-Workout Complete Screen Redesign**
@@ -329,13 +386,14 @@ Using `expo-audio` with `createAudioPlayer`:
 
 ## Next Steps
 
-1. **Test on device** - Verify complete flow + share screen + stats persistence
-2. **Implement actual share** - `react-native-view-shot` + `react-native-share`
-3. **Dynamic rep pickers** - Pull movements from actual workout data (not hardcoded BRP/FLSQ)
+1. **Holistic rep tracking** - Track all movements (not just BRP/FLSQ summit)
+2. **Dynamic rep pickers** - Pull movements from actual workout data
+3. **Implement actual share** - `react-native-view-shot` + `react-native-share`
 4. **HealthKit integration** - Replace mock data with real Apple Health data
 5. **Remove JetBrains Mono** - Clean up unused font from bundle
 6. **Add more share templates** - Per viral.md roadmap (200+ templates goal)
-7. **Remove debug console.log** - `share.tsx` before production
+7. **Sequence block timer display** - Show both movements during work phase
+8. **Choice block UI** - Visual indicator that user picks movement
 
 ## Code Review Status
 
@@ -358,11 +416,14 @@ npm run prebuild       # Runs convert-workouts + expo prebuild
 
 **Workout CSV format:** `workouts/csv/weekX-dayX.csv`
 ```csv
-movement,intervals,work,rest,Time
-8CBB,10,6,3,90
-REST,,,30,30
-BRP + FLSQ,2,20,10,60
+movement,intervals,work,rest,Time,Group,Type
+8CBB,10,6,3,90,,
+REST,1,,30,30,,
+OGBRP + FLSQ,8,20,10,240,A,
+PL > OGBRP,20,3,3,120,,SM
 ```
+
+**Notation**: `+` combo, `>` sequence, `/` choice, `(X)` rep target, Type=SM smoker
 
 **Dev flags:**
 - `EXPO_PUBLIC_DEV_SKIP_AUTH=true` - Skip auth

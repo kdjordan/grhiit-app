@@ -4,10 +4,13 @@ import { WorkoutProgram, WorkoutBlock } from "@/types";
 const id = (prefix: string, n: number) => `${prefix}-${n}`;
 
 // Movement display names
+// Note: This is a legacy sample file. Production workouts load from JSON via workoutLoader.
 const MOVEMENTS = {
   "8CBB": "8-COUNT BODYBUILDERS",
   JSQ: "JUMP SQUATS",
-  BRP: "BURPEES",
+  OGBRP: "BURPEES",        // Original Burpee (no push-up, continuous)
+  PUBRP: "PUSH-UP BURPEES", // Push-up Burpee (isolated single reps)
+  BRP: "BURPEES",          // Legacy alias
   FLSQ: "FLYING SQUATS",
   REST: "REST",
 } as const;

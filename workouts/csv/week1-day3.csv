@@ -1,18 +1,21 @@
-movement,intervals,work,rest,Time ,Group
-8CBB,10,6,3,90,
-REST,,,30,30,
-JSQ,10,6,3,90,
-REST,,,30,30,
-BRP + FLSQ,2,20,10,60,A
-REST,,,30,30,
-BRP + FLSQ,2,20,10,60,A
-REST,,,30,30,
-BRP + FLSQ,2,20,10,60,A
-REST,,,30,30,
-BRP + FLSQ,2,20,10,60,A
-REST,,,30,30,
-BRP + FLSQ,2,20,10,60,A
-REST,,,30,30,
-JSQ,10,6,3,90,
-REST,,,30,30,
-8CBB,10,6,3,90,
+movement,intervals,work,rest,Time ,Group,Type
+PU(2-4),7,6,3,63,,
+REST,1,,27,27,,
+MC(4),7,6,3,63,,
+REST,1,,27,27,,
+LNG(2-3),7,6,3,63,,
+REST,1,,27,27,,
+OGBRP(8-10) + FLSQ(15-20),2,20,10,60,A,
+REST,1,,30,30,,
+OGBRP(8-10) + FLSQ(15-20),2,20,10,60,A,
+REST,1,,30,30,,
+OGBRP(8-10) + FLSQ(15-20),2,20,10,60,A,
+REST,1,,30,30,,
+OGBRP(8-10) + FLSQ(15-20),2,20,10,60,A,
+REST,1,,27,27,,
+LNG(2-3),7,6,3,63,,
+REST,1,,27,27,,
+MC(4),7,6,3,63,,
+REST,1,,27,27,,
+PU(2-4),7,6,3,63,,
+,,,,14.5,,
