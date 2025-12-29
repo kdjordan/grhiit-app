@@ -1,12 +1,64 @@
 # GRHIIT Development Process
 
-## Current Focus: CSV Pipeline & Movement Expansion
+## Current Focus: Identity Refinement & Device Testing
 
-Major overhaul of workout CSV format to support complex interval types.
+Home screen identity overhaul and responsive scaling for real device testing.
 
 ---
 
-## Latest Session (Dec 27)
+## Latest Session (Dec 29)
+
+### Completed
+- **Home Screen Identity Refinement**
+  - Replaced "Welcome Back, KEVIN" → "Week X · Session Y"
+  - Replaced "STREAK" stat → "THIS WEEK" (X/3 sessions)
+  - Replaced date header → "GRHIIT · CYCLE 1"
+  - Icon changed: `zap` → `check-circle`
+  - Removed gamification elements, more serious identity
+
+- **Progress Grid Simplification**
+  - Changed from Roman numerals (I-XXIV) to simple day numbers (1, 2, 3) per week
+  - Removed `toRoman()` helper function
+
+- **Responsive Scaling System**
+  - Created `src/lib/responsive.ts` with scaling utilities
+  - `scale()` - horizontal sizing based on screen width
+  - `verticalScale()` - vertical sizing based on screen height
+  - `moderateScale()` - gentle font scaling
+  - `responsive()` - breakpoint-based values
+  - Applied to all screens: Home, Train, Library, Complete, Preview, Active Timer
+
+- **Workout Preview Fixes**
+  - Added "SMOKER" badge (orange) for smoker blocks
+  - Shows hold movement name (e.g., "PLANK hold")
+  - Fixed rest indicators to show between all sections
+  - Changed rest color to amber/yellow ("30s REST")
+
+- **Countdown Screen Fix**
+  - Added smoker indicator to "FIRST UP" section
+
+- **Real Device Testing**
+  - Tested on iPhone 13 via Expo Go tunnel mode
+  - Timer font reduced from 168px to responsive 100-140px
+  - Fixed NativeWind `tracking-*` warnings (use explicit `letterSpacing`)
+
+- **Dev Mode Disabled**
+  - All dev flags set to `false` in `.env`
+
+### Files Changed
+- `app/(tabs)/index.tsx` - Identity refinement + responsive
+- `app/(tabs)/train.tsx` - Responsive sizing
+- `app/(tabs)/library.tsx` - Responsive sizing
+- `app/workout/index.tsx` - Smoker badge, rest indicators, responsive
+- `app/workout/active.tsx` - Smoker countdown, responsive timer
+- `app/workout/complete.tsx` - Responsive sizing
+- `src/components/ProgressGrid.tsx` - Day numbers instead of Roman numerals
+- `src/lib/responsive.ts` - NEW: Responsive scaling utilities
+- `.env` - Dev mode disabled
+
+---
+
+## Previous Session (Dec 27)
 
 ### Completed
 - **CSV Pipeline Major Overhaul**

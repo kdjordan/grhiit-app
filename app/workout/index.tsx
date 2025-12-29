@@ -15,6 +15,7 @@ import {
   getUniqueMovements,
 } from "@/lib/workoutLoader";
 import { WorkoutBlock, WorkoutProgram } from "@/types";
+import { sizing, scale, moderateScale } from "@/lib/responsive";
 
 // Enable LayoutAnimation for Android
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -361,21 +362,21 @@ export default function WorkoutPreviewScreen() {
           )}
 
           {/* Workout Title + Tagline */}
-          <Text style={tw`text-white/50 text-xs tracking-widest mb-1`}>
+          <Text style={[tw`text-white/50 mb-1`, { fontSize: sizing.caption, letterSpacing: 1.5 }]}>
             WEEK {workout.week} • DAY {workout.day}
           </Text>
           <Text
             style={[
-              tw`text-white text-3xl font-bold`,
-              { fontFamily: "ChakraPetch_700Bold" },
+              tw`text-white font-bold`,
+              { fontFamily: "ChakraPetch_700Bold", fontSize: sizing.headerLarge },
             ]}
           >
             {workout.name}
           </Text>
           <Text
             style={[
-              tw`text-white/40 text-base mt-1 mb-6`,
-              { fontFamily: "SpaceGrotesk_400Regular", fontStyle: "italic" },
+              tw`text-white/40 mt-1 mb-6`,
+              { fontFamily: "SpaceGrotesk_400Regular", fontStyle: "italic", fontSize: sizing.bodyLarge },
             ]}
           >
             {tagline}
@@ -384,20 +385,20 @@ export default function WorkoutPreviewScreen() {
           {/* Stats Row */}
           <View style={tw`flex-row items-center gap-4 mb-6`}>
             <View style={tw`flex-row items-center`}>
-              <Feather name="clock" size={14} color="#6B7280" />
-              <Text style={tw`text-gray-500 ml-1`}>
+              <Feather name="clock" size={scale(14)} color="#6B7280" />
+              <Text style={[tw`text-gray-500 ml-1`, { fontSize: sizing.bodySmall }]}>
                 {formatDuration(totalDuration)}
               </Text>
             </View>
             <View style={tw`flex-row items-center`}>
-              <Feather name="repeat" size={14} color="#6B7280" />
-              <Text style={tw`text-gray-500 ml-1`}>
+              <Feather name="repeat" size={scale(14)} color="#6B7280" />
+              <Text style={[tw`text-gray-500 ml-1`, { fontSize: sizing.bodySmall }]}>
                 {totalIntervals} intervals
               </Text>
             </View>
             <View style={tw`flex-row items-center`}>
-              <Feather name="activity" size={14} color="#6B7280" />
-              <Text style={tw`text-gray-500 ml-1`}>
+              <Feather name="activity" size={scale(14)} color="#6B7280" />
+              <Text style={[tw`text-gray-500 ml-1`, { fontSize: sizing.bodySmall }]}>
                 {uniqueMovements.length} movements
               </Text>
             </View>
@@ -453,24 +454,25 @@ export default function WorkoutPreviewScreen() {
       </ScrollView>
 
       {/* Fixed Bottom Button */}
-      <View style={tw`absolute bottom-0 left-0 right-0 px-5 pb-8 pt-4 bg-grhiit-black`}>
+      <View style={[tw`absolute bottom-0 left-0 right-0 pt-4 bg-grhiit-black`, { paddingHorizontal: sizing.paddingHorizontal, paddingBottom: scale(32) }]}>
         <Pressable
           style={[
-            tw`bg-grhiit-red py-4 flex-row items-center justify-center`,
+            tw`bg-grhiit-red flex-row items-center justify-center`,
             {
-              borderRadius: 16,
+              borderRadius: scale(16),
               shadowColor: "#EF4444",
               shadowOffset: { width: 0, height: 0 },
               shadowOpacity: 0.4,
               shadowRadius: 20,
+              paddingVertical: scale(16),
             },
           ]}
           onPress={handleStart}
         >
           <Text
             style={[
-              tw`text-white text-lg font-bold tracking-wide`,
-              { fontFamily: "SpaceGrotesk_700Bold" },
+              tw`text-white font-bold`,
+              { fontFamily: "SpaceGrotesk_700Bold", fontSize: sizing.bodyLarge, letterSpacing: 0.5 },
             ]}
           >
             LET'S GO
@@ -608,17 +610,17 @@ function DisplayRow({ item, isLast }: { item: DisplayItem; isLast: boolean }) {
             {item.pattern}
           </Text>
           <Text style={[tw`text-white/50 text-xs mt-0.5`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
-            {item.timing} • {item.restBetween}s rest between
+            {item.timing}
           </Text>
         </View>
         {/* Inline rest indicator */}
-        {item.restAfter && !isLast && (
-          <View style={tw`flex-row items-center justify-center py-1`}>
-            <View style={tw`h-px bg-[#333] flex-1`} />
-            <Text style={[tw`text-white/30 text-xs mx-2`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
-              {item.restAfter}s
+        {item.restAfter && (
+          <View style={tw`flex-row items-center justify-center py-2`}>
+            <View style={tw`h-px bg-[#F59E0B]/30 flex-1`} />
+            <Text style={[tw`text-[#F59E0B]/60 text-xs mx-3`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+              {item.restAfter}s REST
             </Text>
-            <View style={tw`h-px bg-[#333] flex-1`} />
+            <View style={tw`h-px bg-[#F59E0B]/30 flex-1`} />
           </View>
         )}
       </View>
@@ -628,16 +630,35 @@ function DisplayRow({ item, isLast }: { item: DisplayItem; isLast: boolean }) {
   // Regular exercise block
   const block = item.block;
   const blockDuration = (block.workDuration + block.restDuration) * block.intervals;
+  const isSmoker = block.isSmoker || block.type === "SM";
 
   return (
     <View style={tw`mb-2`}>
       <View
-        style={tw`bg-[#141414] rounded-xl py-3 px-4 border border-[#262626]`}
+        style={[
+          tw`bg-[#141414] rounded-xl py-3 px-4 border`,
+          isSmoker ? tw`border-[#F59E0B]/30` : tw`border-[#262626]`,
+        ]}
       >
         <View style={tw`flex-row items-center justify-between`}>
           <View style={tw`flex-1`}>
+            {/* Smoker badge */}
+            {isSmoker && (
+              <View style={tw`flex-row items-center mb-1`}>
+                <View style={tw`bg-[#F59E0B]/20 px-2 py-0.5 rounded mr-2`}>
+                  <Text style={[tw`text-[#F59E0B] text-xs`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                    SMOKER
+                  </Text>
+                </View>
+                {block.holdMovement && (
+                  <Text style={[tw`text-[#F59E0B]/70 text-xs`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
+                    {block.holdMovement.displayName} hold
+                  </Text>
+                )}
+              </View>
+            )}
             <Text style={[tw`text-white text-sm`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              {block.displayName}
+              {isSmoker && block.workMovement ? block.workMovement.displayName : block.displayName}
             </Text>
             <Text style={[tw`text-white/50 text-xs mt-0.5`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
               {block.intervals} × ({block.workDuration}s/{block.restDuration}s)
@@ -654,13 +675,13 @@ function DisplayRow({ item, isLast }: { item: DisplayItem; isLast: boolean }) {
         </View>
       </View>
       {/* Inline rest indicator */}
-      {item.restAfter && !isLast && (
-        <View style={tw`flex-row items-center justify-center py-1`}>
-          <View style={tw`h-px bg-[#333] flex-1`} />
-          <Text style={[tw`text-white/30 text-xs mx-2`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
-            {item.restAfter}s
+      {item.restAfter && (
+        <View style={tw`flex-row items-center justify-center py-2`}>
+          <View style={tw`h-px bg-[#F59E0B]/30 flex-1`} />
+          <Text style={[tw`text-[#F59E0B]/60 text-xs mx-3`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+            {item.restAfter}s REST
           </Text>
-          <View style={tw`h-px bg-[#333] flex-1`} />
+          <View style={tw`h-px bg-[#F59E0B]/30 flex-1`} />
         </View>
       )}
     </View>

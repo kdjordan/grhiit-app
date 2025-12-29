@@ -2,6 +2,7 @@ import { View, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import tw from "@/lib/tw";
+import { sizing, scale } from "@/lib/responsive";
 
 // Movement codes and their full names
 const MOVEMENTS = [
@@ -35,22 +36,22 @@ export default function LibraryScreen() {
     <SafeAreaView style={tw`flex-1 bg-grhiit-black`}>
       <ScrollView
         style={tw`flex-1`}
-        contentContainerStyle={tw`px-5 pt-4 pb-8`}
+        contentContainerStyle={[tw`pt-4 pb-8`, { paddingHorizontal: sizing.paddingHorizontal }]}
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
         <Text
           style={[
-            tw`text-white text-2xl mb-2`,
-            { fontFamily: "ChakraPetch_700Bold" },
+            tw`text-white mb-2`,
+            { fontFamily: "ChakraPetch_700Bold", fontSize: sizing.headerMedium },
           ]}
         >
           Movement Library
         </Text>
         <Text
           style={[
-            tw`text-white/50 text-sm mb-6`,
-            { fontFamily: "SpaceGrotesk_400Regular" },
+            tw`text-white/50 mb-6`,
+            { fontFamily: "SpaceGrotesk_400Regular", fontSize: sizing.bodySmall },
           ]}
         >
           Learn the proper form for each exercise
@@ -60,22 +61,22 @@ export default function LibraryScreen() {
         {MOVEMENTS.map((movement) => (
           <View
             key={movement.code}
-            style={tw`bg-[#141414] rounded-xl p-4 mb-3 border border-[#262626]`}
+            style={[tw`bg-[#141414] mb-3 border border-[#262626]`, { borderRadius: scale(12), padding: scale(16) }]}
           >
             <View style={tw`flex-row items-center justify-between mb-2`}>
               <Text
                 style={[
-                  tw`text-white text-base`,
-                  { fontFamily: "SpaceGrotesk_600SemiBold" },
+                  tw`text-white`,
+                  { fontFamily: "SpaceGrotesk_600SemiBold", fontSize: sizing.bodyLarge },
                 ]}
               >
                 {movement.name}
               </Text>
-              <View style={tw`bg-[#262626] px-2 py-1 rounded`}>
+              <View style={[tw`bg-[#262626]`, { paddingHorizontal: scale(8), paddingVertical: scale(4), borderRadius: scale(4) }]}>
                 <Text
                   style={[
-                    tw`text-white/50 text-xs`,
-                    { fontFamily: "SpaceGrotesk_500Medium" },
+                    tw`text-white/50`,
+                    { fontFamily: "SpaceGrotesk_500Medium", fontSize: sizing.caption },
                   ]}
                 >
                   {movement.code}
@@ -84,19 +85,19 @@ export default function LibraryScreen() {
             </View>
             <Text
               style={[
-                tw`text-white/40 text-sm`,
-                { fontFamily: "SpaceGrotesk_400Regular" },
+                tw`text-white/40`,
+                { fontFamily: "SpaceGrotesk_400Regular", fontSize: sizing.bodySmall },
               ]}
             >
               {movement.description}
             </Text>
             {/* Placeholder for video/instructions */}
             <View style={tw`flex-row items-center mt-3 pt-3 border-t border-[#262626]`}>
-              <Feather name="play-circle" size={16} color="#6B7280" />
+              <Feather name="play-circle" size={scale(16)} color="#6B7280" />
               <Text
                 style={[
-                  tw`text-white/30 text-xs ml-2`,
-                  { fontFamily: "SpaceGrotesk_400Regular" },
+                  tw`text-white/30 ml-2`,
+                  { fontFamily: "SpaceGrotesk_400Regular", fontSize: sizing.caption },
                 ]}
               >
                 Video coming soon

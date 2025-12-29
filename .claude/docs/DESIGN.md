@@ -68,10 +68,10 @@ import { Feather } from "@expo/vector-icons";
 - STATS: `bar-chart-2`
 - SETTINGS: `settings`
 
-**Stats bento icons (40px, red):**
+**Stats bento icons (36px responsive, red):**
 - SESSIONS: `target`
 - TIME: `clock`
-- STREAK: `zap`
+- THIS WEEK: `check-circle`
 - KCAL: `activity`
 - BEST: `award`
 
@@ -83,25 +83,27 @@ import { Feather } from "@expo/vector-icons";
 
 1. **Header**
    - Logomark (32px) on left
-   - Date on top: "TODAY, 24 DECEMBER" (gray monospace, letter-spaced)
-   - "Welcome Back, KEVIN" underneath (white, 18px)
+   - Identity text on top: "GRHIIT · CYCLE 1" (gray, letter-spacing 1.5)
+   - Session info underneath: "Week {X} · Session {Y}" (white, 18px)
+   - RESET button (dev mode only, top right)
 
 2. **Progress Bento**
    - Title "PROGRESS" above the bento (outside)
+   - Dev mode indicator "TAP TO SELECT" (green, right side)
    - Bento: `bg-[#1a1a1a]`, 16px radius, padding 16px
    - Contains ProgressGrid component (bar-based)
 
 3. **Stats Bentos** (horizontal scroll)
-   - 5 bento cards: SESSIONS, TIME, STREAK, KCAL, BEST
-   - Each: 110px min-width, 150px height, 16px radius
+   - 5 bento cards: SESSIONS, TIME, THIS WEEK, KCAL, BEST
+   - Each: responsive sizing (100px min-width, 140px height)
    - Layout: title (top) → icon (flex-1 centered) → value (bottom)
-   - Icons: 40px, red (#EF4444)
+   - Icons: responsive 36px, red (#EF4444)
    - Horizontally scrollable with 12px gap
 
 4. **Start Button**
    - Full width, red background (#EF4444)
    - 16px border radius (matches bentos)
-   - Play icon + "START NEXT SESSION"
+   - "START NEXT SESSION" (no play icon)
    - Red glow shadow
 
 ### Key Files:
@@ -133,7 +135,7 @@ import { Feather } from "@expo/vector-icons";
 - **Upcoming**: Dark gray fill (#2a2a2a)
 - **Missed**: Transparent with gray border (#3a3a3a)
 
-**Roman numerals on bars**: Each workout displays I through XXIV
+**Day numbers on bars**: Each bar shows 1, 2, or 3 (representing day within week)
 - White text on completed (red) bars
 - Gray text (#6B7280) on incomplete bars
 - Font: Space Grotesk 500 Medium
@@ -223,6 +225,48 @@ Tab bar styling:
 - Cleaner, more minimal look
 - Taller stat bentos (150px) with better spacing
 - Icons centered with flex-1 wrapper
+
+---
+
+## Responsive Scaling System
+
+**File**: `src/lib/responsive.ts`
+
+All UI elements use responsive scaling to adapt to different iOS screen sizes (iPhone SE through Pro Max).
+
+### Core Functions
+```typescript
+const BASE_WIDTH = 390; // iPhone 13/14 base
+
+scale(size)          // Width-based scaling
+verticalScale(size)  // Height-based scaling
+moderateScale(size, factor) // Blended scaling
+responsive(small, medium, large) // Breakpoint-based values
+```
+
+### Sizing Constants
+```typescript
+sizing = {
+  // Timer
+  timerSize: responsive(240, 280, 320),
+  timerFontSize: responsive(100, 120, 140),
+  timerStroke: responsive(6, 8, 10),
+
+  // Typography
+  heading: responsive(22, 24, 28),
+  body: responsive(14, 16, 18),
+  caption: responsive(10, 11, 12),
+
+  // Spacing
+  screenPadding: scale(16),
+  cardPadding: scale(16)
+}
+```
+
+### Device Breakpoints
+- Small: width < 375px (iPhone SE)
+- Medium: 375-414px (iPhone 13, 14)
+- Large: width > 414px (iPhone Pro Max)
 
 ---
 
@@ -340,10 +384,10 @@ Ring colors match:
 - Animation kicks off when interval starts, runs for full interval duration
 - `strokeDasharray` / `strokeDashoffset` technique for ring fill effect
 
-**Dimensions**:
-- Timer size: 280px diameter
-- Stroke width: 8px (thinner, refined)
-- Center font size: **168px** (MASSIVE - fills the circle)
+**Dimensions** (responsive):
+- Timer size: 240/280/320px diameter (small/medium/large devices)
+- Stroke width: 6/8/10px (responsive)
+- Center font size: 100/120/140px (responsive based on device)
 - Ring starts at 12 o'clock, fills clockwise
 
 **Technical notes**:
@@ -417,11 +461,22 @@ Grouped by workout sections:
 - SUMMIT gets red accent color
 
 ### Inline REST Display
-REST periods shown as divider lines between blocks:
+REST periods shown as amber-colored dividers between ALL blocks:
 ```
-──────────── 30s ────────────
+──────────── 30s REST ────────────
 ```
-No separate REST cards
+- Amber/yellow color (#F59E0B) for visibility
+- Shows between every section (not just some)
+- No separate REST cards
+
+### Smoker Block Indicator
+Smoker blocks display orange badge in preview:
+```
+[SMOKER]  PLANK hold
+```
+- Orange badge (#F59E0B bg at 20% opacity)
+- "SMOKER" text in orange
+- Hold movement shown alongside (e.g., "PLANK hold")
 
 ---
 

@@ -7,11 +7,12 @@ import Svg, { Circle } from "react-native-svg";
 import { useWorkoutStore } from "@/stores/workoutStore";
 import { useUserStore } from "@/stores/userStore";
 import { initializeAudio, playWorkBeep, playRestBeep, playBlockCompleteBeep, cleanupAudio } from "@/lib/audio";
+import { sizing } from "@/lib/responsive";
 import tw from "@/lib/tw";
 
-// Circular timer dimensions - MASSIVE for intensity
-const TIMER_SIZE = 280;
-const STROKE_WIDTH = 8;
+// Circular timer dimensions - responsive to screen size
+const TIMER_SIZE = sizing.timerSize;
+const STROKE_WIDTH = sizing.timerStroke;
 const RADIUS = (TIMER_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
@@ -82,12 +83,12 @@ function CircularTimer({
           transform={`rotate(-90 ${TIMER_SIZE / 2} ${TIMER_SIZE / 2})`}
         />
       </Svg>
-      {/* Center seconds display - MASSIVE, nothing else matters */}
+      {/* Center seconds display */}
       <Text
         style={[
           tw`text-white font-bold`,
           {
-            fontSize: 168,
+            fontSize: sizing.timerFontSize,
             fontFamily: "SpaceGrotesk_700Bold",
             includeFontPadding: false,
           },
@@ -385,16 +386,38 @@ export default function ActiveWorkoutScreen() {
             />
 
             {/* Show first exercise during countdown */}
-            {isCountdown && workout && (
-              <View style={tw`mt-8 items-center`}>
-                <Text style={tw`text-white/50 text-xs tracking-wide mb-1`}>
-                  FIRST UP
-                </Text>
-                <Text style={tw`text-white font-semibold`}>
-                  {workout.blocks[0]?.displayName}
-                </Text>
-              </View>
-            )}
+            {isCountdown && workout && (() => {
+              const firstBlock = workout.blocks[0];
+              const isFirstSmoker = firstBlock?.isSmoker || firstBlock?.type === "SM";
+              const displayName = isFirstSmoker && firstBlock.workMovement
+                ? firstBlock.workMovement.displayName
+                : firstBlock?.displayName;
+
+              return (
+                <View style={tw`mt-8 items-center`}>
+                  <Text style={tw`text-white/50 text-xs tracking-wide mb-1`}>
+                    FIRST UP
+                  </Text>
+                  {isFirstSmoker && (
+                    <View style={tw`flex-row items-center mb-1`}>
+                      <View style={tw`bg-[#F59E0B]/20 px-2 py-0.5 rounded mr-2`}>
+                        <Text style={[tw`text-[#F59E0B] text-xs`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                          SMOKER
+                        </Text>
+                      </View>
+                      {firstBlock.holdMovement && (
+                        <Text style={[tw`text-[#F59E0B]/70 text-xs`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
+                          {firstBlock.holdMovement.displayName} hold
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                  <Text style={tw`text-white font-semibold`}>
+                    {displayName}
+                  </Text>
+                </View>
+              );
+            })()}
           </View>
         </View>
 

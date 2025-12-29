@@ -6,29 +6,6 @@ import { getWorkoutByNumber } from "@/lib/workoutLoader";
 
 const GRHIIT_RED = "#EF4444";
 
-// Convert number to Roman numeral
-function toRoman(num: number): string {
-  const romanNumerals: [number, string][] = [
-    [10, "X"],
-    [9, "IX"],
-    [5, "V"],
-    [4, "IV"],
-    [1, "I"],
-  ];
-
-  let result = "";
-  let remaining = num;
-
-  for (const [value, symbol] of romanNumerals) {
-    while (remaining >= value) {
-      result += symbol;
-      remaining -= value;
-    }
-  }
-
-  return result;
-}
-
 interface ProgressGridProps {
   completedWorkouts: number[];
   missedWorkouts?: number[];
@@ -38,7 +15,7 @@ interface ProgressGridProps {
 }
 
 // Pulsing bar for current workout
-function PulsingBar({ isLarge, workoutNum }: { isLarge: boolean; workoutNum: number }) {
+function PulsingBar({ isLarge, dayNum }: { isLarge: boolean; dayNum: number }) {
   const pulseAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -82,7 +59,7 @@ function PulsingBar({ isLarge, workoutNum }: { isLarge: boolean; workoutNum: num
           tw`text-white`,
           { fontSize: isLarge ? 12 : 9, fontFamily: "SpaceGrotesk_500Medium" }
         ]}>
-          {toRoman(workoutNum)}
+          {dayNum}
         </Text>
       </Animated.View>
     </View>
@@ -149,8 +126,10 @@ export function ProgressGrid({
                 const current = isCurrent(workoutNum);
                 const available = hasData(workoutNum);
 
+                const dayNum = dayIndex + 1; // 1, 2, or 3 within week
+
                 if (current && !devMode) {
-                  return <PulsingBar key={workoutNum} isLarge={isActiveWeek} workoutNum={workoutNum} />;
+                  return <PulsingBar key={workoutNum} isLarge={isActiveWeek} dayNum={dayNum} />;
                 }
 
                 // Text color: white on completed (red), gray on incomplete
@@ -187,7 +166,7 @@ export function ProgressGrid({
                       color: current ? "#FFFFFF" : textColor,
                       fontFamily: "SpaceGrotesk_500Medium"
                     }}>
-                      {toRoman(workoutNum)}
+                      {dayNum}
                     </Text>
                   </View>
                 );

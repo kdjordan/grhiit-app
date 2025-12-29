@@ -7,6 +7,7 @@ import { GrhiitMark } from "@/components/GrhiitMark";
 import { useWorkoutStore } from "@/stores/workoutStore";
 import { useUserStore, SessionStats } from "@/stores/userStore";
 import { playBlockCompleteBeep } from "@/lib/audio";
+import { sizing, scale, moderateScale } from "@/lib/responsive";
 
 // Format seconds to MM:SS
 function formatTime(seconds: number): string {
@@ -47,14 +48,14 @@ function RepPickerModal({ visible, title, options, selected, onSelect, onClose }
       >
         <Pressable
           style={[
-            tw`w-full bg-[#1a1a1a] p-5`,
-            { borderRadius: 16, maxWidth: 320 }
+            tw`w-full bg-[#1a1a1a]`,
+            { borderRadius: scale(16), maxWidth: scale(320), padding: scale(20) }
           ]}
           onPress={(e) => e.stopPropagation()}
         >
           <Text style={[
             tw`text-white text-center mb-5`,
-            { fontFamily: "ChakraPetch_700Bold", fontSize: 18 }
+            { fontFamily: "ChakraPetch_700Bold", fontSize: moderateScale(18) }
           ]}>
             {title}
           </Text>
@@ -66,9 +67,9 @@ function RepPickerModal({ visible, title, options, selected, onSelect, onClose }
                 style={[
                   tw`items-center justify-center`,
                   {
-                    width: 56,
-                    height: 56,
-                    borderRadius: 12,
+                    width: scale(52),
+                    height: scale(52),
+                    borderRadius: scale(12),
                     backgroundColor: selected === num ? "#EF4444" : "#262626",
                   }
                 ]}
@@ -78,7 +79,7 @@ function RepPickerModal({ visible, title, options, selected, onSelect, onClose }
                   tw`text-white`,
                   {
                     fontFamily: "SpaceGrotesk_700Bold",
-                    fontSize: 20,
+                    fontSize: moderateScale(18),
                   }
                 ]}>
                   {num}
@@ -247,7 +248,7 @@ export default function WorkoutCompleteScreen() {
           <View style={tw`items-center mb-8`}>
             <Text style={[
               tw`text-white text-center`,
-              { fontFamily: "ChakraPetch_700Bold", fontSize: 28, letterSpacing: 2 }
+              { fontFamily: "ChakraPetch_700Bold", fontSize: moderateScale(26), letterSpacing: 2 }
             ]}>
               WORKOUT COMPLETE
             </Text>
@@ -256,7 +257,7 @@ export default function WorkoutCompleteScreen() {
             <View style={tw`flex-row items-center mt-3`}>
               <Text style={[
                 tw`text-white/60`,
-                { fontFamily: "SpaceGrotesk_500Medium", fontSize: 18 }
+                { fontFamily: "SpaceGrotesk_500Medium", fontSize: moderateScale(16) }
               ]}>
                 {formatTime(elapsedTime)}
               </Text>
@@ -267,11 +268,11 @@ export default function WorkoutCompleteScreen() {
           <View style={tw`mb-8`}>
             <Text style={[
               tw`text-white mb-1`,
-              { fontSize: 13, letterSpacing: 1, fontFamily: "SpaceGrotesk_600SemiBold" }
+              { fontSize: moderateScale(12), letterSpacing: 1, fontFamily: "SpaceGrotesk_600SemiBold" }
             ]}>
               SUMMIT REPS
             </Text>
-            <Text style={tw`text-white/50 text-xs mb-4`}>
+            <Text style={[tw`text-white/50 mb-4`, { fontSize: sizing.caption }]}>
               How many reps per Tabata interval?
             </Text>
 
@@ -281,7 +282,7 @@ export default function WorkoutCompleteScreen() {
               <View style={tw`flex-1`}>
                 <Text style={[
                   tw`text-white/60 text-center mb-2`,
-                  { fontFamily: "SpaceGrotesk_500Medium", fontSize: 12 }
+                  { fontFamily: "SpaceGrotesk_500Medium", fontSize: sizing.caption }
                 ]}>
                   BRP
                 </Text>
@@ -290,8 +291,8 @@ export default function WorkoutCompleteScreen() {
                     tw`items-center justify-center`,
                     {
                       backgroundColor: burpeeReps ? "#1a1a1a" : "#EF4444",
-                      borderRadius: 12,
-                      height: 72,
+                      borderRadius: scale(12),
+                      height: scale(68),
                       borderWidth: burpeeReps ? 2 : 0,
                       borderColor: "#EF4444",
                     }
@@ -301,7 +302,7 @@ export default function WorkoutCompleteScreen() {
                   <Text style={[
                     {
                       fontFamily: "SpaceGrotesk_700Bold",
-                      fontSize: burpeeReps ? 32 : 14,
+                      fontSize: burpeeReps ? moderateScale(28) : moderateScale(12),
                       color: "#FFFFFF",
                       letterSpacing: burpeeReps ? 0 : 2,
                     }
@@ -315,7 +316,7 @@ export default function WorkoutCompleteScreen() {
               <View style={tw`flex-1`}>
                 <Text style={[
                   tw`text-white/60 text-center mb-2`,
-                  { fontFamily: "SpaceGrotesk_500Medium", fontSize: 12 }
+                  { fontFamily: "SpaceGrotesk_500Medium", fontSize: sizing.caption }
                 ]}>
                   FLSQ
                 </Text>
@@ -324,8 +325,8 @@ export default function WorkoutCompleteScreen() {
                     tw`items-center justify-center`,
                     {
                       backgroundColor: flyingSquatReps ? "#1a1a1a" : "#EF4444",
-                      borderRadius: 12,
-                      height: 72,
+                      borderRadius: scale(12),
+                      height: scale(68),
                       borderWidth: flyingSquatReps ? 2 : 0,
                       borderColor: "#EF4444",
                     }
@@ -335,7 +336,7 @@ export default function WorkoutCompleteScreen() {
                   <Text style={[
                     {
                       fontFamily: "SpaceGrotesk_700Bold",
-                      fontSize: flyingSquatReps ? 32 : 14,
+                      fontSize: flyingSquatReps ? moderateScale(28) : moderateScale(12),
                       color: "#FFFFFF",
                       letterSpacing: flyingSquatReps ? 0 : 2,
                     }
@@ -351,11 +352,11 @@ export default function WorkoutCompleteScreen() {
           <View style={tw`mb-8`}>
             <Text style={[
               tw`text-white/40 mb-1`,
-              { fontSize: 11, letterSpacing: 2, fontFamily: "SpaceGrotesk_500Medium" }
+              { fontSize: sizing.caption, letterSpacing: 2, fontFamily: "SpaceGrotesk_500Medium" }
             ]}>
               RATE THIS SESSION
             </Text>
-            <Text style={tw`text-white/70 text-base mb-4`}>
+            <Text style={[tw`text-white/70 mb-4`, { fontSize: sizing.bodyLarge }]}>
               How hard was this?
             </Text>
 
@@ -364,12 +365,13 @@ export default function WorkoutCompleteScreen() {
                 <Pressable
                   key={rating}
                   style={[
-                    tw`flex-1 py-3 items-center`,
+                    tw`flex-1 items-center`,
                     {
-                      borderRadius: 8,
+                      borderRadius: scale(8),
                       backgroundColor: difficulty === rating ? "#EF4444" : "#1a1a1a",
                       borderWidth: 1,
                       borderColor: difficulty === rating ? "#EF4444" : "#262626",
+                      paddingVertical: scale(12),
                     }
                   ]}
                   onPress={() => setDifficulty(rating)}
@@ -377,7 +379,7 @@ export default function WorkoutCompleteScreen() {
                   <Text
                     style={[
                       {
-                        fontSize: 16,
+                        fontSize: sizing.bodyLarge,
                         fontFamily: "SpaceGrotesk_600SemiBold",
                         color: difficulty === rating ? "#FFFFFF" : "#6B7280",
                       }
@@ -391,8 +393,8 @@ export default function WorkoutCompleteScreen() {
 
             {/* Scale labels */}
             <View style={tw`flex-row justify-between mt-2 px-1`}>
-              <Text style={tw`text-white/30 text-xs`}>Easy</Text>
-              <Text style={tw`text-white/30 text-xs`}>Brutal</Text>
+              <Text style={[tw`text-white/30`, { fontSize: sizing.caption }]}>Easy</Text>
+              <Text style={[tw`text-white/30`, { fontSize: sizing.caption }]}>Brutal</Text>
             </View>
           </View>
 
@@ -402,24 +404,25 @@ export default function WorkoutCompleteScreen() {
             return (
               <Pressable
                 style={[
-                  tw`py-5 items-center mb-5`,
+                  tw`items-center mb-5`,
                   {
-                    borderRadius: 16,
+                    borderRadius: scale(16),
                     backgroundColor: isComplete ? "#EF4444" : "#262626",
                     shadowColor: "#EF4444",
                     shadowOffset: { width: 0, height: 0 },
                     shadowOpacity: isComplete ? 0.35 : 0,
                     shadowRadius: 16,
+                    paddingVertical: scale(18),
                   }
                 ]}
                 onPress={isComplete ? handleDone : undefined}
                 disabled={!isComplete}
               >
                 <Text style={[
-                  tw`text-lg`,
                   {
                     fontFamily: "SpaceGrotesk_700Bold",
                     color: isComplete ? "#FFFFFF" : "#4B5563",
+                    fontSize: sizing.bodyLarge,
                   }
                 ]}>
                   DONE
@@ -429,7 +432,7 @@ export default function WorkoutCompleteScreen() {
           })()}
 
           {/* Quote */}
-          <Text style={tw`text-white/30 text-center text-sm italic`}>
+          <Text style={[tw`text-white/30 text-center italic`, { fontSize: sizing.bodySmall }]}>
             "You just proved something to yourself."
           </Text>
         </Animated.View>

@@ -10,6 +10,7 @@ import {
   getUniqueMovements,
 } from "@/lib/workoutLoader";
 import { WorkoutProgram } from "@/types";
+import { sizing, scale } from "@/lib/responsive";
 
 interface WorkoutCardProps {
   workout: WorkoutProgram;
@@ -31,9 +32,10 @@ function WorkoutCard({ workout, workoutNumber, currentWorkoutNumber, isDevMode, 
   return (
     <View
       style={[
-        tw`bg-[#141414] rounded-2xl p-5 mb-4 border`,
+        tw`bg-[#141414] mb-4 border`,
         isCurrent ? tw`border-grhiit-red/40` : tw`border-[#262626]`,
         !isUnlocked && tw`opacity-60`,
+        { borderRadius: scale(16), padding: scale(20) },
       ]}
     >
       {/* Header */}
@@ -41,33 +43,33 @@ function WorkoutCard({ workout, workoutNumber, currentWorkoutNumber, isDevMode, 
         <View style={tw`flex-row items-center`}>
           {/* Status indicator */}
           {isCompleted && (
-            <View style={tw`bg-[#22C55E]/20 p-1.5 rounded-full mr-3`}>
-              <Feather name="check" size={14} color="#22C55E" />
+            <View style={[tw`bg-[#22C55E]/20 rounded-full mr-3`, { padding: scale(6) }]}>
+              <Feather name="check" size={scale(14)} color="#22C55E" />
             </View>
           )}
           {isCurrent && (
-            <View style={tw`bg-grhiit-red/20 p-1.5 rounded-full mr-3`}>
-              <Feather name="play" size={14} color="#EF4444" />
+            <View style={[tw`bg-grhiit-red/20 rounded-full mr-3`, { padding: scale(6) }]}>
+              <Feather name="play" size={scale(14)} color="#EF4444" />
             </View>
           )}
           {!isUnlocked && (
-            <View style={tw`bg-[#262626] p-1.5 rounded-full mr-3`}>
-              <Feather name="lock" size={14} color="#6B7280" />
+            <View style={[tw`bg-[#262626] rounded-full mr-3`, { padding: scale(6) }]}>
+              <Feather name="lock" size={scale(14)} color="#6B7280" />
             </View>
           )}
           <View>
             <Text
               style={[
-                tw`text-white/50 text-xs tracking-widest mb-1`,
-                { fontFamily: "SpaceGrotesk_500Medium" },
+                tw`text-white/50 mb-1`,
+                { fontFamily: "SpaceGrotesk_500Medium", fontSize: sizing.caption, letterSpacing: 1.5 },
               ]}
             >
               WEEK {workout.week} • DAY {workout.day}
             </Text>
             <Text
               style={[
-                tw`text-white text-xl`,
-                { fontFamily: "ChakraPetch_700Bold" },
+                tw`text-white`,
+                { fontFamily: "ChakraPetch_700Bold", fontSize: sizing.headerSmall },
               ]}
             >
               {workout.name}
@@ -75,11 +77,11 @@ function WorkoutCard({ workout, workoutNumber, currentWorkoutNumber, isDevMode, 
           </View>
         </View>
         <View style={tw`flex-row items-center`}>
-          <Feather name="clock" size={14} color="#6B7280" />
+          <Feather name="clock" size={scale(14)} color="#6B7280" />
           <Text
             style={[
-              tw`text-white/50 text-sm ml-1`,
-              { fontFamily: "SpaceGrotesk_500Medium" },
+              tw`text-white/50 ml-1`,
+              { fontFamily: "SpaceGrotesk_500Medium", fontSize: sizing.bodySmall },
             ]}
           >
             {durationMinutes} min
@@ -109,24 +111,24 @@ function WorkoutCard({ workout, workoutNumber, currentWorkoutNumber, isDevMode, 
       {/* Action Button */}
       {isUnlocked ? (
         <Pressable
-          style={tw`bg-grhiit-red rounded-xl py-3 items-center justify-center`}
+          style={[tw`bg-grhiit-red items-center justify-center`, { borderRadius: scale(12), paddingVertical: scale(12) }]}
           onPress={onPress}
         >
           <Text
             style={[
               tw`text-white`,
-              { fontFamily: "SpaceGrotesk_700Bold" },
+              { fontFamily: "SpaceGrotesk_700Bold", fontSize: sizing.bodyMedium },
             ]}
           >
             {isCompleted ? "REPEAT" : "START"}
           </Text>
         </Pressable>
       ) : (
-        <View style={tw`bg-[#262626] rounded-xl py-3 items-center justify-center`}>
+        <View style={[tw`bg-[#262626] items-center justify-center`, { borderRadius: scale(12), paddingVertical: scale(12) }]}>
           <Text
             style={[
               tw`text-white/30`,
-              { fontFamily: "SpaceGrotesk_700Bold" },
+              { fontFamily: "SpaceGrotesk_700Bold", fontSize: sizing.bodyMedium },
             ]}
           >
             LOCKED
@@ -158,19 +160,19 @@ export default function TrainScreen() {
   return (
     <SafeAreaView style={tw`flex-1 bg-grhiit-black`}>
       {/* Header */}
-      <View style={tw`px-5 pt-4 pb-4`}>
+      <View style={[tw`pt-4 pb-4`, { paddingHorizontal: sizing.paddingHorizontal }]}>
         <Text
           style={[
-            tw`text-white text-2xl`,
-            { fontFamily: "ChakraPetch_700Bold" },
+            tw`text-white`,
+            { fontFamily: "ChakraPetch_700Bold", fontSize: sizing.headerMedium },
           ]}
         >
           Sessions
         </Text>
         <Text
           style={[
-            tw`text-white/40 text-sm mt-1`,
-            { fontFamily: "SpaceGrotesk_400Regular" },
+            tw`text-white/40 mt-1`,
+            { fontFamily: "SpaceGrotesk_400Regular", fontSize: sizing.bodySmall },
           ]}
         >
           {workouts.length} workouts available

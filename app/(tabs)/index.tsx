@@ -7,18 +7,9 @@ import { GrhiitMark, ProgressGrid } from "@/components";
 import { useUserStore } from "@/stores/userStore";
 import { useDevStore, isDevWorkoutSelectEnabled } from "@/stores/devStore";
 import { getWorkoutByNumber } from "@/lib/workoutLoader";
-
-// Format date like "TODAY, 23 DECEMBER"
-function getFormattedDate(): string {
-  const now = new Date();
-  const day = now.getDate();
-  const month = now.toLocaleString('en-US', { month: 'long' }).toUpperCase();
-  return `TODAY, ${day} ${month}`;
-}
+import { sizing, scale, verticalScale } from "@/lib/responsive";
 
 export default function HomeScreen() {
-  const formattedDate = getFormattedDate();
-
   // Get from user store
   const {
     completedWorkoutIds,
@@ -35,7 +26,6 @@ export default function HomeScreen() {
   const isDevMode = isDevWorkoutSelectEnabled();
   const isDev = process.env.EXPO_PUBLIC_DEV_SKIP_AUTH === "true";
 
-  const userName = "KEVIN"; // TODO: Get from auth
   const completedWorkouts = completedWorkoutIds;
   const missedWorkouts = missedWorkoutIds;
   const currentWorkout = getCurrentWorkoutNumber();
@@ -64,54 +54,25 @@ export default function HomeScreen() {
     return `${minutes}:00`;
   };
 
-  // Calculate streak (consecutive days with sessions)
-  const calculateStreak = (): number => {
-    if (recentSessions.length === 0) return 0;
-
-    let streak = 0;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // Sort sessions by date descending
-    const sortedSessions = [...recentSessions].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
-    // Check each day backwards
-    for (let i = 0; i < 30; i++) {
-      const checkDate = new Date(today);
-      checkDate.setDate(checkDate.getDate() - i);
-      checkDate.setHours(0, 0, 0, 0);
-
-      const hasSession = sortedSessions.some(s => {
-        const sessionDate = new Date(s.date);
-        sessionDate.setHours(0, 0, 0, 0);
-        return sessionDate.getTime() === checkDate.getTime();
-      });
-
-      if (hasSession) {
-        streak++;
-      } else if (i > 0) {
-        // Break if we miss a day (allow today to be empty)
-        break;
-      }
-    }
-
-    return streak;
-  };
-
   // Calculate best session (highest reps)
   const getBestReps = (): number => {
     if (recentSessions.length === 0) return 0;
     return Math.max(...recentSessions.map(s => s.totalReps));
   };
 
-  const streak = calculateStreak();
   const bestReps = getBestReps();
 
-  // Calculate session label
+  // Calculate week and session within week
   const currentWeek = Math.ceil(currentWorkout / 3);
-  const sessionLabel = `W${currentWeek}:${currentWorkout.toString().padStart(2, "0")}`;
+  const sessionInWeek = ((currentWorkout - 1) % 3) + 1;
+
+  // Calculate sessions completed in current week
+  const getSessionsThisWeek = (): number => {
+    const weekStart = (currentWeek - 1) * 3 + 1;
+    const weekEnd = currentWeek * 3;
+    return completedWorkouts.filter(w => w >= weekStart && w <= weekEnd).length;
+  };
+  const sessionsThisWeek = getSessionsThisWeek();
 
   return (
     <SafeAreaView style={tw`flex-1 bg-black`} edges={['top']}>
@@ -122,11 +83,11 @@ export default function HomeScreen() {
             <View style={tw`flex-row items-center`}>
               <GrhiitMark size={32} />
               <View style={tw`ml-3`}>
-                <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
-                  {formattedDate}
+                <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1.5 }]}>
+                  GRHIIT · CYCLE 1
                 </Text>
                 <Text style={[tw`text-white text-lg mt-0.5`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-                  Welcome Back, {userName}
+                  Week {currentWeek} · Session {sessionInWeek}
                 </Text>
               </View>
             </View>
@@ -173,66 +134,66 @@ export default function HomeScreen() {
           contentContainerStyle={tw`px-4 py-4 gap-3`}
         >
           {/* Sessions */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
-            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
+            <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
               SESSIONS
             </Text>
             <View style={tw`flex-1 justify-center`}>
-              <Feather name="target" size={40} color="#EF4444" />
+              <Feather name="target" size={scale(36)} color="#EF4444" />
             </View>
-            <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
+            <Text style={[tw`text-white`, { fontFamily: "SpaceGrotesk_600SemiBold", fontSize: sizing.bodyLarge }]}>
               {completedCount}/{totalSessionsInProgram}
             </Text>
           </View>
 
           {/* Time Training */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
-            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
+            <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
               TIME
             </Text>
             <View style={tw`flex-1 justify-center`}>
-              <Feather name="clock" size={40} color="#EF4444" />
+              <Feather name="clock" size={scale(36)} color="#EF4444" />
             </View>
-            <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
+            <Text style={[tw`text-white`, { fontFamily: "SpaceGrotesk_600SemiBold", fontSize: sizing.bodyLarge }]}>
               {formatTotalTime(totalMinutes)}
             </Text>
           </View>
 
-          {/* Streak */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
-            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
-              STREAK
+          {/* This Week */}
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
+            <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
+              THIS WEEK
             </Text>
             <View style={tw`flex-1 justify-center`}>
-              <Feather name="zap" size={40} color="#EF4444" />
+              <Feather name="check-circle" size={scale(36)} color="#EF4444" />
             </View>
-            <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              {streak} {streak === 1 ? "day" : "days"}
+            <Text style={[tw`text-white`, { fontFamily: "SpaceGrotesk_600SemiBold", fontSize: sizing.bodyLarge }]}>
+              {sessionsThisWeek}/3
             </Text>
           </View>
 
           {/* kCal Burned */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
-            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
+            <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
               KCAL
             </Text>
             <View style={tw`flex-1 justify-center`}>
-              <Feather name="activity" size={40} color="#EF4444" />
+              <Feather name="activity" size={scale(36)} color="#EF4444" />
             </View>
-            <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
+            <Text style={[tw`text-white`, { fontFamily: "SpaceGrotesk_600SemiBold", fontSize: sizing.bodyLarge }]}>
               {totalCalories.toLocaleString()}
             </Text>
           </View>
 
           {/* Best Reps */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
-            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
+          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
+            <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
               BEST
             </Text>
             <View style={tw`flex-1 justify-center`}>
-              <Feather name="award" size={40} color="#EF4444" />
+              <Feather name="award" size={scale(36)} color="#EF4444" />
             </View>
-            <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
+            <Text style={[tw`text-white`, { fontFamily: "SpaceGrotesk_600SemiBold", fontSize: sizing.bodyLarge }]}>
               {bestReps} reps
             </Text>
           </View>
