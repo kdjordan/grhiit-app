@@ -1,7 +1,7 @@
 {
   "version": 1,
   "level": 1,
-  "generatedAt": "2025-12-30T01:35:27.108Z",
+  "generatedAt": "2025-12-30T23:37:35.473Z",
   "workouts": [
     {
       "id": "week1-day1",
@@ -409,7 +409,7 @@
           "displayName": "REST",
           "intervals": 1,
           "workDuration": 0,
-          "restDuration": 27,
+          "restDuration": 30,
           "isTransition": true,
           "section": "RAMP"
         },
@@ -429,7 +429,7 @@
           "displayName": "REST",
           "intervals": 1,
           "workDuration": 0,
-          "restDuration": 27,
+          "restDuration": 30,
           "isTransition": true,
           "section": "RAMP"
         },
@@ -449,7 +449,7 @@
           "displayName": "REST",
           "intervals": 1,
           "workDuration": 0,
-          "restDuration": 27,
+          "restDuration": 30,
           "isTransition": true,
           "section": "RAMP"
         },
@@ -577,9 +577,9 @@
           "displayName": "REST",
           "intervals": 1,
           "workDuration": 0,
-          "restDuration": 27,
+          "restDuration": 30,
           "isTransition": true,
-          "section": "SUMMIT"
+          "section": "RAMP"
         },
         {
           "id": "lng-18",
@@ -597,9 +597,9 @@
           "displayName": "REST",
           "intervals": 1,
           "workDuration": 0,
-          "restDuration": 27,
+          "restDuration": 30,
           "isTransition": true,
-          "section": "RUNOUT"
+          "section": "RAMP"
         },
         {
           "id": "mc-20",
@@ -617,9 +617,9 @@
           "displayName": "REST",
           "intervals": 1,
           "workDuration": 0,
-          "restDuration": 27,
+          "restDuration": 30,
           "isTransition": true,
-          "section": "RUNOUT"
+          "section": "RAMP"
         },
         {
           "id": "pu-22",
@@ -632,7 +632,7 @@
           "repTarget": "2-4"
         }
       ],
-      "totalDuration": 870,
+      "totalDuration": 888,
       "movementCount": 5
     },
     {

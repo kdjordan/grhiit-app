@@ -1,5 +1,53 @@
 # GRHIIT Processed Work Log
 
+## Session: Dec 29, 2025 (Continued)
+
+### Completed: Stats Page Rework
+
+**Goal**: Cleaner, more focused stats layout following v1 launch guide.
+
+**Structure**:
+- **Top Section**: 3 fixed stats row (Sessions, Time Under Load, Avg Time)
+- **Middle**: Summit Reps (BRP/FLSQ totals with interval counts)
+- **Health**: Collapsible section (Avg BPM, Max BPM, Intensity) - collapsed by default
+- **Bottom**: Recent sessions log with W3:D1 format
+
+**Key Changes**:
+- Removed horizontal scroll for top stats (now fixed row)
+- Health section collapsed by default (supportive, not dominant)
+- Session codes formatted as W3:D1 instead of week3-day1
+
+---
+
+### Completed: Complete Screen Redesign
+
+**Copy & UX Refinements**:
+- Title: "Week X - Day Y" + "COMPLETE" (not generic "WORKOUT COMPLETE")
+- Summit reps prompt: "What rep count did you hold across Summit intervals?"
+- Movement labels: "SUMMIT — BURPEES" / "SUMMIT — FLSQ" (explicit context)
+- DONE button always enabled (reps are optional, no shame for skipping)
+- Difficulty: "How close to the edge was this?" with scale (Comfortable → Very hard → Maximal)
+
+**Session Taglines**:
+- Created `src/constants/sessionTaglines.ts` with 24 unique taglines
+- Each week/day has specific motivational quote reflecting program phase
+- Week 1: "Learning the System", Week 8: "The Summit"
+
+**Technical Fixes**:
+- Dev "SKIP → COMPLETE" button now sets elapsed time from workout duration
+- Unified GRHIIT_RED to #EF4444 everywhere (logomark was using #E8110F)
+- Removed moderateScale() - using consistent Tailwind classes like other screens
+
+---
+
+### Completed: Logomark Refinements
+
+- Reduced G letter scale from 1.2388 → 1.05 for more breathing room
+- Centered G within octagon (adjusted translate values)
+- Unified color to #EF4444 (was #E8110F in logomark)
+
+---
+
 ## Session: Dec 29, 2025
 
 ### Completed: Home Screen UI Refinements

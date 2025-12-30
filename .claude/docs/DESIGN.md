@@ -657,51 +657,60 @@ const isUnlocked = isDevMode || workoutNumber <= currentWorkoutNumber;
 
 ### Layout (top to bottom)
 1. **Red Logomark** - GrhiitMark 100px, animated entrance
-2. **"WORKOUT COMPLETE"** - ChakraPetch 28px, letter-spacing 2
-3. **Time** - SpaceGrotesk 18px, white/60
-4. **Summit Reps Section** - Primary data capture
+2. **Session Title** - "Week X - Day Y" (ChakraPetch 24px) + "COMPLETE" (gray, 14px)
+3. **Time** - Actual workout duration in MM:SS format
+4. **Summit Reps Section** - Optional data capture
 5. **Rate This Session** - 1-5 difficulty scale
-6. **DONE Button** - Disabled until all inputs filled
-7. **Quote** - Italic, white/30
+6. **DONE Button** - Always enabled (reps are optional)
+7. **Session Tagline** - Week/day-specific motivational quote
 
 ### Summit Reps UI
 ```
 SUMMIT REPS
-How many reps per Tabata interval?
+What rep count did you hold across Summit intervals?
 
-   BRP              FLSQ
-[ TAP ]          [ TAP ]     ← Red bg, white text (unfilled)
-[  4  ]          [  8  ]     ← Dark bg, red border (filled)
+SUMMIT — BURPEES    SUMMIT — FLSQ
+    [ TAP ]            [ TAP ]      ← Red bg (#EF4444), white text
+    [  4  ]            [  8  ]      ← Dark bg, red border (filled)
 ```
+
+**Design Philosophy**: Labels explicitly include "SUMMIT —" to reinforce that only Summit work counts, preventing confusion as workouts grow more complex.
 
 **Rep Picker Modal**:
 - Dark overlay (black/80)
-- Card with movement name header
-- Grid of number buttons (56×56px, 12px radius)
+- Card with "SUMMIT — MOVEMENT" header
+- Grid of number buttons (52×52px, 12px radius)
 - BRP range: 4-12
 - FLSQ range: 8-25
-- Selected number highlighted red
+- Selected number highlighted red (#EF4444)
 - Tap outside to dismiss
 
 ### Difficulty Rating
 ```
 RATE THIS SESSION
-How hard was this?
+How close to the edge was this?
 
 [1] [2] [3] [4] [5]
-Easy            Brutal
+Comfortable   Very hard   Maximal
 ```
 - 1-5 buttons, selected = red fill
-- Scale labels below
+- Three-point scale labels (not just endpoints)
+- Reframed from "How hard was this?" to match GRHIIT's mental language
 
 ### Button States
-**DONE disabled**: `#262626` bg, `#4B5563` text, no shadow
-**DONE enabled**: `#EF4444` bg, white text, red glow shadow
+**DONE**: Always enabled with red glow - `#EF4444` bg, white text
+- No validation required - reps are data, not compliance
+- Allows skip without shame
 
-### Required Inputs (all must be filled)
-- BRP reps (not null)
-- FLSQ reps (not null)
-- Difficulty (not null)
+### Session Taglines
+Each of the 24 sessions has a unique post-workout tagline stored in `src/constants/sessionTaglines.ts`.
+
+**Examples**:
+- W1D1: "You took the first step."
+- W4D3: "You earned the right to continue."
+- W8D3: "You've seen what staying looks like."
+
+**Fallback**: "You just proved something to yourself."
 
 ---
 
