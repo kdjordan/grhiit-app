@@ -7,7 +7,9 @@ import { GrhiitMark } from "@/components/GrhiitMark";
 import { useWorkoutStore } from "@/stores/workoutStore";
 import { useUserStore, SessionStats } from "@/stores/userStore";
 import { playBlockCompleteBeep } from "@/lib/audio";
-import { sizing, scale, moderateScale } from "@/lib/responsive";
+import { getSessionTagline } from "@/constants/sessionTaglines";
+
+const GRHIIT_RED = "#EF4444";
 
 // Format seconds to MM:SS
 function formatTime(seconds: number): string {
@@ -47,16 +49,10 @@ function RepPickerModal({ visible, title, options, selected, onSelect, onClose }
         onPress={onClose}
       >
         <Pressable
-          style={[
-            tw`w-full bg-[#1a1a1a]`,
-            { borderRadius: scale(16), maxWidth: scale(320), padding: scale(20) }
-          ]}
+          style={[tw`w-full bg-[#1a1a1a] p-5 max-w-80`, { borderRadius: 16 }]}
           onPress={(e) => e.stopPropagation()}
         >
-          <Text style={[
-            tw`text-white text-center mb-5`,
-            { fontFamily: "ChakraPetch_700Bold", fontSize: moderateScale(18) }
-          ]}>
+          <Text style={[tw`text-white text-center text-lg mb-5`, { fontFamily: "ChakraPetch_700Bold" }]}>
             {title}
           </Text>
 
@@ -65,23 +61,15 @@ function RepPickerModal({ visible, title, options, selected, onSelect, onClose }
               <Pressable
                 key={num}
                 style={[
-                  tw`items-center justify-center`,
+                  tw`w-13 h-13 items-center justify-center`,
                   {
-                    width: scale(52),
-                    height: scale(52),
-                    borderRadius: scale(12),
-                    backgroundColor: selected === num ? "#EF4444" : "#262626",
+                    borderRadius: 12,
+                    backgroundColor: selected === num ? GRHIIT_RED : "#262626",
                   }
                 ]}
                 onPress={() => onSelect(num)}
               >
-                <Text style={[
-                  tw`text-white`,
-                  {
-                    fontFamily: "SpaceGrotesk_700Bold",
-                    fontSize: moderateScale(18),
-                  }
-                ]}>
+                <Text style={[tw`text-white text-lg`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
                   {num}
                 </Text>
               </Pressable>
@@ -128,7 +116,6 @@ export default function WorkoutCompleteScreen() {
         flsqIntervals += block.intervals;
       } else {
         // Non-summit movements (8CBB, JSQ, etc.)
-        // Check if we already have this movement
         const existing = otherMovements.find(m => m.movement === block.movement);
         if (existing) {
           existing.intervals += block.intervals;
@@ -155,7 +142,7 @@ export default function WorkoutCompleteScreen() {
     };
   })();
 
-  // Play completion sound and animate on mount
+  // Play completion sound on mount
   useEffect(() => {
     playBlockCompleteBeep();
   }, []);
@@ -205,22 +192,19 @@ export default function WorkoutCompleteScreen() {
         brp: burpeeReps?.toString() || "0",
         flsq: flyingSquatReps?.toString() || "0",
         difficulty: difficulty?.toString() || "0",
-        // Summit interval counts
         brpIntervals: workoutSummary?.brpIntervals.toString() || "0",
         flsqIntervals: workoutSummary?.flsqIntervals.toString() || "0",
         totalSummitIntervals: workoutSummary?.totalSummitIntervals.toString() || "0",
-        // Workout info
         week: workoutSummary?.week.toString() || "1",
         day: workoutSummary?.day.toString() || "1",
         workoutName: workoutSummary?.name || "",
-        // Other movements as JSON string
         otherMovements: JSON.stringify(workoutSummary?.otherMovements || []),
       },
     });
   };
 
   return (
-    <SafeAreaView style={tw`flex-1 bg-grhiit-black`}>
+    <SafeAreaView style={tw`flex-1 bg-black`}>
       <ScrollView
         style={tw`flex-1`}
         contentContainerStyle={tw`px-5 pt-12 pb-8`}
@@ -237,73 +221,59 @@ export default function WorkoutCompleteScreen() {
 
         {/* Content that fades in after logo animation */}
         <Animated.View
-          style={[
-            {
-              opacity: contentOpacity,
-              transform: [{ translateY: contentTranslateY }],
-            }
-          ]}
+          style={{
+            opacity: contentOpacity,
+            transform: [{ translateY: contentTranslateY }],
+          }}
         >
-          {/* Title */}
+          {/* Title - Week X - Day Y COMPLETE */}
           <View style={tw`items-center mb-8`}>
-            <Text style={[
-              tw`text-white text-center`,
-              { fontFamily: "ChakraPetch_700Bold", fontSize: moderateScale(26), letterSpacing: 2 }
-            ]}>
-              WORKOUT COMPLETE
+            <Text style={[tw`text-white text-2xl text-center`, { fontFamily: "ChakraPetch_700Bold", letterSpacing: 2 }]}>
+              Week {workoutSummary?.week || 1} - Day {workoutSummary?.day || 1}
+            </Text>
+            <Text style={[tw`text-[#6B7280] text-sm text-center mt-1`, { fontFamily: "ChakraPetch_700Bold", letterSpacing: 2 }]}>
+              COMPLETE
             </Text>
 
             {/* Time */}
-            <View style={tw`flex-row items-center mt-3`}>
-              <Text style={[
-                tw`text-white/60`,
-                { fontFamily: "SpaceGrotesk_500Medium", fontSize: moderateScale(16) }
-              ]}>
-                {formatTime(elapsedTime)}
-              </Text>
-            </View>
+            <Text style={[tw`text-[#6B7280] text-base mt-3`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+              {formatTime(elapsedTime)}
+            </Text>
           </View>
 
-          {/* SUMMIT REPS - Tap to select */}
+          {/* SUMMIT REPS */}
           <View style={tw`mb-8`}>
-            <Text style={[
-              tw`text-white mb-1`,
-              { fontSize: moderateScale(12), letterSpacing: 1, fontFamily: "SpaceGrotesk_600SemiBold" }
-            ]}>
+            <Text style={[tw`text-[#6B7280] text-xs mb-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
               SUMMIT REPS
             </Text>
-            <Text style={[tw`text-white/50 mb-4`, { fontSize: sizing.caption }]}>
-              How many reps per Tabata interval?
+            <Text style={[tw`text-[#6B7280] text-xs mb-4`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+              What rep count did you hold across Summit intervals?
             </Text>
 
             {/* Side by side picker buttons */}
             <View style={tw`flex-row gap-4`}>
-              {/* BRP */}
+              {/* SUMMIT — BURPEES */}
               <View style={tw`flex-1`}>
-                <Text style={[
-                  tw`text-white/60 text-center mb-2`,
-                  { fontFamily: "SpaceGrotesk_500Medium", fontSize: sizing.caption }
-                ]}>
-                  BRP
+                <Text style={[tw`text-[#6B7280] text-xs text-center mb-2`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                  SUMMIT — BURPEES
                 </Text>
                 <Pressable
                   style={[
-                    tw`items-center justify-center`,
+                    tw`items-center justify-center h-16`,
                     {
-                      backgroundColor: burpeeReps ? "#1a1a1a" : "#EF4444",
-                      borderRadius: scale(12),
-                      height: scale(68),
+                      backgroundColor: burpeeReps ? "#1a1a1a" : GRHIIT_RED,
+                      borderRadius: 12,
                       borderWidth: burpeeReps ? 2 : 0,
-                      borderColor: "#EF4444",
+                      borderColor: GRHIIT_RED,
                     }
                   ]}
                   onPress={() => setShowBrpPicker(true)}
                 >
                   <Text style={[
+                    tw`text-white`,
                     {
                       fontFamily: "SpaceGrotesk_700Bold",
-                      fontSize: burpeeReps ? moderateScale(28) : moderateScale(12),
-                      color: "#FFFFFF",
+                      fontSize: burpeeReps ? 28 : 12,
                       letterSpacing: burpeeReps ? 0 : 2,
                     }
                   ]}>
@@ -312,32 +282,28 @@ export default function WorkoutCompleteScreen() {
                 </Pressable>
               </View>
 
-              {/* FLSQ */}
+              {/* SUMMIT — FLSQ */}
               <View style={tw`flex-1`}>
-                <Text style={[
-                  tw`text-white/60 text-center mb-2`,
-                  { fontFamily: "SpaceGrotesk_500Medium", fontSize: sizing.caption }
-                ]}>
-                  FLSQ
+                <Text style={[tw`text-[#6B7280] text-xs text-center mb-2`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                  SUMMIT — FLSQ
                 </Text>
                 <Pressable
                   style={[
-                    tw`items-center justify-center`,
+                    tw`items-center justify-center h-16`,
                     {
-                      backgroundColor: flyingSquatReps ? "#1a1a1a" : "#EF4444",
-                      borderRadius: scale(12),
-                      height: scale(68),
+                      backgroundColor: flyingSquatReps ? "#1a1a1a" : GRHIIT_RED,
+                      borderRadius: 12,
                       borderWidth: flyingSquatReps ? 2 : 0,
-                      borderColor: "#EF4444",
+                      borderColor: GRHIIT_RED,
                     }
                   ]}
                   onPress={() => setShowFlsqPicker(true)}
                 >
                   <Text style={[
+                    tw`text-white`,
                     {
                       fontFamily: "SpaceGrotesk_700Bold",
-                      fontSize: flyingSquatReps ? moderateScale(28) : moderateScale(12),
-                      color: "#FFFFFF",
+                      fontSize: flyingSquatReps ? 28 : 12,
                       letterSpacing: flyingSquatReps ? 0 : 2,
                     }
                   ]}>
@@ -348,16 +314,13 @@ export default function WorkoutCompleteScreen() {
             </View>
           </View>
 
-          {/* RATE THIS SESSION (Secondary) */}
+          {/* RATE THIS SESSION */}
           <View style={tw`mb-8`}>
-            <Text style={[
-              tw`text-white/40 mb-1`,
-              { fontSize: sizing.caption, letterSpacing: 2, fontFamily: "SpaceGrotesk_500Medium" }
-            ]}>
+            <Text style={[tw`text-[#6B7280] text-xs mb-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
               RATE THIS SESSION
             </Text>
-            <Text style={[tw`text-white/70 mb-4`, { fontSize: sizing.bodyLarge }]}>
-              How hard was this?
+            <Text style={[tw`text-white text-base mb-4`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+              How close to the edge was this?
             </Text>
 
             <View style={tw`flex-row gap-3`}>
@@ -365,26 +328,23 @@ export default function WorkoutCompleteScreen() {
                 <Pressable
                   key={rating}
                   style={[
-                    tw`flex-1 items-center`,
+                    tw`flex-1 items-center py-3`,
                     {
-                      borderRadius: scale(8),
-                      backgroundColor: difficulty === rating ? "#EF4444" : "#1a1a1a",
+                      borderRadius: 8,
+                      backgroundColor: difficulty === rating ? GRHIIT_RED : "#1a1a1a",
                       borderWidth: 1,
-                      borderColor: difficulty === rating ? "#EF4444" : "#262626",
-                      paddingVertical: scale(12),
+                      borderColor: difficulty === rating ? GRHIIT_RED : "#262626",
                     }
                   ]}
                   onPress={() => setDifficulty(rating)}
                 >
-                  <Text
-                    style={[
-                      {
-                        fontSize: sizing.bodyLarge,
-                        fontFamily: "SpaceGrotesk_600SemiBold",
-                        color: difficulty === rating ? "#FFFFFF" : "#6B7280",
-                      }
-                    ]}
-                  >
+                  <Text style={[
+                    tw`text-base`,
+                    {
+                      fontFamily: "SpaceGrotesk_600SemiBold",
+                      color: difficulty === rating ? "#FFFFFF" : "#6B7280",
+                    }
+                  ]}>
                     {rating}
                   </Text>
                 </Pressable>
@@ -393,47 +353,35 @@ export default function WorkoutCompleteScreen() {
 
             {/* Scale labels */}
             <View style={tw`flex-row justify-between mt-2 px-1`}>
-              <Text style={[tw`text-white/30`, { fontSize: sizing.caption }]}>Easy</Text>
-              <Text style={[tw`text-white/30`, { fontSize: sizing.caption }]}>Brutal</Text>
+              <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>Comfortable</Text>
+              <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>Very hard</Text>
+              <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>Maximal</Text>
             </View>
           </View>
 
-          {/* Done Button - disabled until reps + difficulty entered */}
-          {(() => {
-            const isComplete = burpeeReps !== null && flyingSquatReps !== null && difficulty !== null;
-            return (
-              <Pressable
-                style={[
-                  tw`items-center mb-5`,
-                  {
-                    borderRadius: scale(16),
-                    backgroundColor: isComplete ? "#EF4444" : "#262626",
-                    shadowColor: "#EF4444",
-                    shadowOffset: { width: 0, height: 0 },
-                    shadowOpacity: isComplete ? 0.35 : 0,
-                    shadowRadius: 16,
-                    paddingVertical: scale(18),
-                  }
-                ]}
-                onPress={isComplete ? handleDone : undefined}
-                disabled={!isComplete}
-              >
-                <Text style={[
-                  {
-                    fontFamily: "SpaceGrotesk_700Bold",
-                    color: isComplete ? "#FFFFFF" : "#4B5563",
-                    fontSize: sizing.bodyLarge,
-                  }
-                ]}>
-                  DONE
-                </Text>
-              </Pressable>
-            );
-          })()}
+          {/* Done Button - Always enabled */}
+          <Pressable
+            style={[
+              tw`items-center py-4 mb-5`,
+              {
+                borderRadius: 16,
+                backgroundColor: GRHIIT_RED,
+                shadowColor: GRHIIT_RED,
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.35,
+                shadowRadius: 16,
+              }
+            ]}
+            onPress={handleDone}
+          >
+            <Text style={[tw`text-white text-base`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+              DONE
+            </Text>
+          </Pressable>
 
-          {/* Quote */}
-          <Text style={[tw`text-white/30 text-center italic`, { fontSize: sizing.bodySmall }]}>
-            "You just proved something to yourself."
+          {/* Session Tagline */}
+          <Text style={[tw`text-[#4B5563] text-sm text-center italic`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+            "{getSessionTagline(workoutSummary?.week || 1, workoutSummary?.day || 1)}"
           </Text>
         </Animated.View>
       </ScrollView>
@@ -441,7 +389,7 @@ export default function WorkoutCompleteScreen() {
       {/* Rep Picker Modals */}
       <RepPickerModal
         visible={showBrpPicker}
-        title="BURPEES"
+        title="SUMMIT — BURPEES"
         options={BRP_RANGE}
         selected={burpeeReps}
         onSelect={(value) => {
@@ -453,7 +401,7 @@ export default function WorkoutCompleteScreen() {
 
       <RepPickerModal
         visible={showFlsqPicker}
-        title="FLYING SQUATS"
+        title="SUMMIT — FLYING SQUATS"
         options={FLSQ_RANGE}
         selected={flyingSquatReps}
         onSelect={(value) => {

@@ -42,7 +42,7 @@ interface UserState {
   completedWorkouts: number;
   completedWorkoutIds: number[]; // Track which workouts completed
   missedWorkoutIds: number[];    // Track which workouts quit/missed
-  totalMinutes: number;
+  totalSeconds: number;          // Accumulated training time in seconds
 
   // Cumulative Stats
   totalSessions: number;
@@ -79,6 +79,7 @@ interface UserState {
   getCurrentWorkoutNumber: () => number;
   resetProgress: () => void; // DEV: Reset to workout 1
   resetStats: () => void;    // DEV: Reset cumulative stats
+  setDevProgress: (week: number, day: number) => void; // DEV: Jump to specific week/day
 }
 
 // Default stats for a movement
@@ -113,7 +114,7 @@ export const useUserStore = create<UserState>()(
       completedWorkouts: 0,
       completedWorkoutIds: [],
       missedWorkoutIds: [],
-      totalMinutes: 0,
+      totalSeconds: 0,
       hasCompletedOnboarding: false,
 
       // Cumulative stats
@@ -145,13 +146,10 @@ export const useUserStore = create<UserState>()(
         const workoutNum = state.getCurrentWorkoutNumber();
         const workoutId = `week${state.currentWeek}-day${state.currentDay}`;
 
-        // Calculate minutes from seconds
-        const minutes = Math.round(sessionStats.durationSeconds / 60);
-
         // Update progress
         const completedWorkouts = state.completedWorkouts + 1;
         const completedWorkoutIds = [...state.completedWorkoutIds, workoutNum];
-        const totalMinutes = state.totalMinutes + minutes;
+        const totalSeconds = state.totalSeconds + sessionStats.durationSeconds;
         const totalSessions = state.totalSessions + 1;
 
         // Calculate total reps for this session
@@ -225,7 +223,7 @@ export const useUserStore = create<UserState>()(
         set({
           completedWorkouts,
           completedWorkoutIds,
-          totalMinutes,
+          totalSeconds,
           currentDay,
           currentWeek,
           totalSessions,
@@ -265,7 +263,7 @@ export const useUserStore = create<UserState>()(
           completedWorkouts: 0,
           completedWorkoutIds: [],
           missedWorkoutIds: [],
-          totalMinutes: 0,
+          totalSeconds: 0,
         });
       },
 
@@ -280,6 +278,33 @@ export const useUserStore = create<UserState>()(
           averageHeartRate: 0,
           maxHeartRate: 0,
           recentSessions: [],
+        });
+      },
+
+      // DEV: Jump to specific week/day with completed workouts filled in
+      setDevProgress: (week: number, day: number) => {
+        const targetWorkout = (week - 1) * 3 + day;
+        // Mark all previous workouts as completed (except last one of previous week = missed)
+        const completedIds: number[] = [];
+        const missedIds: number[] = [];
+
+        for (let i = 1; i < targetWorkout; i++) {
+          // Last workout of each completed week could be missed
+          // For demo: miss the last workout of week 1 (workout 3)
+          if (i === 3 && week > 1) {
+            missedIds.push(i);
+          } else {
+            completedIds.push(i);
+          }
+        }
+
+        set({
+          currentWeek: week,
+          currentDay: day,
+          completedWorkouts: completedIds.length,
+          completedWorkoutIds: completedIds,
+          missedWorkoutIds: missedIds,
+          totalSeconds: completedIds.length * 900, // ~15 min per workout
         });
       },
     }),

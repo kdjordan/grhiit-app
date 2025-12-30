@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { View, Text, Animated, Easing, Pressable } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
+import { Feather } from "@expo/vector-icons";
 import tw from "@/lib/tw";
 import { getWorkoutByNumber } from "@/lib/workoutLoader";
 
@@ -14,57 +14,9 @@ interface ProgressGridProps {
   onSelectWorkout?: (workoutNum: number) => void;
 }
 
-// Pulsing bar for current workout
-function PulsingBar({ isLarge, dayNum }: { isLarge: boolean; dayNum: number }) {
-  const pulseAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 1200,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: false,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 0,
-          duration: 1200,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: false,
-        }),
-      ])
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [pulseAnim]);
-
-  const backgroundColor = pulseAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["rgba(239, 68, 68, 0.2)", "rgba(239, 68, 68, 0.4)"],
-  });
-
-  const height = isLarge ? 32 : 20;
-
-  return (
-    <View style={tw`flex-1 mx-1`}>
-      <Animated.View
-        style={[
-          { height, borderRadius: 4, borderWidth: 2, borderColor: GRHIIT_RED },
-          { backgroundColor },
-          tw`items-center justify-center`
-        ]}
-      >
-        <Text style={[
-          tw`text-white`,
-          { fontSize: isLarge ? 12 : 9, fontFamily: "SpaceGrotesk_500Medium" }
-        ]}>
-          {dayNum}
-        </Text>
-      </Animated.View>
-    </View>
-  );
-}
+const BAR_HEIGHT = 28;
+const ROW_HEIGHT = 36;
+const FONT_SIZE = 11;
 
 export function ProgressGrid({
   completedWorkouts,
@@ -91,15 +43,12 @@ export function ProgressGrid({
         const weekNum = weekIndex + 1;
         const isActiveWeek = weekNum === activeWeek;
 
-        const barHeight = isActiveWeek ? 32 : 20;
-        const rowHeight = isActiveWeek ? 40 : 28;
-
         return (
           <View
             key={weekNum}
             style={[
               tw`flex-row items-center`,
-              { height: rowHeight }
+              { height: ROW_HEIGHT }
             ]}
           >
             {/* Week Label */}
@@ -109,7 +58,7 @@ export function ProgressGrid({
                   x={0}
                   y={12}
                   fill={isActiveWeek ? "#FFFFFF" : "#4B5563"}
-                  fontSize={isActiveWeek ? 11 : 9}
+                  fontSize={10}
                   fontFamily="SpaceGrotesk_500Medium"
                 >
                   WEEK {weekNum}
@@ -125,49 +74,59 @@ export function ProgressGrid({
                 const missed = isMissed(workoutNum);
                 const current = isCurrent(workoutNum);
                 const available = hasData(workoutNum);
+                const isLocked = !completed && !current && currentWorkout !== undefined && workoutNum > currentWorkout;
 
-                const dayNum = dayIndex + 1; // 1, 2, or 3 within week
+                const dayNum = dayIndex + 1;
 
-                if (current && !devMode) {
-                  return <PulsingBar key={workoutNum} isLarge={isActiveWeek} dayNum={dayNum} />;
+                // Determine cell styling based on state
+                // 🔒 Locked: dark gray fill, lock icon, no outline
+                // ▶ Current: dark fill, red outline, white number
+                // ✅ Completed: red fill, white number, no outline
+                // ❌ Missed: transparent with gray border
+
+                let backgroundColor = "#2a2a2a"; // Default dark gray
+                let borderWidth = 0;
+                let borderColor = "transparent";
+
+                if (completed) {
+                  backgroundColor = GRHIIT_RED;
+                } else if (current) {
+                  backgroundColor = "#2a2a2a";
+                  borderWidth = 2;
+                  borderColor = GRHIIT_RED;
+                } else if (missed) {
+                  backgroundColor = "transparent";
+                  borderWidth = 1;
+                  borderColor = "#3a3a3a";
                 }
 
-                // Text color: white on completed (red), gray on incomplete
-                // In dev mode: green border if data available
-                const textColor = completed ? "#FFFFFF" : "#6B7280";
+                // Show lock if locked AND (not in dev mode OR no data available)
+                const showLock = isLocked && (!devMode || !available);
 
                 const bar = (
                   <View
                     style={[
                       {
-                        height: barHeight,
+                        height: BAR_HEIGHT,
                         borderRadius: 4,
-                        backgroundColor: completed
-                          ? GRHIIT_RED
-                          : current
-                            ? "rgba(239, 68, 68, 0.3)"
-                            : missed
-                              ? "transparent"
-                              : "#2a2a2a",
-                        borderWidth: devMode && available ? 2 : missed ? 1 : current ? 2 : 0,
-                        borderColor: devMode && available
-                          ? "#22C55E"
-                          : current
-                            ? GRHIIT_RED
-                            : missed
-                              ? "#3a3a3a"
-                              : "transparent",
+                        backgroundColor,
+                        borderWidth,
+                        borderColor,
                       },
                       tw`items-center justify-center`
                     ]}
                   >
-                    <Text style={{
-                      fontSize: isActiveWeek ? 12 : 9,
-                      color: current ? "#FFFFFF" : textColor,
-                      fontFamily: "SpaceGrotesk_500Medium"
-                    }}>
-                      {dayNum}
-                    </Text>
+                    {showLock ? (
+                      <Feather name="lock" size={FONT_SIZE} color="#4B5563" />
+                    ) : (
+                      <Text style={{
+                        fontSize: FONT_SIZE,
+                        color: completed || current ? "#FFFFFF" : "#6B7280",
+                        fontFamily: "SpaceGrotesk_500Medium"
+                      }}>
+                        {dayNum}
+                      </Text>
+                    )}
                   </View>
                 );
 

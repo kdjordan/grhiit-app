@@ -4,7 +4,7 @@ import Svg, { Path } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-const GRHIIT_RED = "#E8110F";
+const GRHIIT_RED = "#EF4444";
 
 // Path data
 const OCTAGON_PATH = "M677.599 344.673l294.845 122.129 122.126 294.845-122.126 294.843-294.845 122.13-294.845-122.13-122.129-294.843 122.129-294.845 294.845-122.129Zm0 64.944L428.676 512.724 325.569 761.647l103.107 248.923 248.923 103.11 248.923-103.11 103.108-248.923-103.108-248.923-248.923-103.107Z";
@@ -59,7 +59,7 @@ export function GrhiitMark({
           d={G_LETTER_PATH}
           fill={color}
           fillRule="nonzero"
-          transform="translate(-311.648 -413.56) scale(1.2388)"
+          transform="translate(-200 -290) scale(1.05)"
         />
       </Svg>
     );
@@ -91,7 +91,7 @@ export function GrhiitMark({
         strokeWidth={2}
         strokeOpacity={outlineOpacity}
         fillRule="nonzero"
-        transform="translate(-311.648 -413.56) scale(1.2388)"
+        transform="translate(-200 -290) scale(1.05)"
       />
       {/* G letter fill */}
       <AnimatedPath
@@ -99,7 +99,7 @@ export function GrhiitMark({
         fill={color}
         fillRule="nonzero"
         fillOpacity={fillOpacity}
-        transform="translate(-311.648 -413.56) scale(1.2388)"
+        transform="translate(-200 -290) scale(1.05)"
       />
     </Svg>
   );

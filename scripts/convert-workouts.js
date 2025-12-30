@@ -3,7 +3,7 @@
 /**
  * Converts workout CSV files to JSON format
  *
- * CSV format: movement,intervals,work,rest,Time,Group,Type
+ * CSV format: movement,intervals,work,rest,Time,Group,Type,Section
  *
  * Movement notation:
  * - Single: "8CBB", "OGBRP"
@@ -18,6 +18,7 @@
  * - Time column is ignored (calculated by script)
  * - Group column tags blocks for collapsing into "rounds" in preview
  * - Type column: SM=smoker (no rest, always red), empty=standard
+ * - Section column: RAMP, SUMMIT, RUNOUT for preview section headers
  * - Orphan total row at bottom (just a number) is ignored
  *
  * Output: assets/workouts/level-1.json
@@ -90,9 +91,12 @@ function parseCSV(filePath) {
   // Skip header row
   const dataLines = lines.slice(1);
 
-  // Extract week and day from filename (e.g., "week1-day1.csv")
+  // Extract week and day from filename
+  // Supports: "W1_D1 - Sheet1.csv" (Google Sheets) or "week1-day1.csv" (legacy)
   const filename = path.basename(filePath, '.csv');
-  const match = filename.match(/week(\d+)-day(\d+)/i);
+  const googleMatch = filename.match(/W(\d+)_D(\d+)/i);
+  const legacyMatch = filename.match(/week(\d+)-day(\d+)/i);
+  const match = googleMatch || legacyMatch;
   const week = match ? parseInt(match[1], 10) : 1;
   const day = match ? parseInt(match[2], 10) : 1;
 
@@ -103,7 +107,7 @@ function parseCSV(filePath) {
     if (!line.trim()) continue;
 
     // Split by comma, handling empty values
-    // Format: movement,intervals,work,rest,Time,Group,Type
+    // Format: movement,intervals,work,rest,Time,Group,Type,Section
     const parts = line.split(',');
     const movement = (parts[0] || '').trim();
     const intervals = parts[1] ? parts[1].trim() : '';
@@ -112,6 +116,7 @@ function parseCSV(filePath) {
     // parts[4] = Time (ignored, calculated)
     const group = parts[5] ? parts[5].trim() : '';
     const type = parts[6] ? parts[6].trim().toUpperCase() : '';
+    const section = parts[7] ? parts[7].trim().toUpperCase() : '';
 
     // Skip empty lines and orphan total rows (just a number in Time column)
     if (!movement) continue;
@@ -130,6 +135,7 @@ function parseCSV(filePath) {
         isTransition: true,
       };
       if (group) restBlock.group = group;
+      if (section) restBlock.section = section;
       blocks.push(restBlock);
       blockIndex++;
       continue;
@@ -165,6 +171,7 @@ function parseCSV(filePath) {
         },
       };
       if (group) block.group = group;
+      if (section) block.section = section;
       if (holdPart.repTarget) block.holdMovement.repTarget = holdPart.repTarget;
       blocks.push(block);
       blockIndex++;
@@ -198,6 +205,7 @@ function parseCSV(filePath) {
       };
       if (group) block.group = group;
       if (type) block.type = type;
+      if (section) block.section = section;
       blocks.push(block);
       blockIndex++;
       continue;
@@ -230,6 +238,7 @@ function parseCSV(filePath) {
       };
       if (group) block.group = group;
       if (type) block.type = type;
+      if (section) block.section = section;
       // If any choice has a rep target, use the first one found
       const repTarget = choices.find(c => c.repTarget)?.repTarget;
       if (repTarget) block.repTarget = repTarget;
@@ -263,6 +272,7 @@ function parseCSV(filePath) {
         };
         if (group) block.group = group;
         if (type) block.type = type;
+        if (section) block.section = section;
         if (parsed.repTarget) block.repTarget = parsed.repTarget;
         blocks.push(block);
         blockIndex++;
@@ -282,6 +292,7 @@ function parseCSV(filePath) {
     };
     if (group) block.group = group;
     if (type) block.type = type;
+    if (section) block.section = section;
     if (parsed.repTarget) block.repTarget = parsed.repTarget;
     blocks.push(block);
     blockIndex++;

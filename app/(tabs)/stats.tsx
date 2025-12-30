@@ -1,35 +1,50 @@
-import { View, Text, ScrollView } from "react-native";
+import { useState } from "react";
+import { View, Text, ScrollView, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import tw from "@/lib/tw";
 import { useUserStore } from "@/stores/userStore";
 
-// Format minutes to hours:minutes
-function formatTime(minutes: number): string {
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
+// Format seconds to M:SS or H:MM:SS
+function formatTime(secs: number): string {
+  if (secs === 0) return "0:00";
+  const hours = Math.floor(secs / 3600);
+  const minutes = Math.floor((secs % 3600) / 60);
+  const seconds = secs % 60;
   if (hours > 0) {
-    return `${hours}:${mins.toString().padStart(2, "0")}`;
+    return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
-  return `${mins}m`;
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
 export default function StatsScreen() {
+  const [healthExpanded, setHealthExpanded] = useState(false);
+
   // Get stats from user store
   const {
     totalSessions,
-    totalMinutes,
+    totalSeconds,
     stats,
-    totalCalories,
     averageHeartRate,
     maxHeartRate,
     recentSessions,
   } = useUserStore();
 
   // Calculate derived stats
-  const avgDuration = totalSessions > 0 ? Math.round(totalMinutes / totalSessions) : 0;
+  const avgSeconds = totalSessions > 0 ? Math.round(totalSeconds / totalSessions) : 0;
   const brpStats = stats.brp || { totalReps: 0, totalIntervals: 0, sessions: 0 };
   const flsqStats = stats.flsq || { totalReps: 0, totalIntervals: 0, sessions: 0 };
+
+  // Derive intensity score from heart rate
+  const getIntensityScore = () => {
+    if (!averageHeartRate) return null;
+    if (averageHeartRate >= 170) return { score: 5, label: "MAX" };
+    if (averageHeartRate >= 160) return { score: 4, label: "HIGH" };
+    if (averageHeartRate >= 145) return { score: 3, label: "MID" };
+    if (averageHeartRate >= 130) return { score: 2, label: "LOW" };
+    return { score: 1, label: "EASY" };
+  };
+  const intensity = getIntensityScore();
 
   return (
     <SafeAreaView style={tw`flex-1 bg-black`} edges={['top']}>
@@ -44,66 +59,45 @@ export default function StatsScreen() {
           </Text>
         </View>
 
-        {/* Main Stats - Horizontal Scroll */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={tw`px-4 py-4 gap-3`}
-        >
-          {/* Sessions */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
-            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
-              SESSIONS
-            </Text>
-            <View style={tw`flex-1 justify-center`}>
-              <Feather name="target" size={40} color="#EF4444" />
+        {/* Top Section - 3 Stats Row */}
+        <View style={tw`px-4 py-4`}>
+          <View style={tw`flex-row gap-3`}>
+            {/* Sessions */}
+            <View style={[tw`flex-1 bg-[#1a1a1a] py-4 items-center`, { borderRadius: 16 }]}>
+              <Feather name="target" size={28} color="#EF4444" />
+              <Text style={[tw`text-white text-2xl mt-2`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                {totalSessions}
+              </Text>
+              <Text style={[tw`text-[#6B7280] text-xs mt-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
+                SESSIONS
+              </Text>
             </View>
-            <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              {totalSessions}
-            </Text>
-          </View>
 
-          {/* Total Time */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
-            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
-              TOTAL TIME
-            </Text>
-            <View style={tw`flex-1 justify-center`}>
-              <Feather name="clock" size={40} color="#EF4444" />
+            {/* Time Under Load */}
+            <View style={[tw`flex-1 bg-[#1a1a1a] py-4 items-center`, { borderRadius: 16 }]}>
+              <Feather name="clock" size={28} color="#EF4444" />
+              <Text style={[tw`text-white text-2xl mt-2`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                {formatTime(totalSeconds)}
+              </Text>
+              <Text style={[tw`text-[#6B7280] text-xs mt-1 text-center`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
+                TIME UNDER{'\n'}LOAD
+              </Text>
             </View>
-            <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              {formatTime(totalMinutes)}
-            </Text>
-          </View>
 
-          {/* Avg Duration */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
-            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
-              AVG TIME
-            </Text>
-            <View style={tw`flex-1 justify-center`}>
-              <Feather name="trending-up" size={40} color="#EF4444" />
+            {/* Avg Time */}
+            <View style={[tw`flex-1 bg-[#1a1a1a] py-4 items-center`, { borderRadius: 16 }]}>
+              <Feather name="trending-up" size={28} color="#EF4444" />
+              <Text style={[tw`text-white text-2xl mt-2`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                {formatTime(avgSeconds)}
+              </Text>
+              <Text style={[tw`text-[#6B7280] text-xs mt-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
+                AVG TIME
+              </Text>
             </View>
-            <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              {avgDuration}m
-            </Text>
           </View>
+        </View>
 
-          {/* Calories */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: 16, minWidth: 110, height: 150 }]}>
-            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5 }]}>
-              CALORIES
-            </Text>
-            <View style={tw`flex-1 justify-center`}>
-              <Feather name="activity" size={40} color="#EF4444" />
-            </View>
-            <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-              {totalCalories.toLocaleString()}
-            </Text>
-          </View>
-        </ScrollView>
-
-        {/* Summit Reps Section */}
+        {/* Middle - Summit Reps */}
         <View style={tw`px-4 pb-4`}>
           <Text style={[tw`text-[#6B7280] text-xs mb-3 ml-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
             SUMMIT REPS
@@ -111,9 +105,9 @@ export default function StatsScreen() {
           <View style={tw`flex-row gap-3`}>
             {/* Burpees */}
             <View style={[tw`flex-1 bg-[#1a1a1a] p-4`, { borderRadius: 16 }]}>
-              <View style={tw`flex-row items-center mb-3`}>
-                <View style={tw`w-8 h-8 bg-[#EF4444]/20 rounded-lg items-center justify-center mr-3`}>
-                  <Text style={[tw`text-[#EF4444]`, { fontFamily: "SpaceGrotesk_700Bold", fontSize: 12 }]}>B</Text>
+              <View style={tw`flex-row items-center mb-2`}>
+                <View style={tw`w-7 h-7 bg-[#EF4444]/20 rounded-lg items-center justify-center mr-2`}>
+                  <Text style={[tw`text-[#EF4444]`, { fontFamily: "SpaceGrotesk_700Bold", fontSize: 11 }]}>B</Text>
                 </View>
                 <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
                   BURPEES
@@ -129,9 +123,9 @@ export default function StatsScreen() {
 
             {/* Flying Squats */}
             <View style={[tw`flex-1 bg-[#1a1a1a] p-4`, { borderRadius: 16 }]}>
-              <View style={tw`flex-row items-center mb-3`}>
-                <View style={tw`w-8 h-8 bg-[#EF4444]/20 rounded-lg items-center justify-center mr-3`}>
-                  <Text style={[tw`text-[#EF4444]`, { fontFamily: "SpaceGrotesk_700Bold", fontSize: 12 }]}>F</Text>
+              <View style={tw`flex-row items-center mb-2`}>
+                <View style={tw`w-7 h-7 bg-[#EF4444]/20 rounded-lg items-center justify-center mr-2`}>
+                  <Text style={[tw`text-[#EF4444]`, { fontFamily: "SpaceGrotesk_700Bold", fontSize: 11 }]}>F</Text>
                 </View>
                 <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
                   FLYING SQ
@@ -147,53 +141,66 @@ export default function StatsScreen() {
           </View>
         </View>
 
-        {/* Heart Rate Section */}
+        {/* Health Section - Collapsible */}
         <View style={tw`px-4 pb-4`}>
-          <Text style={[tw`text-[#6B7280] text-xs mb-3 ml-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
-            HEART RATE
-          </Text>
-          <View style={[tw`bg-[#1a1a1a] p-4`, { borderRadius: 16 }]}>
-            <View style={tw`flex-row`}>
-              {/* Avg HR */}
-              <View style={tw`flex-1 items-center`}>
-                <View style={tw`w-12 h-12 bg-[#EF4444]/20 rounded-full items-center justify-center mb-2`}>
-                  <Feather name="heart" size={24} color="#EF4444" />
-                </View>
-                <Text style={[tw`text-white text-2xl`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
-                  {averageHeartRate || "--"}
-                </Text>
-                <Text style={[tw`text-[#6B7280] text-xs mt-1`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
-                  AVG BPM
-                </Text>
-              </View>
+          <Pressable
+            onPress={() => setHealthExpanded(!healthExpanded)}
+            style={tw`flex-row items-center justify-between mb-3 ml-1`}
+          >
+            <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
+              HEALTH
+            </Text>
+            <Feather
+              name={healthExpanded ? "chevron-up" : "chevron-down"}
+              size={16}
+              color="#6B7280"
+            />
+          </Pressable>
 
-              {/* Max HR */}
-              <View style={tw`flex-1 items-center`}>
-                <View style={tw`w-12 h-12 bg-[#EF4444]/20 rounded-full items-center justify-center mb-2`}>
-                  <Feather name="trending-up" size={24} color="#EF4444" />
+          {healthExpanded && (
+            <View style={[tw`bg-[#1a1a1a] p-4`, { borderRadius: 16 }]}>
+              <View style={tw`flex-row`}>
+                {/* Avg HR */}
+                <View style={tw`flex-1 items-center`}>
+                  <View style={tw`w-10 h-10 bg-[#EF4444]/20 rounded-full items-center justify-center mb-2`}>
+                    <Feather name="heart" size={20} color="#EF4444" />
+                  </View>
+                  <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                    {averageHeartRate || "--"}
+                  </Text>
+                  <Text style={[tw`text-[#6B7280] text-xs mt-1`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                    AVG BPM
+                  </Text>
                 </View>
-                <Text style={[tw`text-white text-2xl`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
-                  {maxHeartRate || "--"}
-                </Text>
-                <Text style={[tw`text-[#6B7280] text-xs mt-1`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
-                  MAX BPM
-                </Text>
-              </View>
 
-              {/* Zone */}
-              <View style={tw`flex-1 items-center`}>
-                <View style={tw`w-12 h-12 bg-[#EF4444]/20 rounded-full items-center justify-center mb-2`}>
-                  <Text style={[tw`text-[#EF4444]`, { fontFamily: "SpaceGrotesk_700Bold", fontSize: 14 }]}>Z4</Text>
+                {/* Max HR */}
+                <View style={tw`flex-1 items-center`}>
+                  <View style={tw`w-10 h-10 bg-[#EF4444]/20 rounded-full items-center justify-center mb-2`}>
+                    <Feather name="trending-up" size={20} color="#EF4444" />
+                  </View>
+                  <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                    {maxHeartRate || "--"}
+                  </Text>
+                  <Text style={[tw`text-[#6B7280] text-xs mt-1`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                    MAX BPM
+                  </Text>
                 </View>
-                <Text style={[tw`text-white text-2xl`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
-                  {averageHeartRate > 160 ? "High" : averageHeartRate > 0 ? "Mid" : "--"}
-                </Text>
-                <Text style={[tw`text-[#6B7280] text-xs mt-1`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
-                  INTENSITY
-                </Text>
+
+                {/* Intensity */}
+                <View style={tw`flex-1 items-center`}>
+                  <View style={tw`w-10 h-10 bg-[#EF4444]/20 rounded-full items-center justify-center mb-2`}>
+                    <Feather name="zap" size={20} color="#EF4444" />
+                  </View>
+                  <Text style={[tw`text-white text-xl`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                    {intensity?.label || "--"}
+                  </Text>
+                  <Text style={[tw`text-[#6B7280] text-xs mt-1`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                    INTENSITY
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
+          )}
         </View>
 
         {/* Recent Sessions */}
@@ -208,6 +215,10 @@ export default function StatsScreen() {
                 const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                 const isLast = index === Math.min(recentSessions.length - 1, 4);
 
+                // Format as W3:D1
+                const match = session.workoutId.match(/week(\d+)-day(\d+)/i);
+                const sessionCode = match ? `W${match[1]}:D${match[2]}` : session.workoutId;
+
                 return (
                   <View
                     key={session.date}
@@ -218,11 +229,11 @@ export default function StatsScreen() {
                   >
                     <View style={tw`flex-row items-center`}>
                       <View style={tw`w-10 h-10 bg-[#262626] rounded-lg items-center justify-center mr-3`}>
-                        <Feather name="check" size={20} color="#22C55E" />
+                        <Feather name="check" size={18} color="#22C55E" />
                       </View>
                       <View>
                         <Text style={[tw`text-white`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
-                          {session.workoutId.replace('week', 'W').replace('-day', ':D')}
+                          {sessionCode}
                         </Text>
                         <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
                           {dateStr}
@@ -234,7 +245,7 @@ export default function StatsScreen() {
                         {session.totalReps} reps
                       </Text>
                       <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
-                        {Math.round(session.durationSeconds / 60)}m
+                        {formatTime(session.durationSeconds)}
                       </Text>
                     </View>
                   </View>

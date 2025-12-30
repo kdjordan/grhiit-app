@@ -70,10 +70,8 @@ import { Feather } from "@expo/vector-icons";
 
 **Stats bento icons (36px responsive, red):**
 - SESSIONS: `target`
-- TIME: `clock`
+- TIME UNDER LOAD: `clock`
 - THIS WEEK: `check-circle`
-- KCAL: `activity`
-- BEST: `award`
 
 ---
 
@@ -94,9 +92,10 @@ import { Feather } from "@expo/vector-icons";
    - Contains ProgressGrid component (bar-based)
 
 3. **Stats Bentos** (horizontal scroll)
-   - 5 bento cards: SESSIONS, TIME, THIS WEEK, KCAL, BEST
+   - 3 bento cards: SESSIONS, TIME UNDER LOAD, THIS WEEK
    - Each: responsive sizing (100px min-width, 140px height)
    - Layout: title (top) → icon (flex-1 centered) → value (bottom)
+   - TIME UNDER LOAD: shows accumulated workout time in MM:SS format
    - Icons: responsive 36px, red (#EF4444)
    - Horizontally scrollable with 12px gap
 
@@ -118,30 +117,28 @@ import { Feather } from "@expo/vector-icons";
 **Layout**: 8 rows × 3 columns = 24 workouts
 
 **Week labels**: "WEEK 1", "WEEK 2", etc. (not abbreviated)
-- Active week: white, 11px
-- Inactive weeks: gray (#4B5563), 9px
+- Active week: white, 10px
+- Inactive weeks: gray (#4B5563), 10px
 
-**Bar sizing** (active week emphasis):
-- Active week bars: 32px height
-- Inactive week bars: 20px height
-- Active week row height: 40px
-- Inactive week row height: 28px
+**Bar sizing** (uniform, no active week emphasis):
+- All bars: 28px height
+- All row heights: 36px
 - Bar border radius: 4px
 - Horizontal margin: 4px (mx-1)
 
-**Bar states:**
-- **Completed**: Solid red fill (#EF4444)
-- **Current**: Pulsing red outline with animated fill (opacity 0.2→0.4)
-- **Upcoming**: Dark gray fill (#2a2a2a)
+**Cell states:**
+- **Completed**: Red fill (#EF4444), white day number, no outline
+- **Current**: Dark fill (#2a2a2a), red outline (2px), white day number, NO animation
+- **Locked**: Dark gray fill (#2a2a2a), lock icon (Feather), no outline
 - **Missed**: Transparent with gray border (#3a3a3a)
 
 **Day numbers on bars**: Each bar shows 1, 2, or 3 (representing day within week)
-- White text on completed (red) bars
+- White text on completed (red) or current bars
 - Gray text (#6B7280) on incomplete bars
-- Font: Space Grotesk 500 Medium
-- Scaled font size: 12px (active week), 9px (inactive weeks)
+- Font: Space Grotesk 500 Medium, 11px
+- Lock icon replaces number on locked cells
 
-**Animation**: React Native Animated API for pulse effect on current workout
+**Dev mode**: Locked cells with available JSON data become tappable (no lock icon)
 
 ---
 
@@ -513,15 +510,18 @@ Smoker blocks display orange badge in preview:
 ### CSV → JSON Build System
 Workouts are authored in CSV and converted to JSON at build time.
 
-**Source**: `workouts/csv/weekX-dayX.csv`
+**Source**: `workouts/csv/` directory
+- Google Sheets format: `W1_D1 - Sheet1.csv` (preferred)
+- Legacy format: `week1-day1.csv`
+
 ```csv
-movement,intervals,work,rest,Time,Group,Type
-8CBB,10,6,3,90,,
-REST,1,,30,30,,
-JSQ(2-3) + OGBRP(2-3) + JLNG(2),18,6,3,162,,
-PL > OGBRP,20,3,3,120,,SM
-JLNG/LNG,10,6,3,90,,
-OGBRP + FLSQ,8,20,10,240,A,
+movement,intervals,work,rest,Time,Group,Type,Section
+8CBB,10,6,3,90,,,RAMP
+REST,1,,30,30,,,
+JSQ(2-3) + OGBRP(2-3) + JLNG(2),18,6,3,162,,,RAMP
+PL > OGBRP,20,3,3,120,,SM,SUMMIT
+JLNG/LNG,10,6,3,90,,,RUNOUT
+OGBRP + FLSQ,8,20,10,240,A,,SUMMIT
 ```
 
 **Output**: `assets/workouts/level-1.json`
@@ -544,14 +544,15 @@ OGBRP + FLSQ,8,20,10,240,A,
 - **work**: Work duration in seconds
 - **rest**: Rest duration in seconds (for smoker: hold duration)
 - **Time**: Ignored (calculated by script)
-- **Group**: Tag for round grouping in preview (e.g., "A")
+- **Group**: Tag for round grouping in preview (e.g., "A", "B")
 - **Type**: `SM` = smoker, empty = standard
+- **Section**: `RAMP`, `SUMMIT`, or `RUNOUT` - explicit section assignment
 
 ### Parsing Rules
 - REST rows: `intervals=1`, empty work, rest value
 - Combo (+): Creates cycling 1-interval blocks (not sequential)
 - Orphan total row at bottom (just a number) is ignored
-- File naming: `week2-day1.csv` (days reset per week, not continuous)
+- File naming: `W1_D1 - Sheet1.csv` (Google Sheets) or `week1-day1.csv` (legacy)
 
 **Scripts**:
 - `npm run convert-workouts` - Manual conversion

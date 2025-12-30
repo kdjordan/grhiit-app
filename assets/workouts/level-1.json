@@ -1,7 +1,7 @@
 {
   "version": 1,
   "level": 1,
-  "generatedAt": "2025-12-28T23:49:04.088Z",
+  "generatedAt": "2025-12-30T01:35:27.108Z",
   "workouts": [
     {
       "id": "week1-day1",
@@ -16,6 +16,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RAMP",
           "repTarget": "1"
         },
         {
@@ -25,7 +26,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "jsq-2",
@@ -34,6 +36,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RAMP",
           "repTarget": "2-3"
         },
         {
@@ -43,7 +46,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "ogbrp-4",
@@ -53,6 +57,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -63,6 +68,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -72,7 +78,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-7",
@@ -82,6 +89,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-12"
         },
         {
@@ -92,6 +100,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -101,7 +110,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-10",
@@ -111,6 +121,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-12"
         },
         {
@@ -121,6 +132,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -130,7 +142,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "jsq-13",
@@ -139,6 +152,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RUNOUT",
           "repTarget": "2-3"
         },
         {
@@ -148,7 +162,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RUNOUT"
         },
         {
           "id": "8cbb-15",
@@ -157,6 +172,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RUNOUT",
           "repTarget": "1"
         }
       ],
@@ -176,6 +192,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RAMP",
           "repTarget": "1"
         },
         {
@@ -185,7 +202,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "jsq-2",
@@ -194,6 +212,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RAMP",
           "repTarget": "2-3"
         },
         {
@@ -203,7 +222,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "ogbrp-4",
@@ -213,6 +233,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -223,6 +244,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -232,7 +254,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-7",
@@ -242,6 +265,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -252,6 +276,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -261,7 +286,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-10",
@@ -271,6 +297,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -281,6 +308,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -290,7 +318,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-13",
@@ -300,6 +329,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -310,6 +340,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -319,7 +350,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "jsq-16",
@@ -328,6 +360,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RUNOUT",
           "repTarget": "2-3"
         },
         {
@@ -337,7 +370,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RUNOUT"
         },
         {
           "id": "8cbb-18",
@@ -346,6 +380,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RUNOUT",
           "repTarget": "1"
         }
       ],
@@ -365,6 +400,7 @@
           "intervals": 7,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RAMP",
           "repTarget": "2-4"
         },
         {
@@ -374,7 +410,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 27,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "mc-2",
@@ -383,6 +420,7 @@
           "intervals": 7,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RAMP",
           "repTarget": "4"
         },
         {
@@ -392,7 +430,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 27,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "lng-4",
@@ -401,6 +440,7 @@
           "intervals": 7,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RAMP",
           "repTarget": "2-3"
         },
         {
@@ -410,7 +450,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 27,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "ogbrp-6",
@@ -420,6 +461,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -430,6 +472,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -439,7 +482,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-9",
@@ -449,6 +493,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -459,6 +504,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -468,7 +514,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-12",
@@ -478,6 +525,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -488,6 +536,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -497,7 +546,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-15",
@@ -507,6 +557,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -517,6 +568,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -526,7 +578,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 27,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "lng-18",
@@ -535,6 +588,7 @@
           "intervals": 7,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RUNOUT",
           "repTarget": "2-3"
         },
         {
@@ -544,7 +598,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 27,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RUNOUT"
         },
         {
           "id": "mc-20",
@@ -553,6 +608,7 @@
           "intervals": 7,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RUNOUT",
           "repTarget": "4"
         },
         {
@@ -562,7 +618,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 27,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RUNOUT"
         },
         {
           "id": "pu-22",
@@ -571,6 +628,7 @@
           "intervals": 7,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RUNOUT",
           "repTarget": "2-4"
         }
       ],
@@ -590,6 +648,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RAMP",
           "repTarget": "1"
         },
         {
@@ -599,7 +658,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "jsq-2",
@@ -608,6 +668,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RAMP",
           "repTarget": "2-3"
         },
         {
@@ -617,7 +678,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "pubrp-4",
@@ -626,6 +688,7 @@
           "intervals": 5,
           "workDuration": 4,
           "restDuration": 2,
+          "section": "RAMP",
           "repTarget": "1"
         },
         {
@@ -635,7 +698,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "ogbrp-6",
@@ -645,6 +709,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -654,7 +719,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "flsq-8",
@@ -664,6 +730,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "B",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -673,7 +740,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-10",
@@ -683,6 +751,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -692,7 +761,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "flsq-12",
@@ -702,6 +772,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "B",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -711,7 +782,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "pubrp-14",
@@ -720,6 +792,7 @@
           "intervals": 5,
           "workDuration": 4,
           "restDuration": 2,
+          "section": "RUNOUT",
           "repTarget": "1"
         },
         {
@@ -729,7 +802,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RUNOUT"
         },
         {
           "id": "jsq-16",
@@ -738,6 +812,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RUNOUT",
           "repTarget": "2-3"
         },
         {
@@ -747,7 +822,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RUNOUT"
         },
         {
           "id": "8cbb-18",
@@ -756,6 +832,7 @@
           "intervals": 10,
           "workDuration": 6,
           "restDuration": 3,
+          "section": "RUNOUT",
           "repTarget": "1"
         }
       ],
@@ -769,94 +846,108 @@
       "day": 2,
       "blocks": [
         {
-          "id": "8cbb-0",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
+          "id": "pubrp-0",
+          "movement": "PUBRP",
+          "displayName": "PUSH-UP BURPEES",
+          "intervals": 10,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "RAMP",
           "repTarget": "1"
         },
         {
-          "id": "jsq-1",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
+          "id": "rest-1",
+          "movement": "REST",
+          "displayName": "REST",
           "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
-          "id": "8cbb-2",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
+          "id": "jsq-2",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 6,
+          "workDuration": 10,
+          "restDuration": 5,
+          "section": "RAMP",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "rest-3",
+          "movement": "REST",
+          "displayName": "REST",
           "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "pubrp-4",
+          "movement": "PUBRP",
+          "displayName": "PUSH-UP BURPEES",
+          "intervals": 10,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "RAMP",
           "repTarget": "1"
         },
         {
-          "id": "jsq-3",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
+          "id": "rest-5",
+          "movement": "REST",
+          "displayName": "REST",
           "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
-          "id": "8cbb-4",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
+          "id": "ogbrp-6",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
           "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
         },
         {
-          "id": "jsq-5",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
+          "id": "flsq-7",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
           "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
         },
         {
-          "id": "8cbb-6",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
+          "id": "ogbrp-8",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
           "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
         },
         {
-          "id": "jsq-7",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
+          "id": "flsq-9",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
           "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-8",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-9",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
         },
         {
           "id": "rest-10",
@@ -865,355 +956,115 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
-          "id": "8cbb-11",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
+          "id": "ogbrp-11",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
           "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-12",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "ogbrp-13",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-14",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-15",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "pubrp-16",
+          "movement": "PUBRP",
+          "displayName": "PUSH-UP BURPEES",
+          "intervals": 10,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "RUNOUT",
           "repTarget": "1"
         },
         {
-          "id": "jsq-12",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
+          "id": "rest-17",
+          "movement": "REST",
+          "displayName": "REST",
           "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-13",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-14",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-15",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-16",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-17",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RUNOUT"
         },
         {
           "id": "jsq-18",
           "movement": "JSQ",
           "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-19",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-20",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "rest-21",
-          "movement": "REST",
-          "displayName": "REST",
-          "intervals": 1,
-          "workDuration": 0,
-          "restDuration": 30,
-          "isTransition": true
-        },
-        {
-          "id": "ogbrp-22",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
-          "intervals": 3,
-          "workDuration": 20,
-          "restDuration": 10,
-          "group": "A",
-          "repTarget": "8-10"
-        },
-        {
-          "id": "rest-23",
-          "movement": "REST",
-          "displayName": "REST",
-          "intervals": 1,
-          "workDuration": 0,
-          "restDuration": 30,
-          "isTransition": true
-        },
-        {
-          "id": "flsq-24",
-          "movement": "FLSQ",
-          "displayName": "FLYING SQUATS",
           "intervals": 6,
-          "workDuration": 20,
-          "restDuration": 10,
-          "group": "B",
-          "repTarget": "15-20"
+          "workDuration": 10,
+          "restDuration": 5,
+          "section": "RUNOUT",
+          "repTarget": "4-5"
         },
         {
-          "id": "rest-25",
+          "id": "rest-19",
           "movement": "REST",
           "displayName": "REST",
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RUNOUT"
         },
         {
-          "id": "ogbrp-26",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
-          "intervals": 3,
-          "workDuration": 20,
-          "restDuration": 10,
-          "group": "A",
-          "repTarget": "8-10"
-        },
-        {
-          "id": "rest-27",
-          "movement": "REST",
-          "displayName": "REST",
-          "intervals": 1,
-          "workDuration": 0,
-          "restDuration": 30,
-          "isTransition": true
-        },
-        {
-          "id": "8cbb-28",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
+          "id": "pubrp-20",
+          "movement": "PUBRP",
+          "displayName": "PUSH-UP BURPEES",
+          "intervals": 10,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "RUNOUT",
           "repTarget": "1"
-        },
-        {
-          "id": "jsq-29",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-30",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-31",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-32",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-33",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-34",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-35",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-36",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-37",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "rest-38",
-          "movement": "REST",
-          "displayName": "REST",
-          "intervals": 1,
-          "workDuration": 0,
-          "restDuration": 30,
-          "isTransition": true
-        },
-        {
-          "id": "8cbb-39",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-40",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-41",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-42",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-43",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-44",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-45",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-46",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
-        },
-        {
-          "id": "8cbb-47",
-          "movement": "8CBB",
-          "displayName": "8-COUNT BODYBUILDERS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "1"
-        },
-        {
-          "id": "jsq-48",
-          "movement": "JSQ",
-          "displayName": "JUMP SQUATS",
-          "intervals": 1,
-          "workDuration": 6,
-          "restDuration": 3,
-          "repTarget": "2-3"
         }
       ],
-      "totalDuration": 900,
+      "totalDuration": 870,
       "movementCount": 4
     },
     {
@@ -1239,7 +1090,8 @@
             "code": "OGBRP",
             "displayName": "BURPEES",
             "repTarget": "1"
-          }
+          },
+          "section": "RAMP"
         },
         {
           "id": "rest-1",
@@ -1248,7 +1100,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "choice-2",
@@ -1270,6 +1123,7 @@
               "repTarget": "5"
             }
           ],
+          "section": "RAMP",
           "repTarget": "5"
         },
         {
@@ -1279,7 +1133,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RAMP"
         },
         {
           "id": "ogbrp-4",
@@ -1289,6 +1144,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -1298,7 +1154,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "flsq-6",
@@ -1308,6 +1165,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "B",
+          "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
@@ -1317,7 +1175,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "ogbrp-8",
@@ -1327,6 +1186,7 @@
           "workDuration": 20,
           "restDuration": 10,
           "group": "A",
+          "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
@@ -1336,7 +1196,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "SUMMIT"
         },
         {
           "id": "choice-10",
@@ -1358,6 +1219,7 @@
               "repTarget": "5"
             }
           ],
+          "section": "RUNOUT",
           "repTarget": "5"
         },
         {
@@ -1367,7 +1229,8 @@
           "intervals": 1,
           "workDuration": 0,
           "restDuration": 30,
-          "isTransition": true
+          "isTransition": true,
+          "section": "RUNOUT"
         },
         {
           "id": "smoker-12",
@@ -1386,10 +1249,1072 @@
             "code": "OGBRP",
             "displayName": "BURPEES",
             "repTarget": "1"
-          }
+          },
+          "section": "RUNOUT"
         }
       ],
       "totalDuration": 870,
+      "movementCount": 4
+    },
+    {
+      "id": "week3-day1",
+      "name": "Week 3 Day 1",
+      "week": 3,
+      "day": 1,
+      "blocks": [
+        {
+          "id": "8cbb-0",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 10,
+          "workDuration": 6,
+          "restDuration": 3,
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "rest-1",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "zpr-2",
+          "movement": "ZPR",
+          "displayName": "ZIPPERS",
+          "intervals": 10,
+          "workDuration": 6,
+          "restDuration": 3,
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "rest-3",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "ogbrp-4",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-5",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "ogbrp-6",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "rest-7",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "flsq-8",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "B",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "ogbrp-9",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "B",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-10",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "B",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-11",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "ogbrp-12",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-13",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "ogbrp-14",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "rest-15",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "flsq-16",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "B",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "ogbrp-17",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "B",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-18",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "B",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-19",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RUNOUT"
+        },
+        {
+          "id": "zpr-20",
+          "movement": "ZPR",
+          "displayName": "ZIPPERS",
+          "intervals": 10,
+          "workDuration": 6,
+          "restDuration": 3,
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "rest-21",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RUNOUT"
+        },
+        {
+          "id": "8cbb-22",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 10,
+          "workDuration": 6,
+          "restDuration": 3,
+          "section": "RUNOUT",
+          "repTarget": "1"
+        }
+      ],
+      "totalDuration": 930,
+      "movementCount": 4
+    },
+    {
+      "id": "week3-day2",
+      "name": "Week 3 Day 2",
+      "week": 3,
+      "day": 2,
+      "blocks": [
+        {
+          "id": "8cbb-0",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-1",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-2",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-3",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-4",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-5",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-6",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-7",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-8",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-9",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "rest-10",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "8cbb-11",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-12",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-13",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-14",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-15",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-16",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-17",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-18",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-19",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-20",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "rest-21",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "ogbrp-22",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 3,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "rest-23",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "flsq-24",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 6,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "B",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-25",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "ogbrp-26",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 3,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "rest-27",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "8cbb-28",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-29",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-30",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-31",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-32",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-33",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-34",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-35",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-36",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-37",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "C",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "rest-38",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RUNOUT"
+        },
+        {
+          "id": "8cbb-39",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-40",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-41",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-42",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-43",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-44",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-45",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-46",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "8cbb-47",
+          "movement": "8CBB",
+          "displayName": "8-COUNT BODYBUILDERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "jsq-48",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "group": "D",
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        }
+      ],
+      "totalDuration": 900,
+      "movementCount": 4
+    },
+    {
+      "id": "week3-day3",
+      "name": "Week 3 Day 3",
+      "week": 3,
+      "day": 3,
+      "blocks": [
+        {
+          "id": "choice-0",
+          "movement": "JSQ(2-3) + OGBRP(2-3) + JLNG/LNG(2-3) + MC(4-5)",
+          "displayName": "JSQ(2-3) + OGBRP(2-3) + JLNG / LNG(2-3) + MC(4-5)",
+          "intervals": 16,
+          "workDuration": 6,
+          "restDuration": 3,
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JSQ(2-3) + OGBRP(2-3) + JLNG",
+              "displayName": "JSQ(2-3) + OGBRP(2-3) + JLNG",
+              "repTarget": null
+            },
+            {
+              "code": "LNG(2-3) + MC(4-5)",
+              "displayName": "LNG(2-3) + MC(4-5)",
+              "repTarget": null
+            }
+          ],
+          "section": "RAMP"
+        },
+        {
+          "id": "rest-1",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "pubrp-2",
+          "movement": "PUBRP",
+          "displayName": "PUSH-UP BURPEES",
+          "intervals": 10,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "rest-3",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "ogbrp-4",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-5",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "ogbrp-6",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-7",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-8",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "ogbrp-9",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-10",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "ogbrp-11",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-12",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-13",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "ogbrp-14",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-15",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "ogbrp-16",
+          "movement": "OGBRP",
+          "displayName": "BURPEES",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-17",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-18",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "pubrp-19",
+          "movement": "PUBRP",
+          "displayName": "PUSH-UP BURPEES",
+          "intervals": 10,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "rest-20",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RUNOUT"
+        },
+        {
+          "id": "choice-21",
+          "movement": "JSQ(2-3) + OGBRP(2-3) + JLNG/LNG(2-3) + MC(4-5)",
+          "displayName": "JSQ(2-3) + OGBRP(2-3) + JLNG / LNG(2-3) + MC(4-5)",
+          "intervals": 16,
+          "workDuration": 6,
+          "restDuration": 3,
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JSQ(2-3) + OGBRP(2-3) + JLNG",
+              "displayName": "JSQ(2-3) + OGBRP(2-3) + JLNG",
+              "repTarget": null
+            },
+            {
+              "code": "LNG(2-3) + MC(4-5)",
+              "displayName": "LNG(2-3) + MC(4-5)",
+              "repTarget": null
+            }
+          ],
+          "section": "RUNOUT"
+        }
+      ],
+      "totalDuration": 948,
       "movementCount": 4
     }
   ]

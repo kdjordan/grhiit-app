@@ -1,5 +1,56 @@
 # GRHIIT Processed Work Log
 
+## Session: Dec 29, 2025
+
+### Completed: Home Screen UI Refinements
+
+**Progress Grid Simplification**:
+- Removed active week emphasis (all weeks same size: 28px bars, 36px rows)
+- Added Feather lock icons to locked workout cells
+- Removed pulsing animation from current workout (static red outline)
+- Cell states: Completed (red fill), Current (red outline), Locked (lock icon), Missed (gray border)
+
+**Stats Bentos Reduced**:
+- Changed from 5 bentos to 3: SESSIONS, TIME UNDER LOAD, THIS WEEK
+- Renamed TIME to TIME UNDER LOAD (with line break)
+- Changed `totalMinutes` to `totalSeconds` in userStore for precise MM:SS display
+
+**Dev Mode Enhancements**:
+- Added quick action buttons: +1 (complete workout), W2 (jump to week 2), RESET
+- Lock icons hidden for available workouts in dev mode (allows tapping)
+- Removed green border dev indicator (was cluttering UI)
+
+---
+
+### Completed: CSV Pipeline Section Column
+
+**Goal**: Explicit section assignment instead of heuristic detection.
+
+**CSV Format Update**:
+```csv
+movement,intervals,work,rest,Time,Group,Type,Section
+8CBB,10,6,3,90,C,,RAMP
+OGBRP,3,20,10,90,A,,SUMMIT
+JSQ,10,6,3,90,D,,RUNOUT
+```
+
+**Changes**:
+- `scripts/convert-workouts.js` parses Section column (index 7)
+- Preview groups items by explicit `section` property
+- Section values: `RAMP`, `SUMMIT`, `RUNOUT` → map to `RAMP-UP`, `SUMMIT`, `RUN-OUT`
+
+---
+
+### Completed: Google Sheets Filename Support
+
+**Goal**: No manual renaming when downloading CSVs from Google Sheets.
+
+**Change**: Converter now parses both formats:
+- `W1_D1 - Sheet1.csv` → Week 1, Day 1 (Google Sheets)
+- `week1-day1.csv` → Week 1, Day 1 (legacy)
+
+---
+
 ## Session: Dec 26, 2025
 
 ### Completed: Cumulative Stats Tracking in UserStore
@@ -171,9 +222,9 @@ BRP + FLSQ,2,20,10,60,A
 
 ## Next Steps
 
-1. **Test on device** - Verify share screen layout with new total reps display
-2. **Implement actual sharing** - `react-native-view-shot` + `react-native-share`
-3. **Dynamic rep pickers** - Pull movements from actual workout data (not hardcoded BRP/FLSQ)
-4. **Persist rep data** - Store in userStore for stats/history
-5. **Add remaining workouts** - Create CSV files for full program
-6. **Remove JetBrains Mono** - Clean up unused font from bundle
+1. **Add Section column to CSVs** - Save spreadsheets with RAMP/SUMMIT/RUNOUT values
+2. **Test section grouping** - Run converter and verify preview displays correctly
+3. **Implement actual sharing** - `react-native-view-shot` + `react-native-share`
+4. **Dynamic rep pickers** - Pull movements from actual workout data (not hardcoded BRP/FLSQ)
+5. **Persist rep data** - Store in userStore for stats/history
+6. **Add remaining workouts** - Create CSV files for full program

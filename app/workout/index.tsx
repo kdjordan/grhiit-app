@@ -24,8 +24,8 @@ if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental
 
 // Types for grouped display
 type DisplayItem =
-  | { type: "block"; block: WorkoutBlock; restAfter?: number }
-  | { type: "rounds"; rounds: number; pattern: string; timing: string; restBetween: number; totalDuration: number; restAfter?: number };
+  | { type: "block"; block: WorkoutBlock; restAfter?: number; section?: string }
+  | { type: "rounds"; rounds: number; pattern: string; timing: string; restBetween: number; totalDuration: number; restAfter?: number; section?: string };
 
 type WorkoutSection = "RAMP-UP" | "SUMMIT" | "RUN-OUT";
 
@@ -134,6 +134,7 @@ function groupBlocksForDisplay(blocks: WorkoutBlock[]): DisplayItem[] {
         restBetween: restDurations[0] || 30,
         totalDuration,
         restAfter,
+        section: firstBlock.section,
       });
 
       i = j;
@@ -150,7 +151,7 @@ function groupBlocksForDisplay(blocks: WorkoutBlock[]): DisplayItem[] {
       continue;
     }
 
-    items.push({ type: "block", block });
+    items.push({ type: "block", block, section: block.section });
     i++;
   }
 
@@ -158,70 +159,61 @@ function groupBlocksForDisplay(blocks: WorkoutBlock[]): DisplayItem[] {
 }
 
 /**
- * Detect sections (RAMP-UP / SUMMIT / COOL-DOWN) from display items
+ * Calculate duration for a display item
+ */
+function getItemDuration(item: DisplayItem): number {
+  if (item.type === "rounds") {
+    return item.totalDuration + (item.restAfter || 0);
+  }
+  if (item.type === "block") {
+    const blockDur = (item.block.workDuration + item.block.restDuration) * item.block.intervals;
+    return blockDur + (item.restAfter || 0);
+  }
+  return 0;
+}
+
+/**
+ * Map section code to display name
+ */
+function mapSectionName(section: string | undefined): WorkoutSection {
+  switch (section?.toUpperCase()) {
+    case "RAMP": return "RAMP-UP";
+    case "SUMMIT": return "SUMMIT";
+    case "RUNOUT": return "RUN-OUT";
+    default: return "RAMP-UP"; // Default to ramp-up if no section specified
+  }
+}
+
+/**
+ * Group display items by their explicit section property
  */
 function detectSections(items: DisplayItem[]): SectionGroup[] {
-  // Find first and last "rounds" type
-  const roundsIndices = items
-    .map((item, i) => item.type === "rounds" ? i : -1)
-    .filter(i => i !== -1);
+  const sectionOrder: WorkoutSection[] = ["RAMP-UP", "SUMMIT", "RUN-OUT"];
+  const sectionMap = new Map<WorkoutSection, DisplayItem[]>();
 
-  if (roundsIndices.length === 0) {
-    // No summit - all RAMP-UP
-    const totalDuration = items.reduce((sum, item) => {
-      if (item.type === "block") {
-        const blockDur = (item.block.workDuration + item.block.restDuration) * item.block.intervals;
-        return sum + blockDur + (item.restAfter || 0);
-      }
-      return sum + (item.restAfter || 0);
-    }, 0);
+  // Initialize empty arrays for each section
+  sectionOrder.forEach(s => sectionMap.set(s, []));
 
-    return [{ section: "RAMP-UP", items, totalDuration }];
+  // Group items by section
+  for (const item of items) {
+    const sectionName = mapSectionName(item.section);
+    sectionMap.get(sectionName)?.push(item);
   }
 
-  const firstRoundsIdx = Math.min(...roundsIndices);
-  const lastRoundsIdx = Math.max(...roundsIndices);
-
+  // Build section groups (only include non-empty sections)
   const sections: SectionGroup[] = [];
-
-  // RAMP-UP: items before first rounds
-  if (firstRoundsIdx > 0) {
-    const rampUpItems = items.slice(0, firstRoundsIdx);
-    const totalDuration = rampUpItems.reduce((sum, item) => {
-      if (item.type === "block") {
-        const blockDur = (item.block.workDuration + item.block.restDuration) * item.block.intervals;
-        return sum + blockDur + (item.restAfter || 0);
-      }
-      return sum + (item.restAfter || 0);
-    }, 0);
-    sections.push({ section: "RAMP-UP", items: rampUpItems, totalDuration });
+  for (const sectionName of sectionOrder) {
+    const sectionItems = sectionMap.get(sectionName) || [];
+    if (sectionItems.length > 0) {
+      const totalDuration = sectionItems.reduce((sum, item) => sum + getItemDuration(item), 0);
+      sections.push({ section: sectionName, items: sectionItems, totalDuration });
+    }
   }
 
-  // SUMMIT: all rounds items (and any items between them)
-  const summitItems = items.slice(firstRoundsIdx, lastRoundsIdx + 1);
-  const summitDuration = summitItems.reduce((sum, item) => {
-    if (item.type === "rounds") {
-      return sum + item.totalDuration + (item.restAfter || 0);
-    }
-    if (item.type === "block") {
-      const blockDur = (item.block.workDuration + item.block.restDuration) * item.block.intervals;
-      return sum + blockDur + (item.restAfter || 0);
-    }
-    return sum;
-  }, 0);
-  sections.push({ section: "SUMMIT", items: summitItems, totalDuration: summitDuration });
-
-  // RUN-OUT: items after last rounds (maintain intensity while fatigued)
-  if (lastRoundsIdx < items.length - 1) {
-    const runOutItems = items.slice(lastRoundsIdx + 1);
-    const totalDuration = runOutItems.reduce((sum, item) => {
-      if (item.type === "block") {
-        const blockDur = (item.block.workDuration + item.block.restDuration) * item.block.intervals;
-        return sum + blockDur + (item.restAfter || 0);
-      }
-      return sum + (item.restAfter || 0);
-    }, 0);
-    sections.push({ section: "RUN-OUT", items: runOutItems, totalDuration });
+  // Fallback: if no sections found, put everything in RAMP-UP
+  if (sections.length === 0 && items.length > 0) {
+    const totalDuration = items.reduce((sum, item) => sum + getItemDuration(item), 0);
+    return [{ section: "RAMP-UP", items, totalDuration }];
   }
 
   return sections;
@@ -320,6 +312,12 @@ export default function WorkoutPreviewScreen() {
 
   // Dev shortcut to skip to complete screen
   const handleDevSkipToComplete = () => {
+    // Simulate elapsed time as the total workout duration
+    const totalDuration = calculateWorkoutDuration(workout);
+    useWorkoutStore.setState({
+      elapsedTime: totalDuration,
+      workout: workout, // Ensure workout is set
+    });
     router.push("/workout/complete");
   };
 

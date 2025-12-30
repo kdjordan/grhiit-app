@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ScrollView } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
@@ -16,10 +16,23 @@ export default function HomeScreen() {
     missedWorkoutIds,
     getCurrentWorkoutNumber,
     resetProgress,
-    totalMinutes,
-    totalCalories,
-    recentSessions,
+    totalSeconds,
+    setDevProgress,
+    completeWorkout,
   } = useUserStore();
+
+  // DEV: Quick complete current workout with mock data
+  const handleDevComplete = () => {
+    completeWorkout({
+      brpReps: 6,
+      flsqReps: 12,
+      brpIntervals: 4,
+      flsqIntervals: 4,
+      otherMovements: [],
+      difficulty: 3,
+      durationSeconds: 900, // 15 min
+    });
+  };
 
   // DEV: Workout selection mode
   const { selectedWorkoutId, selectWorkout, clearSelection } = useDevStore();
@@ -43,24 +56,17 @@ export default function HomeScreen() {
   const totalSessionsInProgram = 24;
   const completedCount = completedWorkouts.length;
 
-  // Format total time (minutes to H:MM:SS or M:SS)
-  const formatTotalTime = (mins: number): string => {
-    if (mins === 0) return "0:00";
-    const hours = Math.floor(mins / 60);
-    const minutes = mins % 60;
+  // Format total time (seconds to M:SS or H:MM:SS)
+  const formatTotalTime = (secs: number): string => {
+    if (secs === 0) return "0:00";
+    const hours = Math.floor(secs / 3600);
+    const minutes = Math.floor((secs % 3600) / 60);
+    const seconds = secs % 60;
     if (hours > 0) {
-      return `${hours}:${minutes.toString().padStart(2, "0")}:00`;
+      return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     }
-    return `${minutes}:00`;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
-
-  // Calculate best session (highest reps)
-  const getBestReps = (): number => {
-    if (recentSessions.length === 0) return 0;
-    return Math.max(...recentSessions.map(s => s.totalReps));
-  };
-
-  const bestReps = getBestReps();
 
   // Calculate week and session within week
   const currentWeek = Math.ceil(currentWorkout / 3);
@@ -92,14 +98,32 @@ export default function HomeScreen() {
               </View>
             </View>
             {isDev && (
-              <Pressable
-                onPress={resetProgress}
-                style={tw`px-3 py-1.5 bg-[#262626] rounded-lg`}
-              >
-                <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
-                  RESET
-                </Text>
-              </Pressable>
+              <View style={tw`flex-row gap-2`}>
+                <Pressable
+                  onPress={handleDevComplete}
+                  style={tw`px-3 py-1.5 bg-[#22C55E]/20 rounded-lg`}
+                >
+                  <Text style={[tw`text-[#22C55E] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                    +1
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => setDevProgress(2, 1)}
+                  style={tw`px-3 py-1.5 bg-[#262626] rounded-lg`}
+                >
+                  <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                    W2
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={resetProgress}
+                  style={tw`px-3 py-1.5 bg-[#262626] rounded-lg`}
+                >
+                  <Text style={[tw`text-[#6B7280] text-xs`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
+                    RESET
+                  </Text>
+                </Pressable>
+              </View>
             )}
           </View>
         </View>
@@ -127,14 +151,10 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Stats Bentos - Horizontal Scroll */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={tw`px-4 py-4 gap-3`}
-        >
+        {/* Stats Bentos - 3 cards in a row */}
+        <View style={tw`px-4 py-4 flex-row gap-3`}>
           {/* Sessions */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
+          <View style={[tw`flex-1 bg-[#1a1a1a] py-4 px-3 items-center`, { borderRadius: scale(16), height: verticalScale(140) }]}>
             <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
               SESSIONS
             </Text>
@@ -146,21 +166,21 @@ export default function HomeScreen() {
             </Text>
           </View>
 
-          {/* Time Training */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
-            <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
-              TIME
+          {/* Time Under Load */}
+          <View style={[tw`flex-1 bg-[#1a1a1a] py-4 px-3 items-center`, { borderRadius: scale(16), height: verticalScale(140) }]}>
+            <Text style={[tw`text-[#6B7280] text-center`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
+              TIME UNDER{'\n'}LOAD
             </Text>
             <View style={tw`flex-1 justify-center`}>
               <Feather name="clock" size={scale(36)} color="#EF4444" />
             </View>
             <Text style={[tw`text-white`, { fontFamily: "SpaceGrotesk_600SemiBold", fontSize: sizing.bodyLarge }]}>
-              {formatTotalTime(totalMinutes)}
+              {formatTotalTime(totalSeconds)}
             </Text>
           </View>
 
           {/* This Week */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
+          <View style={[tw`flex-1 bg-[#1a1a1a] py-4 px-3 items-center`, { borderRadius: scale(16), height: verticalScale(140) }]}>
             <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
               THIS WEEK
             </Text>
@@ -171,36 +191,13 @@ export default function HomeScreen() {
               {sessionsThisWeek}/3
             </Text>
           </View>
+        </View>
 
-          {/* kCal Burned */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
-            <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
-              KCAL
-            </Text>
-            <View style={tw`flex-1 justify-center`}>
-              <Feather name="activity" size={scale(36)} color="#EF4444" />
-            </View>
-            <Text style={[tw`text-white`, { fontFamily: "SpaceGrotesk_600SemiBold", fontSize: sizing.bodyLarge }]}>
-              {totalCalories.toLocaleString()}
-            </Text>
-          </View>
+        {/* Spacer to push button to bottom */}
+        <View style={tw`flex-1`} />
 
-          {/* Best Reps */}
-          <View style={[tw`bg-[#1a1a1a] py-4 px-5 items-center`, { borderRadius: scale(16), minWidth: scale(100), height: verticalScale(140) }]}>
-            <Text style={[tw`text-[#6B7280]`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 0.5, fontSize: sizing.caption }]}>
-              BEST
-            </Text>
-            <View style={tw`flex-1 justify-center`}>
-              <Feather name="award" size={scale(36)} color="#EF4444" />
-            </View>
-            <Text style={[tw`text-white`, { fontFamily: "SpaceGrotesk_600SemiBold", fontSize: sizing.bodyLarge }]}>
-              {bestReps} reps
-            </Text>
-          </View>
-        </ScrollView>
-
-        {/* Begin Button - Fixed at bottom */}
-        <View style={tw`px-4 pb-6`}>
+        {/* Begin Button - Anchored at bottom */}
+        <View style={tw`px-4 pb-4`}>
           <Pressable
             style={[
               tw`bg-grhiit-red py-4 px-6 flex-row items-center justify-center`,
