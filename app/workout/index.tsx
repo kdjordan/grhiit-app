@@ -108,11 +108,40 @@ function groupBlocksForDisplay(blocks: WorkoutBlock[]): DisplayItem[] {
         }
       }
 
-      // Count rounds
+      // Count rounds and get pattern
       const firstBlock = groupedBlocks[0];
       const pattern = getPatternFromBlocks(groupedBlocks);
-      const blocksPerRound = pattern.split(" + ").length;
-      const roundCount = Math.ceil(groupedBlocks.length / blocksPerRound);
+      const roundCount = countRoundsFromBlocks(groupedBlocks);
+      const hasComboMetadata = groupedBlocks.some(b => b.comboGroup);
+
+      // For single-movement blocks with only 1 round, display as regular block
+      // (not as "1 ROUNDS" which is confusing)
+      if (groupedBlocks.length === 1 && roundCount === 1 && !hasComboMetadata) {
+        // Check if there's a REST after this block
+        let restAfter: number | undefined;
+        if (j < blocks.length && blocks[j].isTransition) {
+          restAfter = blocks[j].restDuration;
+          j++; // Skip the rest block
+        }
+        items.push({ type: "block", block: firstBlock, restAfter, section: firstBlock.section });
+        i = j;
+        continue;
+      }
+
+      // Calculate intervals per round
+      // For combo blocks (comboGroup): count blocks in first comboGroup
+      // For single-movement blocks: use block's intervals property
+      let intervalsPerRound: number;
+      if (hasComboMetadata) {
+        const firstComboGroup = groupedBlocks.find(b => b.comboGroup)?.comboGroup;
+        intervalsPerRound = groupedBlocks.filter(b => b.comboGroup === firstComboGroup).length;
+      } else if (groupedBlocks.length === 1 && firstBlock.intervals > 1) {
+        // Single-movement block with multiple intervals (e.g., SQTH with intervals: 2)
+        intervalsPerRound = firstBlock.intervals;
+      } else {
+        // Fallback: pattern length
+        intervalsPerRound = pattern.split(" + ").length;
+      }
 
       // Calculate total duration
       const totalDuration = groupedBlocks.reduce((sum, b) =>
@@ -130,7 +159,7 @@ function groupBlocksForDisplay(blocks: WorkoutBlock[]): DisplayItem[] {
         type: "rounds",
         rounds: roundCount,
         pattern: pattern,
-        timing: `${firstBlock.intervals} × (${firstBlock.workDuration}s/${firstBlock.restDuration}s)`,
+        timing: `${intervalsPerRound} × (${firstBlock.workDuration}s/${firstBlock.restDuration}s)`,
         restBetween: restDurations[0] || 30,
         totalDuration,
         restAfter,
@@ -220,20 +249,45 @@ function detectSections(items: DisplayItem[]): SectionGroup[] {
 }
 
 /**
- * Extract movement pattern from grouped blocks (e.g., "BRP + FLSQ")
+ * Extract movement pattern from grouped blocks
+ * Always shows clean display names: "SQUAT THRUST + FLYING SQUATS"
+ * No bracket notation, no rep targets in preview
  */
 function getPatternFromBlocks(blocks: WorkoutBlock[]): string {
-  const seen = new Set<string>();
-  const movements: string[] = [];
+  // Check if these blocks have combo metadata
+  const hasComboMetadata = blocks.some(b => b.comboGroup);
 
-  for (const block of blocks) {
-    if (!seen.has(block.movement)) {
-      seen.add(block.movement);
-      movements.push(block.movement);
-    }
+  if (hasComboMetadata) {
+    // Group blocks by comboGroup to find one representative combo
+    const firstComboGroup = blocks.find(b => b.comboGroup)?.comboGroup;
+    const comboBlocks = blocks.filter(b => b.comboGroup === firstComboGroup);
+
+    // Build pattern from display names in order (preserving sequence like SQTH + FLSQ + SQTH)
+    const pattern = comboBlocks.map(b => b.displayName).join(" + ");
+    return pattern;
   }
 
-  return movements.join(" + ");
+  // Fallback: display names from all blocks
+  return blocks.map(b => b.displayName).join(" + ");
+}
+
+/**
+ * Count rounds from grouped blocks
+ * For bracket notation: count unique comboGroups
+ * For regular: count based on unique movements per round
+ */
+function countRoundsFromBlocks(blocks: WorkoutBlock[]): number {
+  // Check if these blocks have combo metadata (bracket notation)
+  const comboGroups = new Set(blocks.filter(b => b.comboGroup).map(b => b.comboGroup));
+
+  if (comboGroups.size > 0) {
+    // Each unique comboGroup is one round
+    return comboGroups.size;
+  }
+
+  // Fallback: count unique movements, assume that's one round pattern
+  const uniqueMovements = new Set(blocks.map(b => b.movement));
+  return Math.ceil(blocks.length / uniqueMovements.size);
 }
 
 export default function WorkoutPreviewScreen() {
@@ -429,24 +483,46 @@ export default function WorkoutPreviewScreen() {
         {/* Expanded Breakdown */}
         {isExpanded && (
           <View style={tw`px-5`}>
-            {sections.map((section, sectionIdx) => (
-              <View key={section.section} style={tw`mb-4`}>
-                {/* Section Header */}
-                <SectionHeader
-                  section={section.section}
-                  duration={section.totalDuration}
-                />
-
-                {/* Section Items */}
-                {section.items.map((item, itemIdx) => (
-                  <DisplayRow
-                    key={`${sectionIdx}-${itemIdx}`}
-                    item={item}
-                    isLast={itemIdx === section.items.length - 1}
+            {sections.map((section, sectionIdx) => {
+              const isSummit = section.section === "SUMMIT";
+              return (
+                <View key={section.section} style={tw`mb-4`}>
+                  {/* Section Header */}
+                  <SectionHeader
+                    section={section.section}
+                    duration={section.totalDuration}
                   />
-                ))}
-              </View>
-            ))}
+
+                  {/* Section Items - SUMMIT gets a wrapping bento */}
+                  {isSummit ? (
+                    <View
+                      style={{
+                        padding: 12,
+                        borderRadius: 16,
+                        borderWidth: 1,
+                        borderColor: "rgba(239, 68, 68, 0.25)",
+                      }}
+                    >
+                      {section.items.map((item, itemIdx) => (
+                        <DisplayRow
+                          key={`${sectionIdx}-${itemIdx}`}
+                          item={item}
+                          isLast={itemIdx === section.items.length - 1}
+                        />
+                      ))}
+                    </View>
+                  ) : (
+                    section.items.map((item, itemIdx) => (
+                      <DisplayRow
+                        key={`${sectionIdx}-${itemIdx}`}
+                        item={item}
+                        isLast={itemIdx === section.items.length - 1}
+                      />
+                    ))
+                  )}
+                </View>
+              );
+            })}
           </View>
         )}
       </ScrollView>

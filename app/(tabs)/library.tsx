@@ -13,8 +13,8 @@ const MOVEMENTS = [
   { code: "JSQ", name: "Jump Squats", description: "Explosive squat with vertical jump at the top" },
   { code: "FLSQ", name: "Flying Squats", description: "Dynamic squat with lateral movement" },
   { code: "STPSQ", name: "Stop Squats", description: "Controlled squat with pause at the bottom - builds strength and stability" },
-  // Burpees
-  { code: "OGBRP", name: "Burpees", description: "Continuous flow burpee without push-up. Down, out, in, up - keep the rhythm" },
+  // Burpees / Squat Thrusts
+  { code: "SQTH", name: "Squat Thrust", description: "Continuous flow movement without push-up. Down, out, in, up - keep the rhythm" },
   { code: "PUBRP", name: "Push-up Burpees", description: "Isolated single-rep burpee with full push-up. Form-critical - one perfect rep at a time" },
   // Upper body
   { code: "PU", name: "Push-ups", description: "Upper body press from plank position" },

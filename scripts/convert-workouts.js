@@ -6,12 +6,17 @@
  * CSV format: movement,intervals,work,rest,Time,Group,Type,Section
  *
  * Movement notation:
- * - Single: "8CBB", "OGBRP"
- * - With rep target: "OGBRP (8)", "FLSQ (2-3)"
- * - Combo (+): "OGBRP + FLSQ" - split into separate blocks, alternating
- * - Sequence (>): "FLSQ (2) > OGBRP" - both in single work phase
+ * - Single: "8CBB", "SQTH"
+ * - With rep target: "SQTH(8)", "FLSQ(2-3)" - parentheses for rep targets
+ * - Combo cycling (+): "SQTH + FLSQ" - alternating A,B,A,B...
+ * - Combo sequential (+) with brackets: "[2]SQTH + [2]FLSQ" - sequential A,A,B,B
+ *   - Bracket notation: [N] specifies how many intervals of each movement
+ *   - Supports prefix [2]SQTH or suffix SQTH[2] positions
+ *   - Can combine with rep targets: "[2]SQTH(8-10) + [2]FLSQ(15-20)"
+ *   - Bracket sum must equal total intervals column
+ * - Sequence (>): "FLSQ(2) > SQTH" - both in single work phase
  * - Choice (/): "JLNG/LNG" - user picks either movement
- * - Smoker: "PL > OGBRP" with Type=SM - no true rest, hold position
+ * - Smoker: "PL > SQTH" with Type=SM - no true rest, hold position
  *
  * Columns:
  * - REST rows have intervals=1, empty work, and rest duration
@@ -40,8 +45,8 @@ const MOVEMENTS = {
   'JSQ': 'JUMP SQUATS',
   'FLSQ': 'FLYING SQUATS',
   'STPSQ': 'STOP SQUATS',
-  // Burpees
-  'OGBRP': 'BURPEES',           // Original Burpee (no push-up, continuous)
+  // Burpees / Squat Thrusts
+  'SQTH': 'SQUAT THRUST',       // No push-up, continuous flow
   'PUBRP': 'PUSH-UP BURPEES',   // Push-up Burpee (with push-up, isolated)
   'BRP': 'BURPEES',             // Legacy alias
   // Upper body
@@ -62,10 +67,54 @@ const MOVEMENTS = {
 };
 
 /**
+ * Parse a movement part that might be a choice (contains /)
+ * "JLNG/LNG(2-3)" → { code: "JLNG/LNG", displayName: "JUMP LUNGES / LUNGES", repTarget: "2-3", isChoice: true }
+ * "SQTH(8-10)" → { code: "SQTH", displayName: "SQUAT THRUST", repTarget: "8-10", isChoice: false }
+ */
+function parseMovementPart(movementStr) {
+  const str = movementStr.trim();
+
+  // Check if this is a choice (contains /)
+  if (str.includes('/')) {
+    // Extract rep target from the end if present: "JLNG/LNG(2-3)" → "2-3"
+    const repMatch = str.match(/\((\d+(?:-\d+)?)\)$/);
+    const repTarget = repMatch ? repMatch[1] : null;
+    const withoutRep = repMatch ? str.replace(/\(\d+(?:-\d+)?\)$/, '') : str;
+
+    // Split by / and parse each choice
+    const choiceParts = withoutRep.split('/').map(p => p.trim());
+    const choices = choiceParts.map(part => {
+      const code = part.toUpperCase();
+      return {
+        code,
+        displayName: MOVEMENTS[code] || code,
+      };
+    });
+
+    return {
+      code: choices.map(c => c.code).join('/'),
+      displayName: choices.map(c => c.displayName).join(' / '),
+      repTarget,
+      isChoice: true,
+      choices,
+    };
+  }
+
+  // Regular movement (no choice)
+  const parsed = parseMovementWithTarget(str);
+  return {
+    code: parsed.code,
+    displayName: MOVEMENTS[parsed.code] || parsed.code,
+    repTarget: parsed.repTarget,
+    isChoice: false,
+  };
+}
+
+/**
  * Parse rep target from movement string
- * "OGBRP (8)" → { code: "OGBRP", repTarget: "8" }
+ * "SQTH (8)" → { code: "SQTH", repTarget: "8" }
  * "FLSQ (2-3)" → { code: "FLSQ", repTarget: "2-3" }
- * "OGBRP" → { code: "OGBRP", repTarget: null }
+ * "SQTH" → { code: "SQTH", repTarget: null }
  */
 function parseMovementWithTarget(movementStr) {
   const match = movementStr.match(/^([A-Z0-9]+)\s*\((\d+(?:-\d+)?)\)$/i);
@@ -82,6 +131,47 @@ function parseMovementWithTarget(movementStr) {
 }
 
 /**
+ * Parse interval count and rep target from movement string with bracket notation
+ * Supports both prefix and suffix bracket positions:
+ *   "[2]SQTH(8-10)" → { code: "SQTH", intervalCount: 2, repTarget: "8-10" }
+ *   "SQTH[2](8-10)" → { code: "SQTH", intervalCount: 2, repTarget: "8-10" }
+ *   "[3]FLSQ" → { code: "FLSQ", intervalCount: 3, repTarget: null }
+ *   "SQTH(8)" → { code: "SQTH", intervalCount: null, repTarget: "8" }
+ *   "SQTH" → { code: "SQTH", intervalCount: null, repTarget: null }
+ */
+function parseMovementWithIntervalCount(movementStr) {
+  const str = movementStr.trim();
+
+  // Try prefix bracket: [2]SQTH(8-10) or [2]SQTH
+  const prefixMatch = str.match(/^\[(\d+)\]([A-Z0-9]+)(?:\((\d+(?:-\d+)?)\))?$/i);
+  if (prefixMatch) {
+    return {
+      code: prefixMatch[2].toUpperCase(),
+      intervalCount: parseInt(prefixMatch[1], 10),
+      repTarget: prefixMatch[3] || null,
+    };
+  }
+
+  // Try suffix bracket: SQTH[2](8-10) or SQTH[2]
+  const suffixMatch = str.match(/^([A-Z0-9]+)\[(\d+)\](?:\((\d+(?:-\d+)?)\))?$/i);
+  if (suffixMatch) {
+    return {
+      code: suffixMatch[1].toUpperCase(),
+      intervalCount: parseInt(suffixMatch[2], 10),
+      repTarget: suffixMatch[3] || null,
+    };
+  }
+
+  // No brackets - fall back to standard rep target parsing
+  const parsed = parseMovementWithTarget(str);
+  return {
+    code: parsed.code,
+    intervalCount: null,
+    repTarget: parsed.repTarget,
+  };
+}
+
+/**
  * Parse a single CSV file into a WorkoutProgram
  */
 function parseCSV(filePath) {
@@ -92,11 +182,12 @@ function parseCSV(filePath) {
   const dataLines = lines.slice(1);
 
   // Extract week and day from filename
-  // Supports: "W1_D1 - Sheet1.csv" (Google Sheets) or "week1-day1.csv" (legacy)
+  // Supports: "W1:D1.csv" (rclone sync), "W1_D1 - Sheet1.csv" (Google Sheets download), "week1-day1.csv" (legacy)
   const filename = path.basename(filePath, '.csv');
+  const rcloneMatch = filename.match(/W(\d+):D(\d+)/i);
   const googleMatch = filename.match(/W(\d+)_D(\d+)/i);
   const legacyMatch = filename.match(/week(\d+)-day(\d+)/i);
-  const match = googleMatch || legacyMatch;
+  const match = rcloneMatch || googleMatch || legacyMatch;
   const week = match ? parseInt(match[1], 10) : 1;
   const day = match ? parseInt(match[2], 10) : 1;
 
@@ -211,7 +302,117 @@ function parseCSV(filePath) {
       continue;
     }
 
+    // Check if this is a COMBO movement (e.g., "SQTH + FLSQ" or "JSQ + SQTH + JLNG")
+    // NOTE: Check for + BEFORE / because combos can contain choices (e.g., "JSQ + JLNG/LNG")
+    // Two modes:
+    // 1. With brackets [N]: Sequential blocks - [2]SQTH + [2]FLSQ = SQTH, SQTH, FLSQ, FLSQ
+    // 2. Without brackets: Cycling blocks - SQTH + FLSQ = SQTH, FLSQ, SQTH, FLSQ...
+    if (movement.includes('+')) {
+      const movementParts = movement.split('+').map(m => m.trim());
+
+      // Parse all movements with bracket-aware function
+      const parsedMovements = movementParts.map(part => parseMovementWithIntervalCount(part));
+
+      // Check if any movement has explicit interval counts (bracket notation)
+      const hasExplicitCounts = parsedMovements.some(p => p.intervalCount !== null);
+
+      if (hasExplicitCounts) {
+        // SEQUENTIAL MODE: [2]SQTH + [2]FLSQ = SQTH, SQTH, FLSQ, FLSQ
+        // Generate a unique combo group ID for preview display
+        const comboGroupId = `combo-${blockIndex}`;
+
+        // Build display name for preview
+        // Only show counts when > 1: "2× SQUAT THRUST + 2× FLYING SQUATS"
+        // Otherwise just names: "SQUAT THRUST + FLYING SQUATS + SQUAT THRUST"
+        const comboDisplayParts = parsedMovements.map(p => {
+          const name = MOVEMENTS[p.code] || p.code;
+          const count = p.intervalCount || 1;
+          return count > 1 ? `${count}× ${name}` : name;
+        });
+        const comboDisplayName = comboDisplayParts.join(' + ');
+
+        // Calculate expected total from brackets
+        const bracketTotal = parsedMovements.reduce((sum, p) => sum + (p.intervalCount || 1), 0);
+
+        // Validate: bracket sum should match CSV total intervals
+        if (intervalCount && bracketTotal !== intervalCount) {
+          console.warn(`  ⚠️  Warning: Bracket sum (${bracketTotal}) doesn't match interval count (${intervalCount}) for "${movement}"`);
+        }
+
+        // Create sequential blocks: all of movement A, then all of movement B, etc.
+        let comboPosition = 0;
+        for (const parsed of parsedMovements) {
+          const count = parsed.intervalCount || 1;
+
+          for (let i = 0; i < count; i++) {
+            const block = {
+              id: `${parsed.code.toLowerCase()}-${blockIndex}`,
+              movement: parsed.code,
+              displayName: MOVEMENTS[parsed.code] || parsed.code,
+              intervals: 1, // Each block is 1 interval
+              workDuration,
+              restDuration,
+              // Combo metadata for preview grouping
+              comboGroup: comboGroupId,
+              comboDisplayName,
+              comboPosition,
+            };
+            if (group) block.group = group;
+            if (type) block.type = type;
+            if (section) block.section = section;
+            if (parsed.repTarget) block.repTarget = parsed.repTarget;
+            blocks.push(block);
+            blockIndex++;
+          }
+          comboPosition++;
+        }
+      } else {
+        // CYCLING MODE: SQTH + FLSQ = SQTH, FLSQ, SQTH, FLSQ... (existing behavior)
+        // Re-parse with parseMovementPart to handle choices within combos
+        const parsedParts = movementParts.map(part => parseMovementPart(part));
+        const numMovements = parsedParts.length;
+        const totalIntervals = intervalCount || numMovements;
+
+        // Generate a unique combo group ID for this CSV row
+        const comboGroupId = `combo-${blockIndex}`;
+
+        // Build display name for preview using clean display names
+        const comboDisplayParts = parsedParts.map(p => p.displayName);
+        const comboDisplayName = comboDisplayParts.join(' + ');
+
+        // Create cycling blocks: A, B, C, A, B, C... for the total number of intervals
+        for (let i = 0; i < totalIntervals; i++) {
+          const movementIndex = i % numMovements;
+          const parsed = parsedParts[movementIndex];
+          const block = {
+            id: `${parsed.code.toLowerCase().replace(/\//g, '-')}-${blockIndex}`,
+            movement: parsed.code,
+            displayName: parsed.displayName,
+            intervals: 1, // Each block is 1 interval
+            workDuration,
+            restDuration,
+            // Combo metadata for preview grouping (same as bracket notation)
+            comboGroup: comboGroupId,
+            comboDisplayName,
+            comboPosition: movementIndex,
+          };
+          if (group) block.group = group;
+          if (type) block.type = type;
+          if (section) block.section = section;
+          if (parsed.repTarget) block.repTarget = parsed.repTarget;
+          if (parsed.isChoice) {
+            block.isChoice = true;
+            block.choices = parsed.choices;
+          }
+          blocks.push(block);
+          blockIndex++;
+        }
+      }
+      continue;
+    }
+
     // Check if this is a CHOICE movement (e.g., "JLNG/LNG" = either one)
+    // NOTE: This is checked AFTER combos, so standalone choices only
     if (movement.includes('/')) {
       const movementParts = movement.split('/').map(m => m.trim());
       const choices = movementParts.map(part => {
@@ -244,39 +445,6 @@ function parseCSV(filePath) {
       if (repTarget) block.repTarget = repTarget;
       blocks.push(block);
       blockIndex++;
-      continue;
-    }
-
-    // Check if this is a COMBO movement (e.g., "OGBRP + FLSQ" or "JSQ + OGBRP + JLNG")
-    // Creates cycling 1-interval blocks: A, B, C, A, B, C, A, B, C...
-    if (movement.includes('+')) {
-      const movementParts = movement.split('+').map(m => m.trim());
-      const numMovements = movementParts.length;
-      const totalIntervals = intervalCount || numMovements;
-      const cycles = Math.floor(totalIntervals / numMovements);
-
-      // Parse all movements upfront
-      const parsedMovements = movementParts.map(part => parseMovementWithTarget(part));
-
-      // Create cycling blocks: A, B, C, A, B, C... for the total number of intervals
-      for (let i = 0; i < totalIntervals; i++) {
-        const movementIndex = i % numMovements;
-        const parsed = parsedMovements[movementIndex];
-        const block = {
-          id: `${parsed.code.toLowerCase()}-${blockIndex}`,
-          movement: parsed.code,
-          displayName: MOVEMENTS[parsed.code] || parsed.code,
-          intervals: 1, // Each block is 1 interval
-          workDuration,
-          restDuration,
-        };
-        if (group) block.group = group;
-        if (type) block.type = type;
-        if (section) block.section = section;
-        if (parsed.repTarget) block.repTarget = parsed.repTarget;
-        blocks.push(block);
-        blockIndex++;
-      }
       continue;
     }
 

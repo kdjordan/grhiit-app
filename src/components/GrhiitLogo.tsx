@@ -4,7 +4,7 @@ import Svg, { Path } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-const GRHIIT_RED = "#E8110F";
+const GRHIIT_RED = "#EF4444";
 
 interface GrhiitLogoProps {
   width?: number;

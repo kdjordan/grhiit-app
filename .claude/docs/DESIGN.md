@@ -420,7 +420,7 @@ Smoker blocks (Type=SM) have no true rest - the "rest" phase is an active hold p
 - Movement name alternates: work movement (BURPEES) ↔ hold movement (PLANK)
 - Interval counter continues normally
 
-**Example**: `PL > OGBRP` with 3s work, 3s rest
+**Example**: `PL > SQTH` with 3s work, 3s rest
 - [3s] BURPEES (work) → [3s] PLANK (hold) → [3s] BURPEES → [3s] PLANK...
 
 **Technical**: Phase included in CircularTimer's phaseKey to ensure animation restarts when work/rest have same duration.
@@ -510,18 +510,26 @@ Smoker blocks display orange badge in preview:
 ### CSV → JSON Build System
 Workouts are authored in CSV and converted to JSON at build time.
 
-**Source**: `workouts/csv/` directory
-- Google Sheets format: `W1_D1 - Sheet1.csv` (preferred)
-- Legacy format: `week1-day1.csv`
+**Source**: `workouts/csv/` directory (synced from Google Drive)
+
+**Sync Command**:
+```bash
+npm run sync-workouts  # Fetches from Drive + converts to JSON
+```
+
+**Filename Formats** (all supported):
+- `W1:D1.csv` - rclone sync (colon separator)
+- `W1_D1 - Sheet1.csv` - Google Sheets download (underscore)
+- `week1-day1.csv` - Legacy format
 
 ```csv
 movement,intervals,work,rest,Time,Group,Type,Section
 8CBB,10,6,3,90,,,RAMP
 REST,1,,30,30,,,
-JSQ(2-3) + OGBRP(2-3) + JLNG(2),18,6,3,162,,,RAMP
-PL > OGBRP,20,3,3,120,,SM,SUMMIT
+JSQ(2-3) + SQTH(2-3) + JLNG(2),18,6,3,162,,,RAMP
+PL > SQTH,20,3,3,120,,SM,SUMMIT
 JLNG/LNG,10,6,3,90,,,RUNOUT
-OGBRP + FLSQ,8,20,10,240,A,,SUMMIT
+SQTH + FLSQ,8,20,10,240,A,,SUMMIT
 ```
 
 **Output**: `assets/workouts/level-1.json`
@@ -531,12 +539,39 @@ OGBRP + FLSQ,8,20,10,240,A,,SUMMIT
 | Notation | Example | Meaning |
 |----------|---------|---------|
 | Single | `8CBB` | Standard movement |
-| Rep target | `OGBRP (8)` | Exact target: 8 reps |
-| Rep range | `FLSQ (2-3)` | Range target: 2-3 reps |
-| Combo (+) | `A + B + C` | Cycle through (A→B→C→A→B→C...) |
-| Sequence (>) | `FLSQ (2) > OGBRP` | Both in one work phase |
+| Rep target | `SQTH(8)` | Exact target: 8 reps (parentheses) |
+| Rep range | `FLSQ(2-3)` | Range target: 2-3 reps |
+| Combo cycling | `A + B + C` | Cycle through (A→B→C→A→B→C...) |
+| Combo sequential | `[2]A + [2]B` | Sequential (A→A→B→B) |
+| Sequence (>) | `FLSQ(2) > SQTH` | Both in one work phase |
 | Choice (/) | `JLNG/LNG` | User picks either |
-| Smoker | `PL > OGBRP` + Type=SM | No rest, hold position |
+| Combo + Choice | `JSQ + JLNG/LNG + MC` | Choice within combo |
+| Smoker | `PL > SQTH` + Type=SM | No rest, hold position |
+
+### Bracket Notation (Interval Counts)
+
+Square brackets `[N]` specify how many consecutive intervals of each movement in a combo:
+
+```csv
+[2]SQTH(8-10) + [2]FLSQ(15-20),4,20,10,120,A,,SUMMIT
+```
+
+- **Prefix**: `[2]SQTH` - 2 intervals of SQTH
+- **Suffix**: `SQTH[2]` - same meaning, alternate syntax
+- **With rep target**: `[2]SQTH(8-10)` - 2 intervals, 8-10 reps each
+- **Validation**: Bracket sum must equal intervals column (2+2=4)
+
+**Result**: Creates sequential blocks: SQTH, SQTH, FLSQ, FLSQ
+
+**Timer display**:
+- Interval 1/4: SQUAT THRUST
+- Interval 2/4: SQUAT THRUST
+- Interval 3/4: FLYING SQUATS
+- Interval 4/4: FLYING SQUATS
+
+**Preview display**:
+- Count = 1: "SQUAT THRUST + FLYING SQUATS + SQUAT THRUST" (clean names)
+- Count > 1: "2× SQUAT THRUST + 2× FLYING SQUATS" (shows multiplier)
 
 ### CSV Columns
 - **movement**: Movement code(s) with notation
@@ -550,19 +585,29 @@ OGBRP + FLSQ,8,20,10,240,A,,SUMMIT
 
 ### Parsing Rules
 - REST rows: `intervals=1`, empty work, rest value
-- Combo (+): Creates cycling 1-interval blocks (not sequential)
+- Combo without brackets: Creates cycling 1-interval blocks (A→B→A→B)
+- Combo with brackets: Creates sequential 1-interval blocks (A→A→B→B)
+- Bracket sum validated against intervals column (warning if mismatch)
 - Orphan total row at bottom (just a number) is ignored
 - File naming: `W1_D1 - Sheet1.csv` (Google Sheets) or `week1-day1.csv` (legacy)
 
 **Scripts**:
-- `npm run convert-workouts` - Manual conversion
+- `npm run sync-workouts` - Sync from Google Drive + convert (preferred)
+- `npm run convert-workouts` - Manual conversion (local CSVs only)
 - `npm run prebuild` - Auto-runs converter before Expo prebuild
+
+**Google Drive Sync** (requires rclone configured):
+```bash
+brew install rclone
+rclone config  # Set up 'gdrive' remote with OAuth
+npm run sync-workouts
+```
 
 ### Movement Codes (17 total)
 
 **Bodybuilders**: 8CBB, 6CBB
 **Squats**: JSQ, FLSQ, STPSQ
-**Burpees**: OGBRP (no push-up), PUBRP (with push-up)
+**Squat Thrusts/Burpees**: SQTH (no push-up), PUBRP (with push-up)
 **Upper body**: PU, TH, ZPR
 **Core/Cardio**: MC, PL, JJ, JK, HK
 **Lunges**: LNG, JLNG
@@ -627,7 +672,7 @@ const isUnlocked = isDevMode || workoutNumber <= currentWorkoutNumber;
 ### Movements (17 total)
 **Bodybuilders**: 8CBB, 6CBB
 **Squats**: JSQ, FLSQ, STPSQ
-**Burpees**: OGBRP, PUBRP
+**Squat Thrusts/Burpees**: SQTH, PUBRP
 **Upper body**: PU, TH, ZPR
 **Core/Cardio**: MC, PL, JJ, JK, HK
 **Lunges**: LNG, JLNG

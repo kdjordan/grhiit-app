@@ -8,7 +8,7 @@ const id = (prefix: string, n: number) => `${prefix}-${n}`;
 const MOVEMENTS = {
   "8CBB": "8-COUNT BODYBUILDERS",
   JSQ: "JUMP SQUATS",
-  OGBRP: "BURPEES",        // Original Burpee (no push-up, continuous)
+  SQTH: "SQUAT THRUST",    // No push-up, continuous flow
   PUBRP: "PUSH-UP BURPEES", // Push-up Burpee (isolated single reps)
   BRP: "BURPEES",          // Legacy alias
   FLSQ: "FLYING SQUATS",

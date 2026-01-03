@@ -1,7 +1,7 @@
 {
   "version": 1,
   "level": 1,
-  "generatedAt": "2025-12-30T23:37:35.473Z",
+  "generatedAt": "2026-01-03T17:05:08.602Z",
   "workouts": [
     {
       "id": "week1-day1",
@@ -50,12 +50,15 @@
           "section": "RAMP"
         },
         {
-          "id": "ogbrp-4",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-4",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-4",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -67,6 +70,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-4",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -82,12 +88,15 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-7",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-7",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-7",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-12"
@@ -99,6 +108,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-7",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -114,12 +126,15 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-10",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-10",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-10",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-12"
@@ -131,6 +146,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-10",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -226,12 +244,15 @@
           "section": "RAMP"
         },
         {
-          "id": "ogbrp-4",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-4",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-4",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -243,6 +264,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-4",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -258,12 +282,15 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-7",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-7",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-7",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -275,6 +302,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-7",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -290,12 +320,15 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-10",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-10",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-10",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -307,6 +340,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-10",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -322,12 +358,15 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-13",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-13",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-13",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -339,6 +378,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-13",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -454,12 +496,15 @@
           "section": "RAMP"
         },
         {
-          "id": "ogbrp-6",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-6",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-6",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -471,6 +516,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-6",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -486,12 +534,15 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-9",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-9",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-9",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -503,6 +554,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-9",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -518,12 +572,15 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-12",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-12",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-12",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -535,6 +592,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-12",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -550,12 +610,15 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-15",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-15",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-15",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -567,6 +630,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-15",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -702,9 +768,9 @@
           "section": "RAMP"
         },
         {
-          "id": "ogbrp-6",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-6",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 2,
           "workDuration": 20,
           "restDuration": 10,
@@ -744,9 +810,9 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-10",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-10",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 2,
           "workDuration": 20,
           "restDuration": 10,
@@ -906,12 +972,15 @@
           "section": "RAMP"
         },
         {
-          "id": "ogbrp-6",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-6",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-6",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -923,17 +992,23 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-6",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "ogbrp-8",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-8",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-6",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -945,6 +1020,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-6",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -960,12 +1038,15 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-11",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-11",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -977,17 +1058,23 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "ogbrp-13",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-13",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -999,6 +1086,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -1076,7 +1166,7 @@
         {
           "id": "smoker-0",
           "movement": "PL>OGBRP",
-          "displayName": "BURPEES",
+          "displayName": "OGBRP",
           "intervals": 20,
           "workDuration": 3,
           "restDuration": 3,
@@ -1088,7 +1178,7 @@
           },
           "workMovement": {
             "code": "OGBRP",
-            "displayName": "BURPEES",
+            "displayName": "OGBRP",
             "repTarget": "1"
           },
           "section": "RAMP"
@@ -1137,9 +1227,9 @@
           "section": "RAMP"
         },
         {
-          "id": "ogbrp-4",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-4",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 2,
           "workDuration": 20,
           "restDuration": 10,
@@ -1179,9 +1269,9 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-8",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-8",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 2,
           "workDuration": 20,
           "restDuration": 10,
@@ -1235,7 +1325,7 @@
         {
           "id": "smoker-12",
           "movement": "PL>OGBRP",
-          "displayName": "BURPEES",
+          "displayName": "OGBRP",
           "intervals": 20,
           "workDuration": 3,
           "restDuration": 3,
@@ -1247,7 +1337,7 @@
           },
           "workMovement": {
             "code": "OGBRP",
-            "displayName": "BURPEES",
+            "displayName": "OGBRP",
             "repTarget": "1"
           },
           "section": "RUNOUT"
@@ -1303,12 +1393,15 @@
           "section": "RAMP"
         },
         {
-          "id": "ogbrp-4",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-4",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-4",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS + SQUAT THRUST",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -1320,17 +1413,23 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-4",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS + SQUAT THRUST",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "ogbrp-6",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-6",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-4",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS + SQUAT THRUST",
+          "comboPosition": 2,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -1352,17 +1451,23 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-8",
+          "comboDisplayName": "FLYING SQUATS + SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "B",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "ogbrp-9",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-9",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-8",
+          "comboDisplayName": "FLYING SQUATS + SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "B",
           "section": "SUMMIT",
           "repTarget": "8-10"
@@ -1374,6 +1479,9 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-8",
+          "comboDisplayName": "FLYING SQUATS + SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 2,
           "group": "B",
           "section": "SUMMIT",
           "repTarget": "15-20"
@@ -1389,13 +1497,16 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-12",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-12",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
-          "group": "A",
+          "comboGroup": "combo-12",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS + SQUAT THRUST",
+          "comboPosition": 0,
+          "group": "C",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
@@ -1406,18 +1517,24 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
-          "group": "A",
+          "comboGroup": "combo-12",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS + SQUAT THRUST",
+          "comboPosition": 1,
+          "group": "C",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "ogbrp-14",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-14",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
-          "group": "A",
+          "comboGroup": "combo-12",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS + SQUAT THRUST",
+          "comboPosition": 2,
+          "group": "C",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
@@ -1438,18 +1555,24 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
-          "group": "B",
+          "comboGroup": "combo-16",
+          "comboDisplayName": "FLYING SQUATS + SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
+          "group": "D",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "ogbrp-17",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-17",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
-          "group": "B",
+          "comboGroup": "combo-16",
+          "comboDisplayName": "FLYING SQUATS + SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
+          "group": "D",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
@@ -1460,7 +1583,10 @@
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
-          "group": "B",
+          "comboGroup": "combo-16",
+          "comboDisplayName": "FLYING SQUATS + SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 2,
+          "group": "D",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
@@ -1521,6 +1647,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RAMP",
           "repTarget": "1"
@@ -1532,6 +1661,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1543,6 +1675,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RAMP",
           "repTarget": "1"
@@ -1554,6 +1689,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1565,6 +1703,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RAMP",
           "repTarget": "1"
@@ -1576,6 +1717,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1587,6 +1731,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RAMP",
           "repTarget": "1"
@@ -1598,6 +1745,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1609,6 +1759,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RAMP",
           "repTarget": "1"
@@ -1620,6 +1773,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1641,6 +1797,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RAMP",
           "repTarget": "1"
@@ -1652,6 +1811,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1663,6 +1825,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RAMP",
           "repTarget": "1"
@@ -1674,6 +1839,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1685,6 +1853,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RAMP",
           "repTarget": "1"
@@ -1696,6 +1867,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1707,6 +1881,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RAMP",
           "repTarget": "1"
@@ -1718,6 +1895,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1729,6 +1909,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RAMP",
           "repTarget": "1"
@@ -1740,6 +1923,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-11",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RAMP",
           "repTarget": "2-3"
@@ -1755,9 +1941,9 @@
           "section": "RAMP"
         },
         {
-          "id": "ogbrp-22",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-22",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 3,
           "workDuration": 20,
           "restDuration": 10,
@@ -1797,9 +1983,9 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-26",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-26",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 3,
           "workDuration": 20,
           "restDuration": 10,
@@ -1824,6 +2010,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -1835,6 +2024,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -1846,6 +2038,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -1857,6 +2052,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -1868,6 +2066,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -1879,6 +2080,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -1890,6 +2094,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -1901,6 +2108,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -1912,6 +2122,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -1923,6 +2136,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-28",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "C",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -1944,6 +2160,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -1955,6 +2174,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -1966,6 +2188,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -1977,6 +2202,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -1988,6 +2216,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -1999,6 +2230,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -2010,6 +2244,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -2021,6 +2258,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -2032,6 +2272,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 0,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "1"
@@ -2043,6 +2286,9 @@
           "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-39",
+          "comboDisplayName": "8-COUNT BODYBUILDERS + JUMP SQUATS",
+          "comboPosition": 1,
           "group": "D",
           "section": "RUNOUT",
           "repTarget": "2-3"
@@ -2058,29 +2304,259 @@
       "day": 3,
       "blocks": [
         {
-          "id": "choice-0",
-          "movement": "JSQ(2-3) + OGBRP(2-3) + JLNG/LNG(2-3) + MC(4-5)",
-          "displayName": "JSQ(2-3) + OGBRP(2-3) + JLNG / LNG(2-3) + MC(4-5)",
-          "intervals": 16,
+          "id": "jsq-0",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-1",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-2",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RAMP",
+          "repTarget": "2-3",
           "isChoice": true,
           "choices": [
             {
-              "code": "JSQ(2-3) + OGBRP(2-3) + JLNG",
-              "displayName": "JSQ(2-3) + OGBRP(2-3) + JLNG",
-              "repTarget": null
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
             },
             {
-              "code": "LNG(2-3) + MC(4-5)",
-              "displayName": "LNG(2-3) + MC(4-5)",
-              "repTarget": null
+              "code": "LNG",
+              "displayName": "LUNGES"
             }
-          ],
-          "section": "RAMP"
+          ]
         },
         {
-          "id": "rest-1",
+          "id": "mc-3",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RAMP",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-4",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-5",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-6",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RAMP",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-7",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RAMP",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-8",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-9",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-10",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RAMP",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-11",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RAMP",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-12",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-13",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-14",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RAMP",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-15",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RAMP",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "rest-16",
           "movement": "REST",
           "displayName": "REST",
           "intervals": 1,
@@ -2090,7 +2566,7 @@
           "section": "RAMP"
         },
         {
-          "id": "pubrp-2",
+          "id": "pubrp-17",
           "movement": "PUBRP",
           "displayName": "PUSH-UP BURPEES",
           "intervals": 10,
@@ -2100,7 +2576,7 @@
           "repTarget": "1"
         },
         {
-          "id": "rest-3",
+          "id": "rest-18",
           "movement": "REST",
           "displayName": "REST",
           "intervals": 1,
@@ -2110,51 +2586,63 @@
           "section": "RAMP"
         },
         {
-          "id": "ogbrp-4",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-19",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-19",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
-          "id": "flsq-5",
+          "id": "flsq-20",
           "movement": "FLSQ",
           "displayName": "FLYING SQUATS",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-19",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "ogbrp-6",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-21",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-19",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
-          "id": "flsq-7",
+          "id": "flsq-22",
           "movement": "FLSQ",
           "displayName": "FLYING SQUATS",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-19",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "rest-8",
+          "id": "rest-23",
           "movement": "REST",
           "displayName": "REST",
           "intervals": 1,
@@ -2164,51 +2652,63 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-9",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-24",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-24",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
-          "id": "flsq-10",
+          "id": "flsq-25",
           "movement": "FLSQ",
           "displayName": "FLYING SQUATS",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-24",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "ogbrp-11",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-26",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-24",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
-          "id": "flsq-12",
+          "id": "flsq-27",
           "movement": "FLSQ",
           "displayName": "FLYING SQUATS",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-24",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "rest-13",
+          "id": "rest-28",
           "movement": "REST",
           "displayName": "REST",
           "intervals": 1,
@@ -2218,51 +2718,63 @@
           "section": "SUMMIT"
         },
         {
-          "id": "ogbrp-14",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-29",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-29",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
-          "id": "flsq-15",
+          "id": "flsq-30",
           "movement": "FLSQ",
           "displayName": "FLYING SQUATS",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-29",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "ogbrp-16",
-          "movement": "OGBRP",
-          "displayName": "BURPEES",
+          "id": "sqth-31",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-29",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 0,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
         {
-          "id": "flsq-17",
+          "id": "flsq-32",
           "movement": "FLSQ",
           "displayName": "FLYING SQUATS",
           "intervals": 1,
           "workDuration": 20,
           "restDuration": 10,
+          "comboGroup": "combo-29",
+          "comboDisplayName": "SQUAT THRUST + FLYING SQUATS",
+          "comboPosition": 1,
           "group": "A",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
         {
-          "id": "rest-18",
+          "id": "rest-33",
           "movement": "REST",
           "displayName": "REST",
           "intervals": 1,
@@ -2272,7 +2784,7 @@
           "section": "SUMMIT"
         },
         {
-          "id": "pubrp-19",
+          "id": "pubrp-34",
           "movement": "PUBRP",
           "displayName": "PUSH-UP BURPEES",
           "intervals": 10,
@@ -2282,7 +2794,7 @@
           "repTarget": "1"
         },
         {
-          "id": "rest-20",
+          "id": "rest-35",
           "movement": "REST",
           "displayName": "REST",
           "intervals": 1,
@@ -2292,30 +2804,1022 @@
           "section": "RUNOUT"
         },
         {
-          "id": "choice-21",
-          "movement": "JSQ(2-3) + OGBRP(2-3) + JLNG/LNG(2-3) + MC(4-5)",
-          "displayName": "JSQ(2-3) + OGBRP(2-3) + JLNG / LNG(2-3) + MC(4-5)",
-          "intervals": 16,
+          "id": "jsq-36",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
           "workDuration": 6,
           "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-37",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-38",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RUNOUT",
+          "repTarget": "2-3",
           "isChoice": true,
           "choices": [
             {
-              "code": "JSQ(2-3) + OGBRP(2-3) + JLNG",
-              "displayName": "JSQ(2-3) + OGBRP(2-3) + JLNG",
-              "repTarget": null
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
             },
             {
-              "code": "LNG(2-3) + MC(4-5)",
-              "displayName": "LNG(2-3) + MC(4-5)",
-              "repTarget": null
+              "code": "LNG",
+              "displayName": "LUNGES"
             }
-          ],
-          "section": "RUNOUT"
+          ]
+        },
+        {
+          "id": "mc-39",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RUNOUT",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-40",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-41",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-42",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RUNOUT",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-43",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RUNOUT",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-44",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-45",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-46",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RUNOUT",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-47",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RUNOUT",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-48",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-49",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-50",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RUNOUT",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-51",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RUNOUT",
+          "repTarget": "4-5"
         }
       ],
       "totalDuration": 948,
-      "movementCount": 4
+      "movementCount": 6
+    },
+    {
+      "id": "week4-day1",
+      "name": "Week 4 Day 1",
+      "week": 4,
+      "day": 1,
+      "blocks": [
+        {
+          "id": "jsq-0",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-1",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-2",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RAMP",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-3",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RAMP",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-4",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-5",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-6",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RAMP",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-7",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RAMP",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-8",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-9",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-10",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RAMP",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-11",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RAMP",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-12",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-13",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RAMP",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-14",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RAMP",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-15",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-0",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RAMP",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "rest-16",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "pubrp-17",
+          "movement": "PUBRP",
+          "displayName": "PUSH-UP BURPEES",
+          "intervals": 10,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "RAMP",
+          "repTarget": "1"
+        },
+        {
+          "id": "rest-18",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "sqth-19",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-19",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 0,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "sqth-20",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-19",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 0,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-21",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-19",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 1,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "flsq-22",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-19",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 1,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-23",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "sqth-24",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-24",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 0,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "sqth-25",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-24",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 0,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-26",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-24",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 1,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "flsq-27",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-24",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 1,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-28",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "sqth-29",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-29",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 0,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "sqth-30",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-29",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 0,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "8-10"
+        },
+        {
+          "id": "flsq-31",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-29",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 1,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "flsq-32",
+          "movement": "FLSQ",
+          "displayName": "FLYING SQUATS",
+          "intervals": 1,
+          "workDuration": 20,
+          "restDuration": 10,
+          "comboGroup": "combo-29",
+          "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
+          "comboPosition": 1,
+          "group": "A",
+          "section": "SUMMIT",
+          "repTarget": "15-20"
+        },
+        {
+          "id": "rest-33",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "pubrp-34",
+          "movement": "PUBRP",
+          "displayName": "PUSH-UP BURPEES",
+          "intervals": 10,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "RUNOUT",
+          "repTarget": "1"
+        },
+        {
+          "id": "rest-35",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RUNOUT"
+        },
+        {
+          "id": "jsq-36",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-37",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-38",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RUNOUT",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-39",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RUNOUT",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-40",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-41",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-42",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RUNOUT",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-43",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RUNOUT",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-44",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-45",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-46",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RUNOUT",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-47",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RUNOUT",
+          "repTarget": "4-5"
+        },
+        {
+          "id": "jsq-48",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 0,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "sqth-49",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 1,
+          "section": "RUNOUT",
+          "repTarget": "2-3"
+        },
+        {
+          "id": "jlng-lng-50",
+          "movement": "JLNG/LNG",
+          "displayName": "JUMP LUNGES / LUNGES",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 2,
+          "section": "RUNOUT",
+          "repTarget": "2-3",
+          "isChoice": true,
+          "choices": [
+            {
+              "code": "JLNG",
+              "displayName": "JUMP LUNGES"
+            },
+            {
+              "code": "LNG",
+              "displayName": "LUNGES"
+            }
+          ]
+        },
+        {
+          "id": "mc-51",
+          "movement": "MC",
+          "displayName": "MOUNTAIN CLIMBERS",
+          "intervals": 1,
+          "workDuration": 6,
+          "restDuration": 3,
+          "comboGroup": "combo-36",
+          "comboDisplayName": "JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS",
+          "comboPosition": 3,
+          "section": "RUNOUT",
+          "repTarget": "4-5"
+        }
+      ],
+      "totalDuration": 948,
+      "movementCount": 6
     }
   ]
 }

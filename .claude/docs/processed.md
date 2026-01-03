@@ -1,5 +1,101 @@
 # GRHIIT Processed Work Log
 
+## Session: Jan 3, 2026
+
+### Completed: Movement Rename (OGBRP → SQTH)
+
+**Goal**: Rename "Burpees" movement to "Squat Thrust" throughout the codebase.
+
+**Changes**:
+- `scripts/convert-workouts.js`: `'SQTH': 'SQUAT THRUST'` (was `'OGBRP': 'BURPEES'`)
+- `app/(tabs)/library.tsx`: Updated movement library entry
+- `src/constants/sampleWorkout.ts`: Updated legacy sample
+- `src/types/index.ts`: Updated code comments
+- All CSV files: Replaced OGBRP with SQTH
+- Documentation: Updated all examples
+
+---
+
+### Completed: Google Drive Sync Pipeline
+
+**Goal**: Sync workout CSVs directly from Google Drive instead of manual download.
+
+**Setup**:
+- Installed `rclone` via Homebrew
+- Configured `gdrive` remote with OAuth
+- Drive folder ID: `1p478tYwUL56tc2CUODYd976kDiPmLM2m`
+
+**New Files**:
+- `scripts/sync-workouts.sh` - Syncs CSVs from Drive and runs converter
+- Updated `package.json` with `npm run sync-workouts` command
+
+**Workflow**:
+```bash
+npm run sync-workouts  # Syncs from Drive + converts to JSON
+```
+
+**Converter Updates**:
+- Added `W1:D1.csv` filename format support (rclone exports with colon)
+- Pattern: `rcloneMatch || googleMatch || legacyMatch`
+
+---
+
+### Completed: Combo Parser Improvements
+
+**Goal**: Support choice movements within combos and show clean display names.
+
+**Problem**: CSV like `JSQ(2-3) + SQTH(2-3) + JLNG/LNG(2-3) + MC(4-5)` was:
+- Failing to parse (choice `/` checked before combo `+`)
+- Showing raw codes with rep targets in preview
+
+**Changes to `scripts/convert-workouts.js`**:
+- Reordered checks: combo (`+`) now checked BEFORE choice (`/`)
+- Added `parseMovementPart()` function to handle choice parts within combos
+- Cycling mode uses clean display names (no rep targets)
+- Sequential mode only shows `N×` prefix when count > 1
+
+**Preview Display Results**:
+- `JUMP SQUATS + SQUAT THRUST + JUMP LUNGES / LUNGES + MOUNTAIN CLIMBERS` ✓
+- `SQUAT THRUST + FLYING SQUATS + SQUAT THRUST` (3-movement sequential) ✓
+- `2× SQUAT THRUST + 2× FLYING SQUATS` (counts > 1 shown)
+
+**Changes to `app/workout/index.tsx`**:
+- `getPatternFromBlocks()` now uses `displayName` instead of raw codes
+- Simplified to just join display names (no bracket notation in preview)
+
+---
+
+## Session: Dec 30, 2025
+
+### Completed: Bracket Notation for Sequential Combos
+
+**Goal**: Support explicit interval counts per movement in combo blocks using bracket notation.
+
+**New Notation**:
+- `[2]OGBRP(8-10) + [2]FLSQ(15-20)` with 4 intervals
+- Creates sequential blocks: OGBRP, OGBRP, FLSQ, FLSQ (not cycling)
+- Bracket sum must equal total intervals column (validation with warning)
+
+**Syntax Support**:
+- Prefix: `[2]OGBRP` - 2 intervals of OGBRP
+- Suffix: `OGBRP[2]` - same meaning, alternate position
+- Combined: `[2]OGBRP(8-10)` - 2 intervals with 8-10 rep target
+
+**Changes**:
+- `scripts/convert-workouts.js`:
+  - Added `parseMovementWithIntervalCount()` function for bracket parsing
+  - Updated combo handler to detect bracket notation
+  - Sequential mode creates blocks in order (A,A,B,B) vs cycling (A,B,A,B)
+  - Adds `comboGroup`, `comboDisplayName`, `comboPosition` metadata
+- `src/types/index.ts`: Added combo metadata properties to WorkoutBlock
+- `DESIGN.md`: Documented bracket notation syntax and behavior
+
+**Existing Behavior Preserved**:
+- Combos without brackets still cycle: `A + B + C` → A,B,C,A,B,C...
+- Rep target parsing unchanged: `OGBRP(8)` = 8 reps per interval
+
+---
+
 ## Session: Dec 29, 2025 (Continued)
 
 ### Completed: Stats Page Rework
@@ -264,15 +360,14 @@ BRP + FLSQ,2,20,10,60,A
 - Timer runs selected workout
 - Round grouping in preview
 
-**Available workouts**: 3 (week1-day1 through week1-day3)
+**Available workouts**: 10 (W1D1 through W4D1)
 
 ---
 
 ## Next Steps
 
-1. **Add Section column to CSVs** - Save spreadsheets with RAMP/SUMMIT/RUNOUT values
-2. **Test section grouping** - Run converter and verify preview displays correctly
-3. **Implement actual sharing** - `react-native-view-shot` + `react-native-share`
-4. **Dynamic rep pickers** - Pull movements from actual workout data (not hardcoded BRP/FLSQ)
-5. **Persist rep data** - Store in userStore for stats/history
-6. **Add remaining workouts** - Create CSV files for full program
+1. **Implement actual sharing** - `react-native-view-shot` + `react-native-share`
+2. **Dynamic rep pickers** - Pull movements from actual workout data (not hardcoded BRP/FLSQ)
+3. **Persist rep data** - Store in userStore for stats/history
+4. **Add remaining workouts** - Create CSV files for full program (24 total)
+5. **Test timer with new combos** - Verify 3-movement sequential and choice combos work in active timer
