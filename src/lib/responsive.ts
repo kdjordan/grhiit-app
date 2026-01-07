@@ -1,4 +1,4 @@
-import { Dimensions, PixelRatio } from 'react-native';
+import { Dimensions } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -59,9 +59,9 @@ export const screen = {
  */
 export const sizing = {
   // Timer
-  timerSize: responsive(240, 280, 320),
-  timerFontSize: responsive(100, 120, 140),
-  timerStroke: responsive(6, 8, 10),
+  timerSize: responsive(240, 280, 340),
+  timerFontSize: responsive(80, 96, 128),
+  timerStroke: responsive(6, 8, 12),
 
   // Typography
   headerLarge: moderateScale(28),

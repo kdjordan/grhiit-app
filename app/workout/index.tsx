@@ -15,7 +15,7 @@ import {
   getUniqueMovements,
 } from "@/lib/workoutLoader";
 import { WorkoutBlock, WorkoutProgram } from "@/types";
-import { sizing, scale, moderateScale } from "@/lib/responsive";
+import { sizing, scale } from "@/lib/responsive";
 
 // Enable LayoutAnimation for Android
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -70,7 +70,7 @@ function generateTagline(name: string, week: number): string {
 }
 
 /**
- * Groups consecutive blocks with same group tag into "rounds" display items
+ * Groups consecutive blocks with same group tag OR comboGroup into "rounds" display items
  * Attaches restAfter to items instead of creating separate REST entries
  */
 function groupBlocksForDisplay(blocks: WorkoutBlock[]): DisplayItem[] {
@@ -80,9 +80,11 @@ function groupBlocksForDisplay(blocks: WorkoutBlock[]): DisplayItem[] {
   while (i < blocks.length) {
     const block = blocks[i];
 
-    // If block has a group, collect all consecutive blocks with same group
-    if (block.group && !block.isTransition) {
-      const groupName = block.group;
+    // Check if block should be grouped (has group property OR comboGroup)
+    const groupKey = block.group || block.comboGroup;
+
+    // If block has a group or comboGroup, collect all consecutive blocks with same key
+    if (groupKey && !block.isTransition) {
       const groupedBlocks: WorkoutBlock[] = [];
       const restDurations: number[] = [];
       let j = i;
@@ -90,14 +92,16 @@ function groupBlocksForDisplay(blocks: WorkoutBlock[]): DisplayItem[] {
       // Collect all blocks and rests in this group
       while (j < blocks.length) {
         const current = blocks[j];
+        const currentGroupKey = current.group || current.comboGroup;
 
-        if (current.group === groupName && !current.isTransition) {
+        if (currentGroupKey === groupKey && !current.isTransition) {
           groupedBlocks.push(current);
           j++;
         } else if (current.isTransition && j > i) {
           // Check if next non-rest block is still in same group
           const nextNonRest = blocks.slice(j + 1).find(b => !b.isTransition);
-          if (nextNonRest?.group === groupName) {
+          const nextGroupKey = nextNonRest?.group || nextNonRest?.comboGroup;
+          if (nextGroupKey === groupKey) {
             restDurations.push(current.restDuration);
             j++;
           } else {
@@ -254,35 +258,39 @@ function detectSections(items: DisplayItem[]): SectionGroup[] {
  * No bracket notation, no rep targets in preview
  */
 function getPatternFromBlocks(blocks: WorkoutBlock[]): string {
-  // Check if these blocks have combo metadata
-  const hasComboMetadata = blocks.some(b => b.comboGroup);
-
-  if (hasComboMetadata) {
-    // Group blocks by comboGroup to find one representative combo
-    const firstComboGroup = blocks.find(b => b.comboGroup)?.comboGroup;
-    const comboBlocks = blocks.filter(b => b.comboGroup === firstComboGroup);
-
-    // Build pattern from display names in order (preserving sequence like SQTH + FLSQ + SQTH)
-    const pattern = comboBlocks.map(b => b.displayName).join(" + ");
-    return pattern;
+  // Check if these blocks have combo metadata with pre-computed display name
+  const blockWithComboName = blocks.find(b => b.comboDisplayName);
+  if (blockWithComboName?.comboDisplayName) {
+    return blockWithComboName.comboDisplayName;
   }
 
-  // Fallback: display names from all blocks
-  return blocks.map(b => b.displayName).join(" + ");
+  // For non-combo grouped blocks, get unique movements in order
+  const seen = new Set<string>();
+  const uniqueNames: string[] = [];
+  for (const b of blocks) {
+    if (!seen.has(b.movement)) {
+      seen.add(b.movement);
+      uniqueNames.push(b.displayName);
+    }
+  }
+  return uniqueNames.join(" + ");
 }
 
 /**
  * Count rounds from grouped blocks
- * For bracket notation: count unique comboGroups
- * For regular: count based on unique movements per round
+ * For combos: total intervals / movements in pattern = rounds
+ * For grouped rounds (Group column): count unique comboGroups
  */
 function countRoundsFromBlocks(blocks: WorkoutBlock[]): number {
-  // Check if these blocks have combo metadata (bracket notation)
-  const comboGroups = new Set(blocks.filter(b => b.comboGroup).map(b => b.comboGroup));
+  // Check if these blocks have combo metadata
+  const hasComboMetadata = blocks.some(b => b.comboGroup);
 
-  if (comboGroups.size > 0) {
-    // Each unique comboGroup is one round
-    return comboGroups.size;
+  if (hasComboMetadata) {
+    // Find how many unique movements in one cycle (unique comboPosition values)
+    const positions = new Set(blocks.filter(b => b.comboPosition !== undefined).map(b => b.comboPosition));
+    const movementsPerCycle = positions.size || 1;
+    // Total rounds = total blocks / movements per cycle
+    return Math.ceil(blocks.length / movementsPerCycle);
   }
 
   // Fallback: count unique movements, assume that's one round pattern
@@ -303,14 +311,14 @@ export default function WorkoutPreviewScreen() {
       return getWorkoutById(selectedWorkoutId);
     }
     return getWorkoutByNumber(getCurrentWorkoutNumber());
-  }, [selectedWorkoutId, isDevMode]);
+  }, [selectedWorkoutId, isDevMode, getCurrentWorkoutNumber]);
 
   // Load workout into store on mount
   useEffect(() => {
     if (workout) {
       setWorkout(workout);
     }
-  }, [workout]);
+  }, [workout, setWorkout]);
 
   // Clear dev selection when leaving
   useEffect(() => {
@@ -319,13 +327,25 @@ export default function WorkoutPreviewScreen() {
         clearSelection();
       }
     };
-  }, [isDevMode]);
+  }, [isDevMode, clearSelection]);
 
   // Toggle expand/collapse with animation
   const toggleExpanded = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsExpanded(!isExpanded);
   };
+
+  // Group blocks for display - must be before early return to follow Rules of Hooks
+  const displayItems = useMemo(
+    () => (workout ? groupBlocksForDisplay(workout.blocks) : []),
+    [workout]
+  );
+
+  // Detect sections - must be before early return to follow Rules of Hooks
+  const sections = useMemo(
+    () => detectSections(displayItems),
+    [displayItems]
+  );
 
   // Handle no workout found
   if (!workout) {
@@ -347,18 +367,6 @@ export default function WorkoutPreviewScreen() {
   const exerciseBlocks = workout.blocks.filter((b) => !b.isTransition);
   const totalIntervals = exerciseBlocks.reduce((sum, b) => sum + b.intervals, 0);
   const tagline = generateTagline(workout.name, workout.week);
-
-  // Group blocks for display
-  const displayItems = useMemo(
-    () => groupBlocksForDisplay(workout.blocks),
-    [workout]
-  );
-
-  // Detect sections
-  const sections = useMemo(
-    () => detectSections(displayItems),
-    [displayItems]
-  );
 
   const handleStart = () => {
     router.push("/workout/active");
@@ -549,7 +557,7 @@ export default function WorkoutPreviewScreen() {
               { fontFamily: "SpaceGrotesk_700Bold", fontSize: sizing.bodyLarge, letterSpacing: 0.5 },
             ]}
           >
-            LET'S GO
+            {"LET'S GO"}
           </Text>
         </Pressable>
       </View>

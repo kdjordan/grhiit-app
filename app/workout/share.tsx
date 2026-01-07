@@ -398,6 +398,7 @@ export default function ShareScreen() {
       duration: 400,
       useNativeDriver: true,
     }).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fadeAnim is a ref, run once on mount
   }, []);
 
   const handleShare = (platform: "instagram" | "tiktok" | "x" | "save") => {

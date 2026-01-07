@@ -8,6 +8,7 @@ import { useWorkoutStore } from "@/stores/workoutStore";
 import { useUserStore } from "@/stores/userStore";
 import { initializeAudio, playWorkBeep, playRestBeep, playBlockCompleteBeep, cleanupAudio } from "@/lib/audio";
 import { sizing } from "@/lib/responsive";
+import { TIMER_COLORS, TIMER_BG_COLORS, GRHIIT_RED, MUTED } from "@/constants/colors";
 import tw from "@/lib/tw";
 
 // Circular timer dimensions - responsive to screen size
@@ -49,6 +50,7 @@ function CircularTimer({
         useNativeDriver: false, // strokeDashoffset doesn't support native driver
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- animatedValue is a ref, not a reactive dependency
   }, [seconds, totalDuration, phaseKey]);
 
   // Map animated value to stroke offset
@@ -100,20 +102,9 @@ function CircularTimer({
   );
 }
 
-// Phase colors - WORK is RED (intensity/brand), REST is muted
-const COLORS = {
-  work: "#EF4444",      // RED for work - brand color, intensity
-  rest: "#FFFFFF",      // White ring on dark background
-  countdown: "#FFFFFF", // White for countdown
-};
-
-// Background colors - RED for intensity, BLACK for recovery
-const BG_COLORS = {
-  work: "#991B1B",      // Deep red - red-lining
-  rest: "#0A0A0A",      // Pure black - recovery
-  transition: "#0A0A0A", // Pure black - recovery
-  countdown: "#141414",  // Dark gray - preparation
-};
+// Phase colors imported from @/constants/colors:
+// TIMER_COLORS: { work, rest, countdown } - ring/stroke colors
+// TIMER_BG_COLORS: { work, rest, transition, countdown } - background colors
 
 export default function ActiveWorkoutScreen() {
   const {
@@ -165,6 +156,7 @@ export default function ActiveWorkoutScreen() {
   // Start workout on mount
   useEffect(() => {
     startWorkout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally run once on mount
   }, []);
 
   // Play audio on phase changes
@@ -179,13 +171,23 @@ export default function ActiveWorkoutScreen() {
     }
   }, [currentPhase]);
 
-  // Play 5 beeps when a block completes (block index changes)
+  // Play 5 beeps when a block/combo completes
+  // For combo blocks: only beep when leaving the combo entirely (different comboGroup)
   useEffect(() => {
     if (prevBlockIndexRef.current !== currentBlockIndex && currentBlockIndex > 0) {
-      playBlockCompleteBeep();
+      const prevBlock = workout?.blocks[prevBlockIndexRef.current];
+      const currBlock = workout?.blocks[currentBlockIndex];
+
+      // Skip beep if we're still in the same combo
+      const sameCombo = prevBlock?.comboGroup && currBlock?.comboGroup &&
+                        prevBlock.comboGroup === currBlock.comboGroup;
+
+      if (!sameCombo) {
+        playBlockCompleteBeep();
+      }
     }
     prevBlockIndexRef.current = currentBlockIndex;
-  }, [currentBlockIndex]);
+  }, [currentBlockIndex, workout]);
 
   // Countdown beeps at 3, 2, 1
   useEffect(() => {
@@ -262,12 +264,12 @@ export default function ActiveWorkoutScreen() {
   // Get background color - RED for work (intensity), BLACK for rest (recovery)
   // SMOKER: Always red (no true rest - hold position is active work)
   const bentoBgColor = isCountdown
-    ? BG_COLORS.countdown
+    ? TIMER_BG_COLORS.countdown
     : isWork
-    ? BG_COLORS.work
+    ? TIMER_BG_COLORS.work
     : isSmoker
-    ? BG_COLORS.work // Smoker stays red during "rest" (hold phase)
-    : BG_COLORS.rest;
+    ? TIMER_BG_COLORS.work // Smoker stays red during "rest" (hold phase)
+    : TIMER_BG_COLORS.rest;
 
   // Get display values
   // SMOKER: During rest phase, show the hold movement name (e.g., "PLANK")
@@ -286,6 +288,27 @@ export default function ActiveWorkoutScreen() {
 
   const movementName = getMovementName();
   const showIntervalCounter = currentBlock && !currentBlock.isTransition && !isCountdown;
+
+  // Calculate combo interval position if this block is part of a combo
+  const getComboIntervalInfo = () => {
+    if (!workout || !currentBlock?.comboGroup) {
+      return { current: currentIntervalInBlock, total: currentBlock?.intervals || 1 };
+    }
+
+    // Find all blocks in this combo
+    const comboBlocks = workout.blocks.filter(b => b.comboGroup === currentBlock.comboGroup);
+    const totalComboIntervals = comboBlocks.length;
+
+    // Find current position within combo (1-indexed)
+    const currentComboPosition = workout.blocks
+      .slice(0, currentBlockIndex + 1)
+      .filter(b => b.comboGroup === currentBlock.comboGroup)
+      .length;
+
+    return { current: currentComboPosition, total: totalComboIntervals };
+  };
+
+  const intervalInfo = getComboIntervalInfo();
 
   // Show rep target during work phase (or smoker work phase)
   const getRepTarget = () => {
@@ -313,11 +336,11 @@ export default function ActiveWorkoutScreen() {
   return (
     <SafeAreaView style={tw`flex-1 bg-grhiit-black`}>
       {/* Progress Bar - RED (brand color) */}
-      <View style={tw`w-full h-1 bg-[#262626]`}>
+      <View style={tw`w-full h-1 bg-border`}>
         <View
           style={[
             tw`h-full`,
-            { width: `${progressPercent}%`, backgroundColor: "#EF4444" },
+            { width: `${progressPercent}%`, backgroundColor: GRHIIT_RED },
           ]}
         />
       </View>
@@ -340,9 +363,9 @@ export default function ActiveWorkoutScreen() {
               <Text style={tw`text-white/70 text-sm`}>
                 INTERVAL{" "}
                 <Text style={tw`text-white font-bold`}>
-                  {currentIntervalInBlock}
+                  {intervalInfo.current}
                 </Text>
-                <Text style={tw`text-white/50`}>/{currentBlock?.intervals}</Text>
+                <Text style={tw`text-white/50`}>/{intervalInfo.total}</Text>
               </Text>
             ) : (
               // Empty during rest/transition - the color and movement name communicate state
@@ -352,36 +375,36 @@ export default function ActiveWorkoutScreen() {
           </View>
 
           {/* Main Timer Content */}
-          <View style={tw`flex-1 items-center justify-center px-5`}>
+          <View style={tw`flex-1 items-center pt-4 px-5`}>
             {/* Movement Name */}
             <Text
+              numberOfLines={1}
+              adjustsFontSizeToFit
               style={[
-                tw`text-white text-2xl font-bold tracking-wide mb-2`,
-                { fontFamily: "ChakraPetch_700Bold" },
+                tw`text-white font-bold mb-2 text-center`,
+                { fontFamily: "ChakraPetch_700Bold", fontSize: sizing.headerSmall, letterSpacing: 1 },
               ]}
             >
               {movementName}
             </Text>
 
-            {/* Rep Target */}
-            {showRepTarget && (
-              <View
-                style={tw`bg-white/20 px-4 py-1 rounded-full mb-6`}
-              >
-                <Text style={tw`text-white text-sm font-semibold`}>
-                  TARGET: {repTarget}
-                </Text>
-              </View>
-            )}
-
-            {!showRepTarget && <View style={tw`mb-4`} />}
+            {/* Rep Target - fixed height container to prevent layout shift */}
+            <View style={{ height: 28, marginBottom: 16, width: '100%', alignItems: "center", justifyContent: "center" }}>
+              {showRepTarget ? (
+                <View style={[tw`bg-white/20 px-3 py-0.5`, { borderRadius: 6 }]}>
+                  <Text style={[tw`text-white text-xs`, { fontFamily: "SpaceGrotesk_600SemiBold" }]}>
+                    TARGET: {repTarget}
+                  </Text>
+                </View>
+              ) : null}
+            </View>
 
             {/* Circular Timer - color communicates state, no label needed */}
             {/* SMOKER: Ring stays red during hold phase */}
             <CircularTimer
               seconds={timeRemaining}
               totalDuration={intervalDuration}
-              color={isWork ? COLORS.work : isSmoker ? COLORS.work : COLORS.rest}
+              color={isWork ? TIMER_COLORS.work : isSmoker ? TIMER_COLORS.work : TIMER_COLORS.rest}
               phase={currentPhase}
             />
 
@@ -400,13 +423,13 @@ export default function ActiveWorkoutScreen() {
                   </Text>
                   {isFirstSmoker && (
                     <View style={tw`flex-row items-center mb-1`}>
-                      <View style={tw`bg-[#F59E0B]/20 px-2 py-0.5 rounded mr-2`}>
-                        <Text style={[tw`text-[#F59E0B] text-xs`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
+                      <View style={tw`bg-warning/20 px-2 py-0.5 rounded mr-2`}>
+                        <Text style={[tw`text-warning text-xs`, { fontFamily: "SpaceGrotesk_700Bold" }]}>
                           SMOKER
                         </Text>
                       </View>
                       {firstBlock.holdMovement && (
-                        <Text style={[tw`text-[#F59E0B]/70 text-xs`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
+                        <Text style={[tw`text-warning/70 text-xs`, { fontFamily: "SpaceGrotesk_400Regular" }]}>
                           {firstBlock.holdMovement.displayName} hold
                         </Text>
                       )}
@@ -426,7 +449,7 @@ export default function ActiveWorkoutScreen() {
           {/* Up Next */}
           {upNextBlock && !isCountdown && (
             <View
-              style={tw`bg-[#141414] rounded-xl p-4 mb-4 border border-[#262626] flex-row justify-between items-center`}
+              style={tw`bg-surface rounded-xl p-4 mb-4 border border-border flex-row justify-between items-center`}
             >
               <View>
                 <Text style={tw`text-white/40 text-xs tracking-wide`}>
@@ -436,29 +459,29 @@ export default function ActiveWorkoutScreen() {
                   {upNextBlock.displayName}
                 </Text>
               </View>
-              <Feather name="arrow-right" size={16} color="#6B7280" />
+              <Feather name="arrow-right" size={16} color={MUTED} />
             </View>
           )}
 
           {/* Control Buttons */}
           <View style={tw`flex-row gap-4`}>
             <Pressable
-              style={tw`flex-1 bg-[#141414] border border-[#262626] rounded-xl py-4 items-center justify-center`}
+              style={tw`flex-1 bg-surface border border-border rounded-xl py-4 items-center justify-center`}
               onPress={handleRestart}
             >
               <View style={tw`flex-row items-center`}>
-                <Feather name="rotate-ccw" size={18} color="#6B7280" />
+                <Feather name="rotate-ccw" size={18} color={MUTED} />
                 <Text style={tw`text-white/60 font-bold text-base ml-2`}>
                   RESTART
                 </Text>
               </View>
             </Pressable>
             <Pressable
-              style={tw`flex-1 bg-transparent border border-[#262626] rounded-xl py-4 items-center justify-center`}
+              style={tw`flex-1 bg-transparent border border-border rounded-xl py-4 items-center justify-center`}
               onPress={handleCancel}
             >
               <View style={tw`flex-row items-center`}>
-                <Feather name="x" size={18} color="#6B7280" />
+                <Feather name="x" size={18} color={MUTED} />
                 <Text style={tw`text-white/40 font-bold text-base ml-2`}>
                   CANCEL
                 </Text>

@@ -27,19 +27,19 @@ export interface WorkoutBlock {
 
   // Sequence-specific (movement contains ">")
   isSequence?: boolean; // True for sequence blocks (multiple movements in one work phase)
-  sequence?: Array<{
+  sequence?: {
     code: string;
     displayName: string;
     repTarget?: string;
-  }>;
+  }[];
 
   // Choice-specific (movement contains "/")
   isChoice?: boolean; // True for choice blocks (user picks one movement)
-  choices?: Array<{
+  choices?: {
     code: string;
     displayName: string;
     repTarget?: string;
-  }>;
+  }[];
 
   // Combo-specific (for sequential bracket notation like [2]SQTH + [2]FLSQ)
   comboGroup?: string; // Unique ID linking blocks from same combo line

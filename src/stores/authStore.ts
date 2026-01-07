@@ -70,7 +70,6 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
 // Initialize auth state listener
 onAuthStateChanged(auth, (user) => {
-  const state = useAuthStore.getState();
   if (user) {
     useUserStore.getState().setUser(user.uid, user.email || "");
   }

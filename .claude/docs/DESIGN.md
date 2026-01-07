@@ -33,9 +33,10 @@ The home screen features a **bento-style layout** with a bar-based progress grid
 **Font change rationale**: JetBrains Mono has a dotted zero which looked too programmer-oriented. Space Grotesk provides clean, modern numbers that fit the premium fitness aesthetic.
 
 Fonts loaded in `app/_layout.tsx`:
-- JetBrains Mono (400, 500, 600, 700) - legacy, may remove
 - Space Grotesk (400, 500, 600, 700)
-- Chakra Petch (700)
+- Chakra Petch (400, 500, 600, 700)
+
+**Font loading**: Google Fonts are bundled locally (OFL license). 5-second timeout with system font fallback if loading fails.
 
 ---
 
@@ -244,10 +245,10 @@ responsive(small, medium, large) // Breakpoint-based values
 ### Sizing Constants
 ```typescript
 sizing = {
-  // Timer
-  timerSize: responsive(240, 280, 320),
-  timerFontSize: responsive(100, 120, 140),
-  timerStroke: responsive(6, 8, 10),
+  // Timer (updated Jan 4, 2026 for larger screens)
+  timerSize: responsive(240, 280, 340),
+  timerFontSize: responsive(80, 96, 128),
+  timerStroke: responsive(6, 8, 12),
 
   // Typography
   heading: responsive(22, 24, 28),
@@ -262,8 +263,8 @@ sizing = {
 
 ### Device Breakpoints
 - Small: width < 375px (iPhone SE)
-- Medium: 375-414px (iPhone 13, 14)
-- Large: width > 414px (iPhone Pro Max)
+- Medium: 375-414px (iPhone 13, 14, 15)
+- Large: width >= 414px (iPhone Pro Max, iPhone 17)
 
 ---
 
@@ -271,30 +272,57 @@ sizing = {
 
 All screens follow these patterns:
 
-### Colors
-- **Background**: `#000000` (pure black)
-- **Bento cards**: `#1a1a1a` (no borders)
-- **Secondary surface**: `#262626` (icon backgrounds, dividers)
-- **Text primary**: `#FFFFFF`
-- **Text secondary**: `#6B7280`
-- **Accent**: `#EF4444` (red)
+### Color Architecture
+
+**Single source of truth**: All colors defined in `tailwind.config.js`
+
+**For JSX with `tw` / `className`** (preferred):
+```tsx
+<View style={tw`bg-surface border-border`} />
+<Text style={tw`text-muted`} />
+```
+
+**For JS contexts** (SVG props, dynamic styles):
+```tsx
+import { GRHIIT_RED, MUTED, TIMER_COLORS } from "@/constants/colors";
+<Feather color={MUTED} />
+<Circle stroke={TIMER_COLORS.work} />
+```
+
+**Files**:
+- `tailwind.config.js` - Primary color definitions
+- `src/constants/colors.ts` - Mirrored exports for JS use
+
+### Color Tokens
+
+| Token | Hex | TW Class | Use |
+|-------|-----|----------|-----|
+| `grhiit-red` | `#EF4444` | `bg-grhiit-red` | Primary accent |
+| `grhiit-red-deep` | `#991B1B` | `bg-accent-deep` | Work phase bg |
+| `grhiit-black` | `#0A0A0A` | `bg-grhiit-black` | App background |
+| `background-pure` | `#000000` | `bg-background-pure` | Pure black |
+| `surface` | `#141414` | `bg-surface` | Cards, buttons |
+| `border` | `#262626` | `border-border` | Borders, dividers |
+| `muted` | `#6B7280` | `text-muted` | Secondary text, icons |
+| `warning` | `#F59E0B` | `text-warning` | Smoker badges |
+| `success` | `#22C55E` | `text-success` | Progress indicators |
 
 ### Typography
 - **Headers**: `SpaceGrotesk_700Bold`, 24px, white
-- **Section labels**: `SpaceGrotesk_500Medium`, 12px, gray `#6B7280`, letter-spacing: 1
+- **Section labels**: `SpaceGrotesk_500Medium`, 12px, `text-muted`, letter-spacing: 1
 - **Values**: `SpaceGrotesk_600SemiBold`, 20-24px, white
 - **Body**: `SpaceGrotesk_500Medium`, 14-16px
 
 ### Bento Cards
-- Background: `#1a1a1a`
+- Background: `bg-surface` (#141414)
 - Border radius: 16px
-- No borders
+- No borders (or `border-border` when needed)
 - Padding: 16-20px
-- Icons: 40px Feather, red `#EF4444`
+- Icons: 40px Feather, `GRHIIT_RED` or `MUTED`
 
 ### Section Headers
 ```tsx
-<Text style={[tw`text-[#6B7280] text-xs mb-3 ml-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
+<Text style={[tw`text-muted text-xs mb-3 ml-1`, { fontFamily: "SpaceGrotesk_500Medium", letterSpacing: 1 }]}>
   SECTION NAME
 </Text>
 ```
@@ -313,23 +341,23 @@ All screens follow these patterns:
 The active timer follows the core GRHIIT philosophy: **no escape, only through**. Once a workout starts, there's no pause or skip. The only options are RESTART (start over) or CANCEL (quit entirely).
 
 ### Color Scheme
-Phase colors communicate workout state at a glance:
+Phase colors communicate workout state at a glance (defined in `src/constants/colors.ts`):
 
-```
-WORK:       Green (#22C55E text, #166534 background)
-REST:       Red (#EF4444 text, #991B1B background)
-TRANSITION: Yellow (#F59E0B text, #92400E background)
-COUNTDOWN:  Gray (#FFFFFF text, #1F2937 background)
-```
+| Phase | Ring Color | Background | TW/Constant |
+|-------|-----------|------------|-------------|
+| WORK | `GRHIIT_RED` | `ACCENT_DEEP` | Red ring, deep red bg |
+| REST | `PRIMARY` | `GRHIIT_BLACK` | White ring, black bg |
+| TRANSITION | `PRIMARY` | `GRHIIT_BLACK` | Same as rest |
+| COUNTDOWN | `PRIMARY` | `SURFACE` | White ring, dark gray bg |
 
-**Rationale**: WORK = green (go/active), REST = red (stop/recover). This inverts typical fitness app conventions but aligns with traffic light logic.
+**Rationale**: WORK = RED (intensity, red-lining, brand color). REST = BLACK (recovery, reset). The red communicates maximum effort.
 
 ### Layout (top to bottom)
 
 1. **Progress Bar** (top edge)
    - 4px height, full width
-   - Gray background (#262626)
-   - Green fill showing % complete
+   - Background: `bg-border`
+   - Fill: `GRHIIT_RED` showing % complete
    - Real-time progress based on elapsed/total time
 
 2. **Timer Bento** (main area)
@@ -340,12 +368,11 @@ COUNTDOWN:  Gray (#FFFFFF text, #1F2937 background)
      - **Movement Name**: Large, bold, uppercase (ChakraPetch_700Bold)
      - **Rep Target Badge**: "TARGET: 3" when applicable (white/20 background)
      - **Timer Display**: Large two-digit countdown
-     - **Phase Indicator**: "WORK" / "REST" badge
 
 3. **Up Next Card**
    - Shows next exercise block
-   - Gray background (#141414), border (#262626)
-   - Arrow icon on right
+   - Background: `bg-surface`, border: `border-border`
+   - Arrow icon: `MUTED` color
 
 4. **Stats Row** (3 cards)
    - ELAPSED: Time since workout started
@@ -384,7 +411,7 @@ Ring colors match:
 **Dimensions** (responsive):
 - Timer size: 240/280/320px diameter (small/medium/large devices)
 - Stroke width: 6/8/10px (responsive)
-- Center font size: 100/120/140px (responsive based on device)
+- Center font size: 80/96/112px (reduced to fit 2-digit numbers)
 - Ring starts at 12 o'clock, fills clockwise
 
 **Technical notes**:
@@ -394,11 +421,25 @@ Ring colors match:
 
 ### Minimal Timer UI
 During workout, only essentials shown:
-- Interval counter ("INTERVAL 3/10") - work phase only
-- Movement name
+- Interval counter ("INTERVAL 3/16") - shows position in combo for cycling blocks
+- Movement name (responsive, single line with `adjustsFontSizeToFit`)
+- TARGET badge (fixed 28px height container to prevent layout shift)
 - MASSIVE countdown number in circular progress
 - UP NEXT card
 - RESTART / CANCEL buttons
+
+### Combo Interval Counter
+For cycling combos (e.g., `JSQ + SQTH + JLNG/LNG + MC` with 16 intervals):
+- Shows "INTERVAL 2/16" instead of "INTERVAL 1/1"
+- Calculated via `getComboIntervalInfo()` using `comboGroup` metadata
+- Counts position across all blocks sharing same `comboGroup`
+
+### TARGET Badge
+- Fixed height container (28px) prevents layout shift between work/rest phases
+- Font: `text-xs` (12px), `SpaceGrotesk_600SemiBold`
+- Background: `bg-white/20`
+- Border radius: 6px (squared, matches app design)
+- Padding: `px-3 py-0.5`
 
 **Removed for focus**:
 - ~~Stats row~~ (elapsed, remaining, progress %) - moved to post-workout
@@ -679,6 +720,27 @@ const isUnlocked = isDevMode || workoutNumber <= currentWorkoutNumber;
 
 ---
 
+## Build & Quality Tools
+
+### EAS Build Configuration
+`eas.json` defines build profiles:
+- **development**: Dev client with simulator support
+- **preview**: Internal distribution for testing
+- **production**: App Store / Play Store builds
+
+### Code Quality
+- **ESLint**: `eslint.config.js` with `eslint-config-expo`
+- **Prettier**: `.prettierrc` for consistent formatting
+- **Scripts**: `npm run lint`, `npm run lint:fix`, `npm run format`
+
+### Dev Client
+`expo-dev-client` installed for:
+- Better debugging with Chrome DevTools
+- Custom native module support
+- Faster iteration than Expo Go for complex apps
+
+---
+
 ## Dev Environment Notes
 
 - `EXPO_PUBLIC_DEV_SKIP_AUTH=true` - Skip auth for faster iteration
@@ -694,7 +756,19 @@ const isUnlocked = isDevMode || workoutNumber <= currentWorkoutNumber;
 ### Dependencies
 - `expo-audio` - Sound playback (beeps)
 - `expo-video` - Video playback (future)
-- `expo-av` - **REMOVED** (deprecated SDK 54)
+- `expo-dev-client` - Custom development builds
+
+### Audio Configuration
+```typescript
+// Required for iOS to play audio with silent switch on
+await setAudioModeAsync({ playsInSilentMode: true });
+```
+
+### Audio Beep Logic
+- **Phase change**: Single beep on work/rest transitions
+- **Countdown**: Single beep at 3, 2, 1
+- **Block complete**: 5 beeps when leaving a block/combo
+- **Combo blocks**: No block-complete beep between movements in same `comboGroup`
 
 ---
 

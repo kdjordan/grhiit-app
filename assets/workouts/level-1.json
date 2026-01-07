@@ -1,7 +1,7 @@
 {
   "version": 1,
   "level": 1,
-  "generatedAt": "2026-01-03T17:05:08.602Z",
+  "generatedAt": "2026-01-06T23:54:19.651Z",
   "workouts": [
     {
       "id": "week1-day1",
@@ -1165,8 +1165,8 @@
       "blocks": [
         {
           "id": "smoker-0",
-          "movement": "PL>OGBRP",
-          "displayName": "OGBRP",
+          "movement": "PL>SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 20,
           "workDuration": 3,
           "restDuration": 3,
@@ -1177,8 +1177,8 @@
             "displayName": "PLANK"
           },
           "workMovement": {
-            "code": "OGBRP",
-            "displayName": "OGBRP",
+            "code": "SQTH",
+            "displayName": "SQUAT THRUST",
             "repTarget": "1"
           },
           "section": "RAMP"
@@ -1324,8 +1324,8 @@
         },
         {
           "id": "smoker-12",
-          "movement": "PL>OGBRP",
-          "displayName": "OGBRP",
+          "movement": "PL>SQTH",
+          "displayName": "SQUAT THRUST",
           "intervals": 20,
           "workDuration": 3,
           "restDuration": 3,
@@ -1336,8 +1336,8 @@
             "displayName": "PLANK"
           },
           "workMovement": {
-            "code": "OGBRP",
-            "displayName": "OGBRP",
+            "code": "SQTH",
+            "displayName": "SQUAT THRUST",
             "repTarget": "1"
           },
           "section": "RUNOUT"
@@ -3423,7 +3423,7 @@
           "comboGroup": "combo-24",
           "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
           "comboPosition": 0,
-          "group": "A",
+          "group": "B",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
@@ -3437,7 +3437,7 @@
           "comboGroup": "combo-24",
           "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
           "comboPosition": 0,
-          "group": "A",
+          "group": "B",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
@@ -3451,7 +3451,7 @@
           "comboGroup": "combo-24",
           "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
           "comboPosition": 1,
-          "group": "A",
+          "group": "B",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
@@ -3465,7 +3465,7 @@
           "comboGroup": "combo-24",
           "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
           "comboPosition": 1,
-          "group": "A",
+          "group": "B",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
@@ -3489,7 +3489,7 @@
           "comboGroup": "combo-29",
           "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
           "comboPosition": 0,
-          "group": "A",
+          "group": "C",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
@@ -3503,7 +3503,7 @@
           "comboGroup": "combo-29",
           "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
           "comboPosition": 0,
-          "group": "A",
+          "group": "C",
           "section": "SUMMIT",
           "repTarget": "8-10"
         },
@@ -3517,7 +3517,7 @@
           "comboGroup": "combo-29",
           "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
           "comboPosition": 1,
-          "group": "A",
+          "group": "C",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
@@ -3531,7 +3531,7 @@
           "comboGroup": "combo-29",
           "comboDisplayName": "2× SQUAT THRUST + 2× FLYING SQUATS",
           "comboPosition": 1,
-          "group": "A",
+          "group": "C",
           "section": "SUMMIT",
           "repTarget": "15-20"
         },
@@ -3820,6 +3820,163 @@
       ],
       "totalDuration": 948,
       "movementCount": 6
+    },
+    {
+      "id": "week4-day2",
+      "name": "Week 4 Day 2",
+      "week": 4,
+      "day": 2,
+      "blocks": [
+        {
+          "id": "smoker-0",
+          "movement": "PL>SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 20,
+          "workDuration": 3,
+          "restDuration": 3,
+          "type": "SM",
+          "isSmoker": true,
+          "holdMovement": {
+            "code": "PL",
+            "displayName": "PLANK"
+          },
+          "workMovement": {
+            "code": "SQTH",
+            "displayName": "SQUAT THRUST",
+            "repTarget": null
+          },
+          "section": "RAMP"
+        },
+        {
+          "id": "rest-1",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "jsq-2",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 20,
+          "workDuration": 6,
+          "restDuration": 3,
+          "section": "RAMP"
+        },
+        {
+          "id": "rest-3",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RAMP"
+        },
+        {
+          "id": "sqth-4",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 20,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "SUMMIT",
+          "repTarget": "2"
+        },
+        {
+          "id": "rest-5",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "jsq-6",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 10,
+          "workDuration": 6,
+          "restDuration": 2,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "rest-7",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "sqth-8",
+          "movement": "SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 20,
+          "workDuration": 4,
+          "restDuration": 2,
+          "section": "SUMMIT",
+          "repTarget": "2"
+        },
+        {
+          "id": "rest-9",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "SUMMIT"
+        },
+        {
+          "id": "jsq-10",
+          "movement": "JSQ",
+          "displayName": "JUMP SQUATS",
+          "intervals": 20,
+          "workDuration": 6,
+          "restDuration": 3,
+          "section": "RUNOUT"
+        },
+        {
+          "id": "rest-11",
+          "movement": "REST",
+          "displayName": "REST",
+          "intervals": 1,
+          "workDuration": 0,
+          "restDuration": 30,
+          "isTransition": true,
+          "section": "RUNOUT"
+        },
+        {
+          "id": "smoker-12",
+          "movement": "PL>SQTH",
+          "displayName": "SQUAT THRUST",
+          "intervals": 20,
+          "workDuration": 3,
+          "restDuration": 3,
+          "type": "SM",
+          "isSmoker": true,
+          "holdMovement": {
+            "code": "PL",
+            "displayName": "PLANK"
+          },
+          "workMovement": {
+            "code": "SQTH",
+            "displayName": "SQUAT THRUST",
+            "repTarget": null
+          },
+          "section": "RUNOUT"
+        }
+      ],
+      "totalDuration": 1100,
+      "movementCount": 3
     }
   ]
 }

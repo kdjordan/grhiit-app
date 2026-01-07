@@ -1,5 +1,132 @@
 # GRHIIT Processed Work Log
 
+## Session: Jan 4, 2026
+
+### Completed: Expo Best Practices Setup
+
+**Goal**: Follow Expo's 12 tips for project setup.
+
+**Changes**:
+- Created `eas.json` with build profiles (development, preview, production)
+- Added font fallback with 5s timeout in `_layout.tsx` (prevents infinite loading if fonts fail)
+- Added ESLint + Prettier configuration (`eslint.config.js`, `.prettierrc`)
+- Installed `expo-dev-client` for better debugging
+- Added npm scripts: `lint`, `lint:fix`, `format`
+
+---
+
+### Completed: ESLint Fixes (24 issues)
+
+**Critical bug fixed**:
+- `app/workout/index.tsx`: `useMemo` hooks called after early return (violates Rules of Hooks)
+- Moved hooks before `if (!workout) return` block
+
+**Other fixes**:
+- Unescaped JSX entities in `login.tsx`, `complete.tsx`, `workout/index.tsx`
+- Unused variables removed across 6 files
+- Missing hook dependencies added or eslint-disable comments for intentional patterns
+- Firebase duplicate imports consolidated
+- Array type style updated (`Array<T>` → `T[]`)
+
+---
+
+### Completed: Font Bundle Optimization
+
+**Removed**: JetBrains Mono (~1MB saved)
+- Was legacy, not used anywhere
+- Only Space Grotesk + Chakra Petch needed
+
+**Updated** `app/_layout.tsx`:
+- Removed JetBrains Mono imports and useFonts entries
+
+---
+
+### Completed: Timer Size Increase for Large Screens
+
+**Goal**: Larger numbers for iPhone 17 / Pro Max.
+
+**Changes** (`src/lib/responsive.ts`):
+- `timerSize`: 320 → 340 (large screens)
+- `timerFontSize`: 112 → 128 (large screens)
+- `timerStroke`: 10 → 12 (large screens)
+
+---
+
+## Session: Jan 3, 2026 (Evening)
+
+### Completed: Color System Formalization
+
+**Goal**: Single source of truth for colors, eliminate hardcoded hex values.
+
+**Changes**:
+- `tailwind.config.js`: Added missing colors (`grhiit-red-deep`, `muted`, `surface`, `warning`)
+- Created `src/constants/colors.ts`: Mirrored TW colors for JS contexts (SVG, Feather icons)
+- `app/workout/active.tsx`: Replaced all hardcoded hex values with TW classes or constants
+
+**Usage pattern**:
+- TW classes (`bg-surface`, `text-muted`) for JSX
+- Constants (`GRHIIT_RED`, `TIMER_COLORS`) for SVG/dynamic styles
+
+---
+
+### Completed: Combo Preview Grouping
+
+**Problem**: Cycling combos like `JSQ + SQTH + JLNG/LNG + MC` displayed as 16 individual bentos instead of one grouped card.
+
+**Fix** (`app/workout/index.tsx`):
+- `groupBlocksForDisplay()`: Now groups by `comboGroup` in addition to `group`
+- `getPatternFromBlocks()`: Uses pre-computed `comboDisplayName` from converter
+- `countRoundsFromBlocks()`: Calculates rounds as `totalBlocks / movementsPerCycle`
+
+**Result**: Shows "4 ROUNDS" with "JSQ + SQTH + JLNG/LNG + MC" pattern
+
+---
+
+### Completed: Combo Interval Counter in Active Timer
+
+**Problem**: Showed "INTERVAL 1/1" for each combo block instead of position in combo.
+
+**Fix** (`app/workout/active.tsx`):
+- Added `getComboIntervalInfo()` function
+- Calculates position within combo using `comboGroup` metadata
+- Now shows "INTERVAL 2/16" for second movement in a 16-interval combo
+
+---
+
+### Completed: Timer UI Refinements
+
+**Font size reductions** (`src/lib/responsive.ts`):
+- Timer numbers: `responsive(100, 120, 140)` → `responsive(80, 96, 112)`
+- Movement name: Fixed `text-2xl` → `sizing.headerSmall` with `numberOfLines={1}` and `adjustsFontSizeToFit`
+
+**TARGET badge** (`app/workout/active.tsx`):
+- Fixed height container (28px) to prevent layout shift between work/rest
+- Font: `text-xs` (12px)
+- Border radius: 6px (more square)
+- Padding: `px-3 py-0.5`
+
+---
+
+### Completed: Audio Silent Mode Fix
+
+**Problem**: Beeps not playing on iOS physical device even with volume up.
+
+**Fix** (`src/lib/audio.ts`):
+- Added `setAudioModeAsync({ playsInSilentMode: true })` during initialization
+- Audio now plays regardless of iOS silent switch
+
+---
+
+### Completed: Block Complete Beep Logic for Combos
+
+**Problem**: 5-beep "block complete" sound fired between each movement in a combo.
+
+**Fix** (`app/workout/active.tsx`):
+- Check if previous and current blocks share same `comboGroup`
+- Only play block complete beep when leaving a combo entirely
+
+---
+
 ## Session: Jan 3, 2026
 
 ### Completed: Movement Rename (OGBRP → SQTH)

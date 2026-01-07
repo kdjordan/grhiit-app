@@ -12,7 +12,6 @@ interface AnimatedSplashProps {
 
 export function AnimatedSplash({ onComplete }: AnimatedSplashProps) {
   const [markComplete, setMarkComplete] = useState(false);
-  const [logoComplete, setLogoComplete] = useState(false);
 
   const slideY = useRef(new Animated.Value(0)).current;
   const logoOpacity = useRef(new Animated.Value(0)).current;
@@ -25,9 +24,7 @@ export function AnimatedSplash({ onComplete }: AnimatedSplashProps) {
       toValue: 1,
       duration: 600,
       useNativeDriver: true,
-    }).start(() => {
-      setLogoComplete(true);
-    });
+    }).start();
   };
 
   const handleLogoComplete = () => {

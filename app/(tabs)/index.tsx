@@ -35,7 +35,7 @@ export default function HomeScreen() {
   };
 
   // DEV: Workout selection mode
-  const { selectedWorkoutId, selectWorkout, clearSelection } = useDevStore();
+  const { selectWorkout } = useDevStore();
   const isDevMode = isDevWorkoutSelectEnabled();
   const isDev = process.env.EXPO_PUBLIC_DEV_SKIP_AUTH === "true";
 

@@ -5,18 +5,21 @@ import { View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts, ChakraPetch_400Regular, ChakraPetch_500Medium, ChakraPetch_600SemiBold, ChakraPetch_700Bold } from "@expo-google-fonts/chakra-petch";
 import { SpaceGrotesk_400Regular, SpaceGrotesk_500Medium, SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from "@expo-google-fonts/space-grotesk";
-import { JetBrainsMono_400Regular, JetBrainsMono_500Medium, JetBrainsMono_600SemiBold, JetBrainsMono_700Bold } from "@expo-google-fonts/jetbrains-mono";
 import { useAuthStore } from "@/stores";
 import { AnimatedSplash } from "@/components";
 
 const DEV_SKIP_AUTH = process.env.EXPO_PUBLIC_DEV_SKIP_AUTH === "true";
 const DEV_SKIP_SPLASH = process.env.EXPO_PUBLIC_DEV_SKIP_SPLASH === "true";
 
+// Font loading timeout - proceed with system fonts if custom fonts fail
+const FONT_LOAD_TIMEOUT_MS = 5000;
+
 // Keep native splash visible while we load
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [showSplash, setShowSplash] = useState(!DEV_SKIP_SPLASH);
+  const [fontLoadTimedOut, setFontLoadTimedOut] = useState(false);
   const { user, isInitialized } = useAuthStore();
   const segments = useSegments();
 
@@ -29,25 +32,35 @@ export default function RootLayout() {
     SpaceGrotesk_500Medium,
     SpaceGrotesk_600SemiBold,
     SpaceGrotesk_700Bold,
-    JetBrainsMono_400Regular,
-    JetBrainsMono_500Medium,
-    JetBrainsMono_600SemiBold,
-    JetBrainsMono_700Bold,
   });
 
+  // Font loading timeout - proceed with system fonts if loading takes too long
   useEffect(() => {
-    // Hide native splash once fonts are loaded
-    if (fontsLoaded) {
+    const timeout = setTimeout(() => {
+      if (!fontsLoaded) {
+        console.warn("Font loading timed out, proceeding with system fonts");
+        setFontLoadTimedOut(true);
+      }
+    }, FONT_LOAD_TIMEOUT_MS);
+
+    return () => clearTimeout(timeout);
+  }, [fontsLoaded]);
+
+  // Hide native splash once fonts are loaded (or timed out)
+  const fontsReady = fontsLoaded || fontLoadTimedOut;
+
+  useEffect(() => {
+    if (fontsReady) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsReady]);
 
   const handleSplashComplete = () => {
     setShowSplash(false);
   };
 
-  // Wait for fonts to load
-  if (!fontsLoaded) {
+  // Wait for fonts to load (or timeout)
+  if (!fontsReady) {
     return (
       <View style={{ flex: 1, backgroundColor: "#0A0A0A" }}>
         {showSplash && <AnimatedSplash onComplete={handleSplashComplete} />}

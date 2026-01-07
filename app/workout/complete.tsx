@@ -381,7 +381,7 @@ export default function WorkoutCompleteScreen() {
 
           {/* Session Tagline */}
           <Text style={[tw`text-[#4B5563] text-sm text-center italic`, { fontFamily: "SpaceGrotesk_500Medium" }]}>
-            "{getSessionTagline(workoutSummary?.week || 1, workoutSummary?.day || 1)}"
+            {`"${getSessionTagline(workoutSummary?.week || 1, workoutSummary?.day || 1)}"`}
           </Text>
         </Animated.View>
       </ScrollView>

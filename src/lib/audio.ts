@@ -1,23 +1,33 @@
 // Audio utilities for workout timer
-import { createAudioPlayer, AudioPlayer } from "expo-audio";
+import { createAudioPlayer, AudioPlayer, setAudioModeAsync } from "expo-audio";
 
 // Audio player reference
 let beepPlayer: AudioPlayer | null = null;
 let audioEnabled = true;
+let isInitialized = false;
 
 // Sound source
 const beepSource = require("../../assets/sounds/single-beep.wav");
 
 /**
- * Initialize audio - create the player
+ * Initialize audio - create the player and configure audio mode
  */
 export async function initializeAudio() {
+  if (isInitialized && beepPlayer) return;
+
   try {
+    // Configure audio mode to play even when silent switch is on
+    await setAudioModeAsync({
+      playsInSilentMode: true,
+    });
+
     beepPlayer = createAudioPlayer(beepSource);
     audioEnabled = true;
+    isInitialized = true;
   } catch (error) {
-    console.warn("Failed to initialize audio:", error);
+    console.warn("[Audio] Failed to initialize:", error);
     audioEnabled = false;
+    isInitialized = false;
   }
 }
 
@@ -31,7 +41,7 @@ async function playBeep() {
     beepPlayer.seekTo(0);
     beepPlayer.play();
   } catch (error) {
-    console.warn("Failed to play beep:", error);
+    console.warn("[Audio] Failed to play beep:", error);
   }
 }
 
@@ -83,6 +93,7 @@ export async function cleanupAudio() {
     beepPlayer.remove();
     beepPlayer = null;
   }
+  isInitialized = false;
 }
 
 /**

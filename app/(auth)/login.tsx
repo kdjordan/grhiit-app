@@ -102,7 +102,7 @@ export default function LoginScreen() {
           </Pressable>
 
           <View style={tw`flex-row justify-center mt-6`}>
-            <Text style={tw`text-secondary`}>Don't have an account? </Text>
+            <Text style={tw`text-secondary`}>{"Don't have an account? "}</Text>
             <Link href="/(auth)/signup" asChild>
               <Pressable>
                 <Text style={tw`text-primary font-semibold`}>Sign Up</Text>

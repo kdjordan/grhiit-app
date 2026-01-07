@@ -45,6 +45,7 @@ export function GrhiitMark({
         onAnimationComplete?.();
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- animation refs don't need to be dependencies
   }, [animate]);
 
   if (!animate) {
